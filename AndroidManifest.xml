@@ -1,17 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-      package="com.github.jobs"
-      android:versionCode="1"
-      android:versionName="1.0">
-    <application android:label="@string/app_name" android:icon="@drawable/ic_launcher">
-        <activity android:name=".HomeActivity" android:label="@string/app_name">
+          package="com.github.jobs"
+          android:versionCode="1"
+          android:versionName="1.0">
+    <application android:label="@string/app_name" android:icon="@drawable/ic_launcher" android:name=".App"
+                 android:theme="@style/Theme.Styled">
+        <activity android:name=".ui.HomeActivity" android:label="@string/github_jobs">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
+                <action android:name="android.intent.action.MAIN"/>
+                <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
+        <activity android:name=".ui.phone.DummyActivity"/>
+        <activity android:name=".ui.tablet.DummyActivity"/>
+        <service android:name="com.codeslap.groundy.GroundyService"/>
     </application>
 
     <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.WAKE_LOCK"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
     <uses-sdk android:minSdkVersion="8" android:targetSdkVersion="14"/>
 </manifest>
