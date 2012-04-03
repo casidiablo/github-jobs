@@ -2,4 +2,6 @@
 <resources>
     <string name="app_name">Github Jobs</string>
     <string name="github_jobs">github:jobs</string>
+    <string name="search">Search</string>
+    <string name="search_example">e.g. java, ruby</string>
 </resources>

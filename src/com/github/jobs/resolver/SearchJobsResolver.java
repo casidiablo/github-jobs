@@ -12,6 +12,7 @@ import java.util.List;
 public class SearchJobsResolver extends CallResolver {
 
     private List<Job> mJobs;
+    public static final String EXTRA_QUERY = "com.github.jobs.EXTRA_QUERY";
 
     @Override
     protected void updateData() {

@@ -1,101 +1,89 @@
 package com.github.jobs.ui;
 
-import android.content.Intent;
+import android.content.Context;
 import android.os.Bundle;
-import android.os.Handler;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.view.KeyEvent;
 import android.view.View;
-import android.widget.Toast;
-import com.actionbarsherlock.view.Window;
+import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.LinearLayout;
+import android.widget.TextView;
+import com.actionbarsherlock.internal.widget.ActionBarView;
+import com.actionbarsherlock.view.Menu;
+import com.actionbarsherlock.view.MenuItem;
 import com.codeslap.github.jobs.api.Job;
-import com.codeslap.groundy.DetachableResultReceiver;
 import com.codeslap.groundy.Groundy;
+import com.codeslap.groundy.ReceiverFragment;
 import com.codeslap.persistence.Persistence;
 import com.codeslap.topy.BaseActivity;
 import com.github.jobs.R;
 import com.github.jobs.resolver.SearchJobsResolver;
-import com.github.jobs.utils.UIUtils;
 
-public class HomeActivity extends BaseActivity implements View.OnClickListener {
-    private SearchStatusFragment mSearchStatusFragment;
+public class HomeActivity extends BaseActivity implements TextView.OnEditorActionListener {
+
+    private ReceiverFragment mReceiverFragment;
+    private String mCurrentFilter;
+    private TextView mSearchView;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
-        setSupportProgressBarIndeterminateVisibility(false);
-        findViewById(R.id.dump).setOnClickListener(this);
-        findViewById(R.id.dummy).setOnClickListener(this);
 
         FragmentManager fm = getSupportFragmentManager();
-        mSearchStatusFragment = (SearchStatusFragment) fm.findFragmentByTag(SearchStatusFragment.TAG);
-        if (mSearchStatusFragment == null) {
-            mSearchStatusFragment = new SearchStatusFragment();
-            fm.beginTransaction().add(mSearchStatusFragment, SearchStatusFragment.TAG).commit();
+        mReceiverFragment = (ReceiverFragment) fm.findFragmentByTag(ReceiverFragment.TAG);
+        if (mReceiverFragment == null) {
+            mReceiverFragment = new SearchReceiverFragment();
+            fm.beginTransaction().add(mReceiverFragment, ReceiverFragment.TAG).commit();
+            triggerJobSearch();
         }
     }
 
     @Override
-    public void onClick(View view) {
-        switch (view.getId()) {
-            case R.id.dump:
-                Groundy.queue(HomeActivity.this, SearchJobsResolver.class, mSearchStatusFragment.mReceiver, null);
-                break;
-            case R.id.dummy:
-                startActivity(new Intent(this, UIUtils.getDummyClass(this)));
-                break;
-        }
+    public boolean onCreateOptionsMenu(Menu menu) {
+        View searchBar = getLayoutInflater().inflate(R.layout.search, new LinearLayout(this), false);
+        mSearchView = (TextView) searchBar.findViewById(R.id.edit_search);
+        mSearchView.setOnEditorActionListener(this);
+        menu.add(R.string.search)
+                .setIcon(R.drawable.ic_search)
+                .setActionView(searchBar)
+                .setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS | MenuItem.SHOW_AS_ACTION_COLLAPSE_ACTION_VIEW);
+        return true;
     }
 
-    public static class SearchStatusFragment extends Fragment implements DetachableResultReceiver.Receiver {
-        public static final String TAG = SearchStatusFragment.class.getName();
+    @Override
+    public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+        if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+            mCurrentFilter = v.getText().toString().trim();
+            triggerJobSearch();
+        }
+        return false;
+    }
 
-        private boolean mSyncing = false;
-        private DetachableResultReceiver mReceiver;
-
-        @Override
-        public void onCreate(Bundle savedInstanceState) {
-            super.onCreate(savedInstanceState);
-            setRetainInstance(true);
-            mReceiver = new DetachableResultReceiver(new Handler());
-            mReceiver.setReceiver(this);
+    private void triggerJobSearch() {
+        if (mSearchView != null) {
+            ActionBarView actionBar = (ActionBarView) findViewById(com.actionbarsherlock.R.id.abs__action_bar);
+            actionBar.collapseActionView();
+            InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(mSearchView.getWindowToken(), 0);
         }
 
-        /**
-         * {@inheritDoc}
-         */
-        public void onReceiveResult(int resultCode, Bundle resultData) {
-            HomeActivity activity = (HomeActivity) getActivity();
-            if (activity == null) {
-                return;
-            }
+        Bundle extras = new Bundle();
+        extras.putString(SearchJobsResolver.EXTRA_QUERY, mCurrentFilter);
+        Groundy.queue(this, SearchJobsResolver.class, mReceiverFragment.getReceiver(), extras);
+    }
 
-            switch (resultCode) {
-                case Groundy.STATUS_RUNNING: {
-                    mSyncing = true;
-                    break;
-                }
-                case Groundy.STATUS_FINISHED: {
-                    mSyncing = false;
-                    System.out.println(Persistence.quick(activity).findFirst(Job.class, null, null).getCompanyUrl());
-                    break;
-                }
-                case Groundy.STATUS_ERROR: {
-                    mSyncing = false;
-                    Toast.makeText(activity, "Pailas", Toast.LENGTH_LONG).show();
-                    break;
-                }
-            }
-
-            ((HomeActivity) getActivity()).setSupportProgressBarIndeterminateVisibility(mSyncing);
+    private static class SearchReceiverFragment extends ReceiverFragment {
+        @Override
+        protected void onFinished(Bundle resultData) {
+            super.onFinished(resultData);
+            System.out.println(":::::: FINISHED " + Persistence.quick(getActivity()).count(Job.class));
         }
 
         @Override
-        public void onActivityCreated(Bundle savedInstanceState) {
-            super.onActivityCreated(savedInstanceState);
-            ((HomeActivity) getActivity()).setSupportProgressBarIndeterminateVisibility(mSyncing);
+        protected void onProgressChanged(boolean running) {
+            ((BaseActivity) getActivity()).setSupportProgressBarIndeterminateVisibility(running);
         }
     }
 }
