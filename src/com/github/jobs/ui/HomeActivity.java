@@ -1,15 +1,13 @@
 package com.github.jobs.ui;
 
-import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.Loader;
 import android.view.KeyEvent;
-import android.view.View;
 import android.view.inputmethod.EditorInfo;
-import android.view.inputmethod.InputMethodManager;
-import android.widget.LinearLayout;
 import android.widget.TextView;
-import com.actionbarsherlock.internal.widget.ActionBarView;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
 import com.codeslap.github.jobs.api.Job;
@@ -20,11 +18,18 @@ import com.codeslap.topy.BaseActivity;
 import com.github.jobs.R;
 import com.github.jobs.resolver.SearchJobsResolver;
 
-public class HomeActivity extends BaseActivity implements TextView.OnEditorActionListener {
+import java.util.List;
+
+public class HomeActivity extends BaseActivity implements TextView.OnEditorActionListener, LoaderManager.LoaderCallbacks<List<Job>> {
+
+    private static final int SEARCH_REQUEST = 534;
+    private static final int SEARCH_ITEM = 848;
 
     private ReceiverFragment mReceiverFragment;
+
     private String mCurrentFilter;
-    private TextView mSearchView;
+    private String mCurrentLocation;
+    private boolean mCurrentFullTime;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -42,14 +47,19 @@ public class HomeActivity extends BaseActivity implements TextView.OnEditorActio
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        View searchBar = getLayoutInflater().inflate(R.layout.search, new LinearLayout(this), false);
-        mSearchView = (TextView) searchBar.findViewById(R.id.edit_search);
-        mSearchView.setOnEditorActionListener(this);
-        menu.add(R.string.search)
-                .setIcon(R.drawable.ic_search)
-                .setActionView(searchBar)
-                .setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS | MenuItem.SHOW_AS_ACTION_COLLAPSE_ACTION_VIEW);
+        menu.add(0, SEARCH_ITEM, 0, R.string.search).setIcon(R.drawable.ic_search).setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
         return true;
+    }
+
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case SEARCH_ITEM:
+                startActivityForResult(new Intent(this, SearchDialog.class), SEARCH_REQUEST);
+                break;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
@@ -61,16 +71,34 @@ public class HomeActivity extends BaseActivity implements TextView.OnEditorActio
         return false;
     }
 
-    private void triggerJobSearch() {
-        if (mSearchView != null) {
-            ActionBarView actionBar = (ActionBarView) findViewById(com.actionbarsherlock.R.id.abs__action_bar);
-            actionBar.collapseActionView();
-            InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-            imm.hideSoftInputFromWindow(mSearchView.getWindowToken(), 0);
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == SEARCH_REQUEST && resultCode == RESULT_OK) {
+            mCurrentFilter = data.getStringExtra(SearchDialog.EXTRA_DESCRIPTION);
+            mCurrentLocation = data.getStringExtra(SearchDialog.EXTRA_LOCATION);
+            mCurrentFullTime = data.getBooleanExtra(SearchDialog.EXTRA_FULL_TIME, false);
         }
+    }
 
+    @Override
+    public Loader<List<Job>> onCreateLoader(int id, Bundle args) {
+        return null;
+    }
+
+    @Override
+    public void onLoadFinished(Loader<List<Job>> listLoader, List<Job> data) {
+    }
+
+    @Override
+    public void onLoaderReset(Loader<List<Job>> listLoader) {
+    }
+
+    private void triggerJobSearch() {
         Bundle extras = new Bundle();
         extras.putString(SearchJobsResolver.EXTRA_QUERY, mCurrentFilter);
+        extras.putString(SearchJobsResolver.EXTRA_LOCATION, mCurrentLocation);
+        extras.putBoolean(SearchJobsResolver.EXTRA_FULL_TIME, mCurrentFullTime);
         Groundy.queue(this, SearchJobsResolver.class, mReceiverFragment.getReceiver(), extras);
     }
 
@@ -86,4 +114,5 @@ public class HomeActivity extends BaseActivity implements TextView.OnEditorActio
             ((BaseActivity) getActivity()).setSupportProgressBarIndeterminateVisibility(running);
         }
     }
+
 }

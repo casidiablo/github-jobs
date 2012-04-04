@@ -11,6 +11,7 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
+        <activity android:name=".ui.SearchDialog" android:theme="@style/Theme.Sherlock.Dialog" android:label="@string/advanced_search"/>
         <activity android:name=".ui.phone.DummyActivity"/>
         <activity android:name=".ui.tablet.DummyActivity"/>
         <service android:name="com.codeslap.groundy.GroundyService"/>
