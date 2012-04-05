@@ -23,7 +23,7 @@ public class SearchJobsResolver extends CallResolver {
         Bundle params = getParameters();
         String query = params.getString(EXTRA_QUERY);
         String location = params.getString(EXTRA_LOCATION);
-        boolean fullTime = params.getBoolean(EXTRA_FULL_TIME);
+        boolean fullTime = params.getBoolean(EXTRA_FULL_TIME, true);
 
         // configure search
         Search.Builder builder = new Search.Builder();

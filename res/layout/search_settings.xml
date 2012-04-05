@@ -36,6 +36,7 @@
             android:id="@+id/checkbox_full_time"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:checked="true"
             android:text="@string/full_time"/>
     <LinearLayout
             android:layout_width="match_parent"
