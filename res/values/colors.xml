@@ -1,5 +1,6 @@
 <resources>
     <color name="title">#294455</color>
     <color name="link">#1D80BE</color>
-    <color name="full_time">#441D9A00</color>
+    <color name="full_time">#aa1D9A00</color>
+    <color name="date">#cccccc</color>
 </resources>

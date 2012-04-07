@@ -69,7 +69,7 @@
         <dependency>
             <groupId>com.codeslap</groupId>
             <artifactId>persistence</artifactId>
-            <version>0.9.14-SNAPSHOT</version>
+            <version>0.9.15</version>
             <scope>compile</scope>
         </dependency>
         <dependency>

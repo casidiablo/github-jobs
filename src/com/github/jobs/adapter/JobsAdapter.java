@@ -8,9 +8,12 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 import com.codeslap.github.jobs.api.Job;
 import com.github.jobs.R;
+import com.github.jobs.ui.JobDetailsActivity;
+import com.github.jobs.utils.RelativeDate;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 /**
  * @author cristian
@@ -19,9 +22,13 @@ public class JobsAdapter extends BaseAdapter {
 
     private final List<Job> mJobs = new ArrayList<Job>();
     private final LayoutInflater mInflater;
+    private final SimpleDateFormat mDateParser;
+    private final Context mContext;
 
     public JobsAdapter(Context context) {
+        mContext = context;
         mInflater = LayoutInflater.from(context);
+        mDateParser = new SimpleDateFormat("EEE MMM dd kk:mm:ss 'UTC' yyyy");
     }
 
     @Override
@@ -50,6 +57,7 @@ public class JobsAdapter extends BaseAdapter {
             holder.location = (TextView) view.findViewById(R.id.location);
             holder.company = (TextView) view.findViewById(R.id.company);
             holder.type = (TextView) view.findViewById(R.id.type);
+            holder.date = (TextView) view.findViewById(R.id.date);
 
             view.setTag(holder);
         } else {
@@ -60,10 +68,26 @@ public class JobsAdapter extends BaseAdapter {
 
         holder.title.setText(job.getTitle());
         holder.location.setText(job.getLocation());
-        holder.company.setText(job.getCompany());
+        if (JobDetailsActivity.FULL_TIME.equals(job.getType())) {
+            holder.company.setText(String.format("%s - ", job.getCompany()));
+        } else {
+            holder.company.setText(String.format("%s - "));
+        }
         holder.type.setText(job.getType());
+        try {
+            Date parsed = mDateParser.parse(job.getCreatedAt());
+            holder.date.setText(getTimeAgo(parsed));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
 
         return view;
+    }
+
+    private String getTimeAgo(Date date) {
+        Calendar calendar = new GregorianCalendar();
+        calendar.setTime(date);
+        return RelativeDate.getRelativeDate(mContext, calendar);
     }
 
     public void updateItems(List<Job> data) {
@@ -76,10 +100,11 @@ public class JobsAdapter extends BaseAdapter {
         mJobs.clear();
     }
 
-    private static class ViewHolder{
+    private static class ViewHolder {
         TextView title;
         TextView location;
         TextView company;
         TextView type;
+        TextView date;
     }
 }

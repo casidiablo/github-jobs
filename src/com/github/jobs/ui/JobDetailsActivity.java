@@ -30,6 +30,7 @@ public class JobDetailsActivity extends BaseActivity implements View.OnClickList
 
     public static final String EXTRA_JOB_ID = "job_id";
     public static final int HOW_TO_APPLY = 4734;
+    public static final String FULL_TIME = "Full Time";
     private Job mJob;
 
     @Override
@@ -71,7 +72,7 @@ public class JobDetailsActivity extends BaseActivity implements View.OnClickList
             companyLocation.setVisibility(View.VISIBLE);
         }
 
-        if (!"Full Time".equalsIgnoreCase(mJob.getType())) {
+        if (!FULL_TIME.equalsIgnoreCase(mJob.getType())) {
             findViewById(R.id.full_time).setVisibility(View.INVISIBLE);
         }
 
