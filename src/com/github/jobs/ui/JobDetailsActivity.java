@@ -76,6 +76,7 @@ public class JobDetailsActivity extends BaseActivity implements View.OnClickList
         }
 
         setLogoBackground();
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
     @Override
@@ -87,10 +88,19 @@ public class JobDetailsActivity extends BaseActivity implements View.OnClickList
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == HOW_TO_APPLY) {
-            startActivity(new Intent(this, HowToApplyDialog.class)
-                    .putExtra(HowToApplyDialog.HOW_TO_APPLY, mJob.getHowToApply()));
-            return true;
+        int itemId = item.getItemId();
+        switch (itemId) {
+            case HOW_TO_APPLY:
+                startActivity(new Intent(this, HowToApplyDialog.class)
+                        .putExtra(HowToApplyDialog.HOW_TO_APPLY, mJob.getHowToApply()));
+                return true;
+            case android.R.id.home:
+                // app icon in Action Bar clicked; go home
+                Intent intent = new Intent(this, HomeActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intent);
+                overridePendingTransition(R.anim.home_enter, R.anim.home_exit);
+                return true;
         }
         return super.onOptionsItemSelected(item);
     }
@@ -106,7 +116,7 @@ public class JobDetailsActivity extends BaseActivity implements View.OnClickList
                     return;
                 }
                 BitmapDrawable bitmapDrawable = new BitmapDrawable(bitmap);
-                bitmapDrawable.setAlpha(70);
+                bitmapDrawable.setAlpha(50);
                 bitmapDrawable.setGravity(Gravity.CENTER);
                 ImageView background = (ImageView) findViewById(R.id.job_details_background);
                 background.setImageDrawable(bitmapDrawable);
