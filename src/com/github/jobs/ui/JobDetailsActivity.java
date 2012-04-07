@@ -16,12 +16,14 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
+import com.actionbarsherlock.widget.ShareActionProvider;
 import com.codeslap.github.jobs.api.Job;
 import com.codeslap.groundy.bitmap.BitmapHelper;
 import com.codeslap.groundy.bitmap.RawBitmapObserver;
 import com.codeslap.persistence.Persistence;
 import com.codeslap.topy.BaseActivity;
 import com.github.jobs.R;
+import com.github.jobs.utils.ShareHelper;
 
 /**
  * @author cristian
@@ -29,7 +31,8 @@ import com.github.jobs.R;
 public class JobDetailsActivity extends BaseActivity implements View.OnClickListener {
 
     public static final String EXTRA_JOB_ID = "job_id";
-    public static final int HOW_TO_APPLY = 4734;
+    private static final int SHARE = 484;
+    private static final int HOW_TO_APPLY = 4734;
     public static final String FULL_TIME = "Full Time";
     private Job mJob;
 
@@ -82,8 +85,17 @@ public class JobDetailsActivity extends BaseActivity implements View.OnClickList
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        menu.add(0, HOW_TO_APPLY, 0, getString(R.string.apply))
+        menu.add(1, HOW_TO_APPLY, 0, getString(R.string.apply))
                 .setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS | MenuItem.SHOW_AS_ACTION_WITH_TEXT);
+        menu.add(0, SHARE, 0, R.string.share)
+                .setActionProvider(new ShareActionProvider(this))
+                .setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
+
+        // Set file with share history to the provider and set the share intent.
+        MenuItem actionItem = menu.findItem(SHARE);
+        ShareActionProvider actionProvider = (ShareActionProvider) actionItem.getActionProvider();
+        actionProvider.setShareHistoryFileName(ShareActionProvider.DEFAULT_SHARE_HISTORY_FILE_NAME);
+        actionProvider.setShareIntent(ShareHelper.getShareIntent(mJob));
         return true;
     }
 
@@ -106,6 +118,19 @@ public class JobDetailsActivity extends BaseActivity implements View.OnClickList
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.company_url:
+                Intent companyUrl = new Intent(Intent.ACTION_VIEW);
+                companyUrl.addCategory(Intent.CATEGORY_BROWSABLE);
+                companyUrl.setData(Uri.parse(mJob.getCompanyUrl()));
+                startActivity(companyUrl);
+                break;
+        }
+    }
+
+
     private void setLogoBackground() {
         if (mJob.getCompanyLogo() == null) {
             return;
@@ -124,17 +149,5 @@ public class JobDetailsActivity extends BaseActivity implements View.OnClickList
             }
         };
         BitmapHelper.getInstance().registerBitmapObserver(this, mJob.getCompanyLogo(), rawBitmapObserver);
-    }
-
-    @Override
-    public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.company_url:
-                Intent companyUrl = new Intent(Intent.ACTION_VIEW);
-                companyUrl.addCategory(Intent.CATEGORY_BROWSABLE);
-                companyUrl.setData(Uri.parse(mJob.getCompanyUrl()));
-                startActivity(companyUrl);
-                break;
-        }
     }
 }

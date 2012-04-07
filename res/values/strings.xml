@@ -37,4 +37,5 @@
     <string name="one_minute_ago">one minute ago</string>
     <string name="one_second_ago">one second ago</string>
     <string name="few_secs_ago">Few seconds ago</string>
+    <string name="share">Share</string>
 </resources>

@@ -19,6 +19,7 @@ import com.github.jobs.R;
 import com.github.jobs.adapter.JobsAdapter;
 import com.github.jobs.resolver.EmailSubscriberResolver;
 import com.github.jobs.resolver.SearchJobsResolver;
+import com.github.jobs.utils.ShareHelper;
 
 import java.util.List;
 
@@ -26,6 +27,7 @@ public class HomeActivity extends BaseActivity implements LoaderManager.LoaderCa
     private static final int SEARCH_REQUEST = 534;
     private static final int JOB_DETAILS = 8474;
     private static final int HOW_TO_APPLY = 5763;
+    private static final int SHARE = 4722;
 
     private ReceiverFragment mReceiverFragment;
 
@@ -72,6 +74,7 @@ public class HomeActivity extends BaseActivity implements LoaderManager.LoaderCa
         menu.setHeaderTitle(job.getTitle());
         menu.add(0, JOB_DETAILS, 0, R.string.job_details);
         menu.add(0, HOW_TO_APPLY, 0, R.string.how_to_apply);
+        menu.add(0, SHARE, 0, R.string.share);
     }
 
     @Override
@@ -88,6 +91,9 @@ public class HomeActivity extends BaseActivity implements LoaderManager.LoaderCa
                 Intent howToApplyIntent = new Intent(this, HowToApplyDialog.class);
                 howToApplyIntent.putExtra(HowToApplyDialog.EXTRA_HOW_TO_APPLY, job.getHowToApply());
                 startActivity(howToApplyIntent);
+                return true;
+            case SHARE:
+                startActivity(ShareHelper.getShareIntent(job));
                 return true;
         }
         return super.onContextItemSelected(item);
