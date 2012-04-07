@@ -7,7 +7,10 @@
     <TextView
             android:id="@+id/title"
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textColor="@color/title"
+            android:textStyle="bold"/>
     <TextView
             android:id="@+id/location"
             android:layout_width="fill_parent"

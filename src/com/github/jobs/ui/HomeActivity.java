@@ -5,6 +5,8 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
@@ -18,7 +20,7 @@ import com.github.jobs.resolver.SearchJobsResolver;
 
 import java.util.List;
 
-public class HomeActivity extends BaseActivity implements LoaderManager.LoaderCallbacks<List<Job>> {
+public class HomeActivity extends BaseActivity implements LoaderManager.LoaderCallbacks<List<Job>>,AdapterView.OnItemClickListener {
 
     private static final int SEARCH_REQUEST = 534;
 
@@ -37,6 +39,7 @@ public class HomeActivity extends BaseActivity implements LoaderManager.LoaderCa
 
         mAdapter = new JobsAdapter(this);
         ListView list = (ListView) findViewById(R.id.job_list);
+        list.setOnItemClickListener(this);
         list.setAdapter(mAdapter);
 
         FragmentManager fm = getSupportFragmentManager();
@@ -92,6 +95,14 @@ public class HomeActivity extends BaseActivity implements LoaderManager.LoaderCa
     @Override
     public void onLoaderReset(Loader<List<Job>> listLoader) {
         mAdapter.clear();
+    }
+
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        Job job = mAdapter.getItem(position);
+        Intent intent = new Intent(this, JobDetailsActivity.class);
+        intent.putExtra(JobDetailsActivity.EXTRA_JOB_ID, job.getId());
+        startActivity(intent);
     }
 
     private void queryList() {

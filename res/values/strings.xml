@@ -4,7 +4,7 @@
     <string name="github_jobs">github:jobs</string>
     <string name="search">Search</string>
     <string name="search_example">title, companies, etc.</string>
-    <string name="advanced_search">Advanced search</string>
+    <string name="search_title">Search</string>
     <string name="use_this_time">Use this time</string>
     <string name="set_as_default">Set as default</string>
     <string name="clear">Clear</string>
@@ -13,4 +13,7 @@
     <string name="full_time">Full time</string>
     <string name="job_description">Job description</string>
     <string name="must_specify_description">You must specify a description</string>
+    <string name="job_details">Job details</string>
+    <string name="apply">Apply</string>
+    <string name="how_to_apply">How to apply?</string>
 </resources>

@@ -11,7 +11,8 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-        <activity android:name=".ui.SearchDialog" android:theme="@style/Theme.Sherlock.Dialog" android:label="@string/advanced_search"/>
+        <activity android:name=".ui.SearchDialog" android:theme="@style/Theme.Sherlock.Dialog" android:label="@string/search_title"/>
+        <activity android:name=".ui.JobDetailsActivity" android:label="@string/job_details"/>
         <service android:name="com.codeslap.groundy.GroundyService"/>
     </application>
 
