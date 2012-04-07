@@ -16,6 +16,7 @@ import com.codeslap.groundy.ReceiverFragment;
 import com.codeslap.topy.BaseActivity;
 import com.github.jobs.R;
 import com.github.jobs.adapter.JobsAdapter;
+import com.github.jobs.resolver.EmailSubscriberResolver;
 import com.github.jobs.resolver.SearchJobsResolver;
 
 import java.util.List;
@@ -65,6 +66,13 @@ public class HomeActivity extends BaseActivity implements LoaderManager.LoaderCa
         switch (item.getItemId()) {
             case R.id.menu_search:
                 startActivityForResult(new Intent(this, SearchDialog.class), SEARCH_REQUEST);
+                break;
+            case R.id.menu_subscribe:
+                Intent subscribeIntent = new Intent(this, SubscribeDialog.class);
+                subscribeIntent.putExtra(EmailSubscriberResolver.EXTRA_DESCRIPTION, mCurrentFilter);
+                subscribeIntent.putExtra(EmailSubscriberResolver.EXTRA_LOCATION, mCurrentLocation);
+                subscribeIntent.putExtra(EmailSubscriberResolver.EXTRA_FULL_TIME, mCurrentFullTime);
+                startActivity(subscribeIntent);
                 break;
         }
         return super.onOptionsItemSelected(item);
@@ -138,7 +146,7 @@ public class HomeActivity extends BaseActivity implements LoaderManager.LoaderCa
 
         @Override
         protected void onProgressChanged(boolean running) {
-            ((BaseActivity) getActivity()).setSupportProgressBarIndeterminateVisibility(running);
+            ((HomeActivity) getActivity()).setSupportProgressBarIndeterminateVisibility(running);
         }
     }
 }

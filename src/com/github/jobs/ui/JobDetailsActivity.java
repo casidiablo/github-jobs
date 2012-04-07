@@ -88,7 +88,8 @@ public class JobDetailsActivity extends BaseActivity implements View.OnClickList
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == HOW_TO_APPLY) {
-            HowToApplyDialog.getInstance(mJob.getHowToApply()).show(getSupportFragmentManager(), HowToApplyDialog.TAG);
+            startActivity(new Intent(this, HowToApplyDialog.class)
+                    .putExtra(HowToApplyDialog.HOW_TO_APPLY, mJob.getHowToApply()));
             return true;
         }
         return super.onOptionsItemSelected(item);

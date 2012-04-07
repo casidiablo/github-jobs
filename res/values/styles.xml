@@ -1,11 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <style name="Theme.Styled" parent="Theme.Sherlock.Light.DarkActionBar">
+    <style name="Theme.GithubJobs" parent="Theme.Sherlock.Light.DarkActionBar">
         <item name="actionBarStyle">@style/Widget.Styled.ActionBar</item>
         <item name="android:actionBarStyle">@style/Widget.Styled.ActionBar</item>
+        <item name="android:buttonStyle">@style/GithubJobsButton</item>
+    </style>
+
+    <style name="Theme.GithubJobs.Dialog" parent="Theme.Sherlock.Dialog">
+        <item name="android:buttonStyle">@style/GithubJobsButton</item>
     </style>
 
     <style name="Widget.Styled.ActionBar" parent="Widget.Sherlock.Light.ActionBar.Solid.Inverse">
         <item name="background">@drawable/header_back</item>
+    </style>
+
+    <style name="GithubJobsButton" parent="@android:style/Widget.Button">
+        <item name="android:background">@drawable/button_drawable</item>
+        <item name="android:textColor">#ffffff</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:shadowColor">#2371A3</item>
+        <item name="android:shadowDx">-1</item>
+        <item name="android:shadowDy">-1</item>
+        <item name="android:shadowRadius">1</item>
+        <item name="android:textAppearance">?android:attr/textAppearanceMedium</item>
     </style>
 </resources>

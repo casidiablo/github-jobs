@@ -47,12 +47,14 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:layout_marginRight="2dip"
                 android:text="Search"/>
         <Button
                 android:id="@+id/btn_cancel"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:layout_marginLeft="2dip"
                 android:text="Cancel"/>
     </LinearLayout>
 </LinearLayout>

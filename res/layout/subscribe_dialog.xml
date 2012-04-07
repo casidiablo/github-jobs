@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:orientation="vertical"
+        android:padding="5dip">
+    <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/faked_promise"
+            android:textAppearance="?android:attr/textAppearanceMedium"/>
+    <EditText
+            android:id="@+id/edit_email"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textEmailAddress"
+            android:hint="email"/>
+    <Button
+            android:id="@+id/btn_subscribe"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/subscribe"/>
+</LinearLayout>

@@ -4,14 +4,16 @@
           android:versionCode="1"
           android:versionName="1.0">
     <application android:label="@string/app_name" android:icon="@drawable/ic_launcher" android:name=".App"
-                 android:theme="@style/Theme.Styled">
+                 android:theme="@style/Theme.GithubJobs">
         <activity android:name=".ui.HomeActivity" android:label="@string/github_jobs">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-        <activity android:name=".ui.SearchDialog" android:theme="@style/Theme.Sherlock.Dialog" android:label="@string/search_title"/>
+        <activity android:name=".ui.SearchDialog" android:theme="@style/Theme.GithubJobs.Dialog" android:label="@string/search_title"/>
+        <activity android:name=".ui.SubscribeDialog" android:theme="@style/Theme.GithubJobs.Dialog" android:label="@string/subscribe_by_email"/>
+        <activity android:name=".ui.HowToApplyDialog" android:theme="@style/Theme.GithubJobs.Dialog" android:label="@string/how_to_apply"/>
         <activity android:name=".ui.JobDetailsActivity" android:label="@string/job_details"/>
         <service android:name="com.codeslap.groundy.GroundyService"/>
     </application>

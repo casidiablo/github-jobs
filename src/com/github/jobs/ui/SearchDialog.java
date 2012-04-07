@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import com.actionbarsherlock.app.SherlockActivity;
+import com.actionbarsherlock.view.Window;
 import com.github.jobs.R;
 
 public class SearchDialog extends SherlockActivity implements View.OnClickListener {

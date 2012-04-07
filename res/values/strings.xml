@@ -16,4 +16,10 @@
     <string name="job_details">Job details</string>
     <string name="apply">Apply</string>
     <string name="how_to_apply">How to apply?</string>
+    <string name="subscribe">Subscribe</string>
+    <string name="subscribe_by_email">Subscribe by Email</string>
+    <string name="faked_promise">We promise not to spam or share your email.</string>
+    <string name="email">email</string>
+    <string name="subscribed">Subscribed! Expect an email with new listings soon!</string>
+    <string name="error_subscribing">Error Subscribing, please try again in a few minutes.</string>
 </resources>
