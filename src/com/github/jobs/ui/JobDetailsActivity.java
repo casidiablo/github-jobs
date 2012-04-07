@@ -93,7 +93,7 @@ public class JobDetailsActivity extends BaseActivity implements View.OnClickList
         switch (itemId) {
             case HOW_TO_APPLY:
                 startActivity(new Intent(this, HowToApplyDialog.class)
-                        .putExtra(HowToApplyDialog.HOW_TO_APPLY, mJob.getHowToApply()));
+                        .putExtra(HowToApplyDialog.EXTRA_HOW_TO_APPLY, mJob.getHowToApply()));
                 return true;
             case android.R.id.home:
                 // app icon in Action Bar clicked; go home

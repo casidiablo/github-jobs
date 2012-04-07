@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
+import android.view.ContextMenu;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
@@ -22,8 +23,9 @@ import com.github.jobs.resolver.SearchJobsResolver;
 import java.util.List;
 
 public class HomeActivity extends BaseActivity implements LoaderManager.LoaderCallbacks<List<Job>>,AdapterView.OnItemClickListener {
-
     private static final int SEARCH_REQUEST = 534;
+    private static final int JOB_DETAILS = 8474;
+    private static final int HOW_TO_APPLY = 5763;
 
     private ReceiverFragment mReceiverFragment;
 
@@ -42,6 +44,7 @@ public class HomeActivity extends BaseActivity implements LoaderManager.LoaderCa
         ListView list = (ListView) findViewById(R.id.job_list);
         list.setOnItemClickListener(this);
         list.setAdapter(mAdapter);
+        registerForContextMenu(list);
 
         FragmentManager fm = getSupportFragmentManager();
         mReceiverFragment = (ReceiverFragment) fm.findFragmentByTag(ReceiverFragment.TAG);
@@ -59,6 +62,35 @@ public class HomeActivity extends BaseActivity implements LoaderManager.LoaderCa
     public boolean onCreateOptionsMenu(Menu menu) {
         getSupportMenuInflater().inflate(R.menu.home_menu, menu);
         return true;
+    }
+
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+        super.onCreateContextMenu(menu, v, menuInfo);
+        AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) menuInfo;
+        Job job = mAdapter.getItem(info.position);
+        menu.setHeaderTitle(job.getTitle());
+        menu.add(0, JOB_DETAILS, 0, R.string.job_details);
+        menu.add(0, HOW_TO_APPLY, 0, R.string.how_to_apply);
+    }
+
+    @Override
+    public boolean onContextItemSelected(android.view.MenuItem item) {
+        AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
+        Job job = mAdapter.getItem(info.position);
+        switch (item.getItemId()) {
+            case JOB_DETAILS:
+                Intent jobDetailsIntent = new Intent(this, JobDetailsActivity.class);
+                jobDetailsIntent.putExtra(JobDetailsActivity.EXTRA_JOB_ID, job.getId());
+                startActivity(jobDetailsIntent);
+                return true;
+            case HOW_TO_APPLY:
+                Intent howToApplyIntent = new Intent(this, HowToApplyDialog.class);
+                howToApplyIntent.putExtra(HowToApplyDialog.EXTRA_HOW_TO_APPLY, job.getHowToApply());
+                startActivity(howToApplyIntent);
+                return true;
+        }
+        return super.onContextItemSelected(item);
     }
 
     @Override

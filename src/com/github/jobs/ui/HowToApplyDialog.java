@@ -14,14 +14,14 @@ import com.github.jobs.R;
  */
 public class HowToApplyDialog extends SherlockActivity {
 
-    public static final String HOW_TO_APPLY = "how_to_apply";
+    public static final String EXTRA_HOW_TO_APPLY = "how_to_apply";
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.how_to_apply_dialog);
 
-        SpannableString application = new SpannableString(Html.fromHtml(getIntent().getStringExtra(HOW_TO_APPLY)));
+        SpannableString application = new SpannableString(Html.fromHtml(getIntent().getStringExtra(EXTRA_HOW_TO_APPLY)));
         Linkify.addLinks(application, Linkify.ALL);
 
         TextView howToApply = (TextView) findViewById(R.id.lbl_how_to_apply);
