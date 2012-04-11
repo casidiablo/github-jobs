@@ -7,8 +7,10 @@ import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
 import android.view.ContextMenu;
 import android.view.View;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.Toast;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
 import com.codeslap.github.jobs.api.Job;
@@ -23,7 +25,8 @@ import com.github.jobs.utils.ShareHelper;
 
 import java.util.List;
 
-public class HomeActivity extends BaseActivity implements LoaderManager.LoaderCallbacks<List<Job>>,AdapterView.OnItemClickListener {
+public class HomeActivity extends BaseActivity implements LoaderManager.LoaderCallbacks<List<Job>>,
+        AdapterView.OnItemClickListener, AbsListView.OnScrollListener {
     private static final int SEARCH_REQUEST = 534;
     private static final int JOB_DETAILS = 8474;
     private static final int HOW_TO_APPLY = 5763;
@@ -37,16 +40,25 @@ public class HomeActivity extends BaseActivity implements LoaderManager.LoaderCa
 
     private JobsAdapter mAdapter;
 
+    private int mCurrentPage;
+    private View mMoreRootView;
+    private ListView mList;
+    private boolean mLoading = false;
+    private int mLastTotalItemCount;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
 
         mAdapter = new JobsAdapter(this);
-        ListView list = (ListView) findViewById(R.id.job_list);
-        list.setOnItemClickListener(this);
-        list.setAdapter(mAdapter);
-        registerForContextMenu(list);
+        mList = (ListView) findViewById(R.id.job_list);
+        mList.setOnItemClickListener(this);
+        mMoreRootView = getLayoutInflater().inflate(R.layout.list_footer, null);
+        mList.addFooterView(mMoreRootView);
+        mList.setAdapter(mAdapter);
+        mList.setOnScrollListener(this);
+        registerForContextMenu(mList);
 
         FragmentManager fm = getSupportFragmentManager();
         mReceiverFragment = (ReceiverFragment) fm.findFragmentByTag(ReceiverFragment.TAG);
@@ -136,6 +148,9 @@ public class HomeActivity extends BaseActivity implements LoaderManager.LoaderCa
     @Override
     public void onLoadFinished(Loader<List<Job>> listLoader, List<Job> data) {
         mAdapter.updateItems(data);
+        if (data.isEmpty()) {
+            removeFooterFromList();
+        }
     }
 
     @Override
@@ -149,6 +164,31 @@ public class HomeActivity extends BaseActivity implements LoaderManager.LoaderCa
         Intent intent = new Intent(this, JobDetailsActivity.class);
         intent.putExtra(JobDetailsActivity.EXTRA_JOB_ID, job.getId());
         startActivity(intent);
+    }
+
+    @Override
+    public void onScrollStateChanged(AbsListView view, int scrollState) {
+    }
+
+    @Override
+    public void onScroll(AbsListView absListView, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+        if (mMoreRootView == null) {
+            return;
+        }
+        if (totalItemCount <= 1) {
+            return;
+        }
+        totalItemCount -= mList.getHeaderViewsCount();
+        if (!mLoading && mLastTotalItemCount != totalItemCount && (totalItemCount - visibleItemCount) == firstVisibleItem) {
+            mLoading = true;
+            mLastTotalItemCount = totalItemCount;
+            loadMore();
+        }
+    }
+
+    private void loadMore() {
+        mCurrentPage++;
+        triggerJobSearch();
     }
 
     private void queryList() {
@@ -166,11 +206,30 @@ public class HomeActivity extends BaseActivity implements LoaderManager.LoaderCa
         }
     }
 
+    private void removeFooterFromList() {
+        if (mMoreRootView != null) {
+            mList.removeFooterView(mMoreRootView);
+            mMoreRootView = null;
+        }
+    }
+
+    private void addFooterToList() {
+        if (mMoreRootView == null) {
+            mMoreRootView = getLayoutInflater().inflate(R.layout.list_footer, null);
+            mList.addFooterView(mMoreRootView);
+        } else if(mList.getFooterViewsCount() == 0) {
+            mList.addFooterView(mMoreRootView);
+        }
+    }
+
     private void triggerJobSearch() {
         Bundle extras = new Bundle();
         extras.putString(SearchJobsResolver.EXTRA_QUERY, mCurrentFilter);
         extras.putString(SearchJobsResolver.EXTRA_LOCATION, mCurrentLocation);
         extras.putBoolean(SearchJobsResolver.EXTRA_FULL_TIME, mCurrentFullTime);
+        extras.putInt(SearchJobsResolver.EXTRA_PAGE, mCurrentPage);
+
+        mLoading = true;
         Groundy.queue(this, SearchJobsResolver.class, mReceiverFragment.getReceiver(), extras);
         setSupportProgressBarIndeterminateVisibility(true);
     }
@@ -179,12 +238,27 @@ public class HomeActivity extends BaseActivity implements LoaderManager.LoaderCa
         @Override
         protected void onFinished(Bundle resultData) {
             super.onFinished(resultData);
-            ((HomeActivity) getActivity()).queryList();
+            HomeActivity activity = (HomeActivity) getActivity();
+            activity.queryList();
+            activity.addFooterToList();
+            int items = resultData.getInt(SearchJobsResolver.DATA_ITEMS);
+            if (items == 0) {
+                activity.removeFooterFromList();
+            }
+        }
+
+        @Override
+        protected void onError(Bundle resultData) {
+            super.onError(resultData);
+            Toast.makeText(getActivity(), resultData.getString(Groundy.KEY_ERROR), Toast.LENGTH_LONG).show();
+            ((HomeActivity) getActivity()).removeFooterFromList();
         }
 
         @Override
         protected void onProgressChanged(boolean running) {
-            ((HomeActivity) getActivity()).setSupportProgressBarIndeterminateVisibility(running);
+            HomeActivity activity = (HomeActivity) getActivity();
+            activity.setSupportProgressBarIndeterminateVisibility(running);
+            activity.mLoading = running;
         }
     }
 }
