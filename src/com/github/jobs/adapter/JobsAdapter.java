@@ -100,6 +100,11 @@ public class JobsAdapter extends BaseAdapter {
         mJobs.clear();
     }
 
+    public void addItems(ArrayList<Job> jobs) {
+        mJobs.addAll(jobs);
+        notifyDataSetChanged();
+    }
+
     private static class ViewHolder {
         TextView title;
         TextView location;

@@ -1,0 +1,285 @@
+package com.github.jobs.ui;
+
+import android.content.Intent;
+import android.os.Bundle;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.Loader;
+import android.view.ContextMenu;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.AbsListView;
+import android.widget.AdapterView;
+import android.widget.ListView;
+import com.actionbarsherlock.app.SherlockFragment;
+import com.actionbarsherlock.app.SherlockFragmentActivity;
+import com.actionbarsherlock.view.Menu;
+import com.actionbarsherlock.view.MenuInflater;
+import com.actionbarsherlock.view.MenuItem;
+import com.codeslap.github.jobs.api.Job;
+import com.codeslap.groundy.Groundy;
+import com.codeslap.groundy.ReceiverFragment;
+import com.github.jobs.R;
+import com.github.jobs.adapter.JobsAdapter;
+import com.github.jobs.resolver.EmailSubscriberResolver;
+import com.github.jobs.resolver.SearchJobsResolver;
+import com.github.jobs.utils.ShareHelper;
+
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
+
+/**
+ * @author cristian
+ */
+public class JobListFragment extends SherlockFragment implements LoaderManager.LoaderCallbacks<List<Job>>,
+        AdapterView.OnItemClickListener, AbsListView.OnScrollListener {
+
+    private static final String KEY_SEARCH = "search_key";
+
+    public static JobListFragment newInstance(SearchPack searchPack) {
+        JobListFragment jobListFragment = new JobListFragment();
+        Bundle args = new Bundle();
+        args.putSerializable(KEY_SEARCH, searchPack);
+        jobListFragment.setArguments(args);
+        return jobListFragment;
+    }
+
+    private static final int JOB_DETAILS = 8474;
+    private static final int HOW_TO_APPLY = 5763;
+    private static final int SHARE = 4722;
+
+    private SearchPack mCurrentSearch = new SearchPack();
+    private JobsAdapter mAdapter;
+
+    private View mMoreRootView;
+    private ListView mList;
+    private boolean mLoading = false;
+    private int mLastTotalItemCount;
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        // restore instance
+        if (savedInstanceState != null && savedInstanceState.containsKey(KEY_SEARCH)) {
+            mCurrentSearch = (SearchPack) savedInstanceState.getSerializable(KEY_SEARCH);
+        } else {
+            mCurrentSearch = (SearchPack) getArguments().getSerializable(KEY_SEARCH);
+        }
+        return inflater.inflate(R.layout.jobs_list, null, false);
+    }
+
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        mAdapter = new JobsAdapter(getActivity());
+        mList = (ListView) getView().findViewById(R.id.job_list);
+        mList.setOnItemClickListener(this);
+        mMoreRootView = getLayoutInflater(savedInstanceState).inflate(R.layout.list_footer, null);
+        mList.addFooterView(mMoreRootView);
+        mList.setAdapter(mAdapter);
+        mList.setOnScrollListener(this);
+        setHasOptionsMenu(true);
+        registerForContextMenu(mList);
+
+        if (mCurrentSearch.isDefault()) {
+            queryList();
+        } else {
+            removeFooterFromList();
+        }
+        if (savedInstanceState == null) {
+            triggerJobSearch();
+        }
+    }
+
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+        super.onCreateContextMenu(menu, v, menuInfo);
+        AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) menuInfo;
+        Job job = mAdapter.getItem(info.position);
+        menu.setHeaderTitle(job.getTitle());
+        menu.add(0, JOB_DETAILS, 0, R.string.job_details);
+        menu.add(0, HOW_TO_APPLY, 0, R.string.how_to_apply);
+        menu.add(0, SHARE, 0, R.string.share);
+    }
+
+    @Override
+    public boolean onContextItemSelected(android.view.MenuItem item) {
+        AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
+        Job job = mAdapter.getItem(info.position);
+        switch (item.getItemId()) {
+            case JOB_DETAILS:
+                Intent jobDetailsIntent = new Intent(getActivity(), JobDetailsActivity.class);
+                jobDetailsIntent.putExtra(JobDetailsActivity.EXTRA_JOB_ID, job.getId());
+                startActivity(jobDetailsIntent);
+                return true;
+            case HOW_TO_APPLY:
+                Intent howToApplyIntent = new Intent(getActivity(), HowToApplyDialog.class);
+                howToApplyIntent.putExtra(HowToApplyDialog.EXTRA_HOW_TO_APPLY, job.getHowToApply());
+                startActivity(howToApplyIntent);
+                return true;
+            case SHARE:
+                startActivity(ShareHelper.getShareIntent(job));
+                return true;
+        }
+        return super.onContextItemSelected(item);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.menu_subscribe:
+                Intent subscribeIntent = new Intent(getActivity(), SubscribeDialog.class);
+                subscribeIntent.putExtra(EmailSubscriberResolver.EXTRA_SEARCH, mCurrentSearch);
+                startActivity(subscribeIntent);
+                break;
+            case R.id.menu_delete:
+                // TODO delete
+                break;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public Loader<List<Job>> onCreateLoader(int id, Bundle args) {
+        return new JobListLoader(getActivity());
+    }
+
+    @Override
+    public void onLoadFinished(Loader<List<Job>> listLoader, List<Job> data) {
+        mAdapter.updateItems(data);
+        if (data.isEmpty()) {
+            removeFooterFromList();
+        }
+    }
+
+    @Override
+    public void onLoaderReset(Loader<List<Job>> listLoader) {
+        mAdapter.clear();
+    }
+
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        Job job = mAdapter.getItem(position);
+        Intent intent = new Intent(getActivity(), JobDetailsActivity.class);
+        intent.putExtra(JobDetailsActivity.EXTRA_JOB_ID, job.getId());
+        startActivity(intent);
+    }
+
+    @Override
+    public void onScrollStateChanged(AbsListView view, int scrollState) {
+    }
+
+    @Override
+    public void onScroll(AbsListView absListView, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+        if (mMoreRootView == null) {
+            return;
+        }
+        if (totalItemCount <= 1) {
+            return;
+        }
+        totalItemCount -= mList.getHeaderViewsCount();
+        if (!mLoading && mLastTotalItemCount != totalItemCount && (totalItemCount - visibleItemCount) == firstVisibleItem) {
+            mLoading = true;
+            mLastTotalItemCount = totalItemCount;
+            loadMore();
+        }
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        if (menu.findItem(R.id.menu_subscribe) == null && !mCurrentSearch.isDefault()) {
+            inflater.inflate(R.menu.jobs_list_menu, menu);
+        }
+    }
+
+    private void queryList() {
+        try {
+            LoaderManager loaderManager = getActivity().getSupportLoaderManager();
+            Loader<Object> loader = loaderManager.getLoader(0);
+            if (loader == null) {
+                loaderManager.initLoader(0, null, this);
+            } else {
+                loaderManager.restartLoader(0, null, this);
+            }
+        } catch (IllegalStateException e) {
+            // happens when activity is closed. We can't use isResumed since it will be false when the activity is
+            // not being shown, thus it will cause problems if user loads another screen while this is still loading
+        }
+    }
+
+    private void removeFooterFromList() {
+        if (mMoreRootView == null) {
+            return;
+        }
+        mList.removeFooterView(mMoreRootView);
+        mMoreRootView = null;
+    }
+
+    private void addFooterToList() {
+        if (mMoreRootView == null) {
+            mMoreRootView = getLayoutInflater(null).inflate(R.layout.list_footer, null);
+            mList.addFooterView(mMoreRootView);
+        } else if (mList.getFooterViewsCount() == 0) {
+            mList.addFooterView(mMoreRootView);
+        }
+    }
+
+    private void loadMore() {
+        mCurrentSearch.page++;
+        triggerJobSearch();
+    }
+
+    private void triggerJobSearch() {
+        Bundle extras = new Bundle();
+        extras.putSerializable(SearchJobsResolver.EXTRA_SEARCH_PACK, mCurrentSearch);
+
+        mLoading = true;
+        FragmentManager fm = getFragmentManager();
+        SearchReceiverFragment receiverFragment = (SearchReceiverFragment) fm.findFragmentByTag(ReceiverFragment.TAG);
+        receiverFragment.addSearchListener(mCurrentSearch, new SearchReceiverFragment.SearchCallback() {
+            @Override
+            public void onFinished(Bundle resultData) {
+                Serializable serializable = resultData.getSerializable(SearchJobsResolver.DATA_JOBS);
+                if (!(serializable instanceof ArrayList)) {
+                    return;
+                }
+                ArrayList<Job> jobs = (ArrayList<Job>) serializable;
+                mAdapter.addItems(jobs);
+                if (jobs.size() == 0) {
+                    removeFooterFromList();
+                } else {
+                    addFooterToList();
+                }
+            }
+
+            @Override
+            public void onError(Bundle resultData) {
+                removeFooterFromList();
+            }
+
+            @Override
+            public void onProgressChanged(boolean running) {
+                mLoading = running;
+            }
+        });
+        Groundy.queue(getActivity(), SearchJobsResolver.class, receiverFragment.getReceiver(), extras);
+        ((SherlockFragmentActivity) getActivity()).setSupportProgressBarIndeterminateVisibility(true);
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putSerializable(KEY_SEARCH, mCurrentSearch);
+    }
+
+//    @Override
+//    public void onClick(View v) {
+//        switch (v.getId()) {
+//            case R.id.search_details:
+//                ((HomeActivity) getActivity()).removeSearch(mCurrentSearch);
+//                break;
+//        }
+//    }
+}

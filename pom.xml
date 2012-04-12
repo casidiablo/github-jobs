@@ -40,7 +40,6 @@
             <groupId>com.google.android</groupId>
             <artifactId>support-v4</artifactId>
             <version>r6</version>
-            <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>com.codeslap</groupId>
@@ -69,8 +68,14 @@
         <dependency>
             <groupId>com.codeslap</groupId>
             <artifactId>persistence</artifactId>
-            <version>0.9.15</version>
+            <version>0.9.16-SNAPSHOT</version>
             <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.viewpagerindicator</groupId>
+            <artifactId>library</artifactId>
+            <version>2.2.4-SNAPSHOT</version>
+            <type>apklib</type>
         </dependency>
         <dependency>
             <groupId>stax</groupId>
@@ -264,7 +269,9 @@
                         <configuration>
                             <artifacts>
                                 <artifact>
-                                    <file>${project.build.directory}/${project.artifactId}-${project.version}-release.apk</file>
+                                    <file>
+                                        ${project.build.directory}/${project.artifactId}-${project.version}-release.apk
+                                    </file>
                                     <type>apk</type>
                                     <classifier>signed-aligned</classifier>
                                 </artifact>

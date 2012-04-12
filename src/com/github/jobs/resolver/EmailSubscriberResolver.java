@@ -4,26 +4,26 @@ import android.os.Bundle;
 import com.codeslap.github.jobs.api.GithubJobsApi;
 import com.codeslap.groundy.CallResolver;
 import com.codeslap.groundy.Groundy;
+import com.github.jobs.ui.SearchPack;
 
 /**
  * @author cristian
  */
 public class EmailSubscriberResolver extends CallResolver {
 
-    public static final String EXTRA_EMAIL = "com.github.jobs.EXTRA_EMAIL";
-    public static final String EXTRA_DESCRIPTION = "com.github.jobs.EXTRA_DESCRIPTION";
-    public static final String EXTRA_LOCATION = "com.github.jobs.EXTRA_LOCATION";
-    public static final String EXTRA_FULL_TIME = "com.github.jobs.EXTRA_FULL_TIME";
+    public static final String EXTRA_EMAIL = "com.github.jobs.extra_email";
+    public static final String EXTRA_SEARCH = "com.github.jobs.extra_search";
 
     private boolean mResult;
 
     @Override
     protected void updateData() {
         Bundle parameters = getParameters();
+        SearchPack searchPack = (SearchPack) parameters.getSerializable(EXTRA_SEARCH);
         String email = parameters.getString(EXTRA_EMAIL);
-        String description = parameters.getString(EXTRA_DESCRIPTION);
-        String location = parameters.getString(EXTRA_LOCATION);
-        boolean fullTime = parameters.getBoolean(EXTRA_FULL_TIME, true);
+        String description = searchPack.search;
+        String location = searchPack.location;
+        boolean fullTime = searchPack.fullTime;
         mResult = GithubJobsApi.subscribe(email, description, location, fullTime);
     }
 

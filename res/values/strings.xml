@@ -39,4 +39,7 @@
     <string name="few_secs_ago">Few seconds ago</string>
     <string name="share">Share</string>
     <string name="loading_more">Loading more…</string>
+    <string name="all_jobs">All jobs</string>
+    <string name="search_details">Searching: %s. Click here to close.</string>
+    <string name="delete_search">Delete search</string>
 </resources>
