@@ -134,7 +134,7 @@ public class JobListFragment extends SherlockFragment implements LoaderManager.L
                 startActivity(subscribeIntent);
                 break;
             case R.id.menu_delete:
-                // TODO delete
+                ((HomeActivity) getActivity()).removeSearch(mCurrentSearch);
                 break;
         }
         return super.onOptionsItemSelected(item);
@@ -273,13 +273,4 @@ public class JobListFragment extends SherlockFragment implements LoaderManager.L
         super.onSaveInstanceState(outState);
         outState.putSerializable(KEY_SEARCH, mCurrentSearch);
     }
-
-//    @Override
-//    public void onClick(View v) {
-//        switch (v.getId()) {
-//            case R.id.search_details:
-//                ((HomeActivity) getActivity()).removeSearch(mCurrentSearch);
-//                break;
-//        }
-//    }
 }
