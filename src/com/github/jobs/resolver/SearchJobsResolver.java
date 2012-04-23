@@ -8,6 +8,7 @@ import com.codeslap.groundy.CallResolver;
 import com.codeslap.groundy.Groundy;
 import com.codeslap.persistence.Persistence;
 import com.codeslap.persistence.SqlAdapter;
+import com.github.jobs.bean.SearchesAndJobs;
 import com.github.jobs.ui.SearchPack;
 
 import java.util.ArrayList;
@@ -28,41 +29,57 @@ public class SearchJobsResolver extends CallResolver {
 
         // configure search
         Search.Builder builder = new Search.Builder();
-        builder.setSearch(searchPack.search);
-        builder.setLocation(searchPack.location);
-        builder.setFullTime(searchPack.fullTime);
-        if (searchPack.page > 0) {
-            builder.setPage(searchPack.page);
+        builder.setSearch(searchPack.getSearch());
+        builder.setLocation(searchPack.getLocation());
+        builder.setFullTime(searchPack.isFullTime());
+        if (searchPack.getPage() > 0) {
+            builder.setPage(searchPack.getPage());
         }
-        builder.createSearch();
 
         // execute search
-        List<Job> jobsList = GithubJobsApi.search(builder.createSearch());
+        Search search = builder.createSearch();
+        List<Job> jobsList = GithubJobsApi.search(search);
         if (jobsList == null) {
             return;
         }
+
         mJobs = new ArrayList<Job>(jobsList);
-        if (searchPack.isDefault()) {
-            SqlAdapter sqlAdapter = Persistence.getSqliteAdapter(getContext());
-            // delete old content
-            if (searchPack.page == 0 && mJobs.size() > 0) {
+        SqlAdapter sqlAdapter = Persistence.getSqliteAdapter(getContext());
+        // delete old content
+        if (searchPack.getPage() == 0 && mJobs.size() > 0) {
+            if (searchPack.isDefault()) {
                 sqlAdapter.delete(Job.class, null, null);
+            } else {
+                SearchesAndJobs sample = new SearchesAndJobs();
+                sample.setSearchHashCode(searchPack.hashCode());
+                sqlAdapter.delete(sample);
             }
-            sqlAdapter.storeCollection(mJobs, null);
         }
+        // if the search is not the default one, references to cache table too
+        if (!searchPack.isDefault()) {
+            List<SearchesAndJobs> searchCaches = new ArrayList<SearchesAndJobs>();
+            for (Job job : mJobs) {
+                SearchesAndJobs searchesAndJobs = new SearchesAndJobs();
+                searchesAndJobs.setSearchHashCode(searchPack.hashCode());
+                searchesAndJobs.setJobId(job.getId());
+                searchCaches.add(searchesAndJobs);
+            }
+            sqlAdapter.storeCollection(searchCaches, null);
+        }
+        // persist all data to be able to use it later
+        sqlAdapter.storeCollection(mJobs, null);
     }
 
     @Override
     protected void prepareResult() {
+        Bundle params = getParameters();
+        SearchPack searchPack = (SearchPack) params.getSerializable(EXTRA_SEARCH_PACK);
+        Bundle resultData = getResultData();
+        resultData.putSerializable(DATA_SEARCH_PACK, searchPack);
         if (mJobs == null) {
             return;
         }
-        Bundle resultData = new Bundle();
-        Bundle params = getParameters();
-        SearchPack searchPack = (SearchPack) params.getSerializable(EXTRA_SEARCH_PACK);
-        resultData.putSerializable(DATA_SEARCH_PACK, searchPack);
         resultData.putSerializable(DATA_JOBS, mJobs);
-        setResultData(resultData);
         setResultCode(Groundy.STATUS_FINISHED);
     }
 

@@ -2,7 +2,6 @@ package com.github.jobs.ui;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.FragmentManager;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
 import android.view.ContextMenu;
@@ -19,7 +18,6 @@ import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
 import com.codeslap.github.jobs.api.Job;
 import com.codeslap.groundy.Groundy;
-import com.codeslap.groundy.ReceiverFragment;
 import com.github.jobs.R;
 import com.github.jobs.adapter.JobsAdapter;
 import com.github.jobs.resolver.EmailSubscriberResolver;
@@ -37,6 +35,8 @@ public class JobListFragment extends SherlockFragment implements LoaderManager.L
         AdapterView.OnItemClickListener, AbsListView.OnScrollListener {
 
     private static final String KEY_SEARCH = "search_key";
+    private static final String KEY_LOADING = "loading_key";
+    private static final String KEY_LAST_TOTAL_ITEM_COUNT = "last_total_item_count_key";
 
     public static JobListFragment newInstance(SearchPack searchPack) {
         JobListFragment jobListFragment = new JobListFragment();
@@ -59,13 +59,19 @@ public class JobListFragment extends SherlockFragment implements LoaderManager.L
     private int mLastTotalItemCount;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        // restore instance
-        if (savedInstanceState != null && savedInstanceState.containsKey(KEY_SEARCH)) {
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        if (savedInstanceState != null) {
             mCurrentSearch = (SearchPack) savedInstanceState.getSerializable(KEY_SEARCH);
+            mLoading = savedInstanceState.getBoolean(KEY_LOADING);
+            mLastTotalItemCount = savedInstanceState.getInt(KEY_LAST_TOTAL_ITEM_COUNT);
         } else {
             mCurrentSearch = (SearchPack) getArguments().getSerializable(KEY_SEARCH);
         }
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         return inflater.inflate(R.layout.jobs_list, null, false);
     }
 
@@ -82,9 +88,8 @@ public class JobListFragment extends SherlockFragment implements LoaderManager.L
         setHasOptionsMenu(true);
         registerForContextMenu(mList);
 
-        if (mCurrentSearch.isDefault()) {
-            queryList();
-        } else {
+        queryList();
+        if (!mCurrentSearch.isDefault()) {
             removeFooterFromList();
         }
         if (savedInstanceState == null) {
@@ -142,7 +147,7 @@ public class JobListFragment extends SherlockFragment implements LoaderManager.L
 
     @Override
     public Loader<List<Job>> onCreateLoader(int id, Bundle args) {
-        return new JobListLoader(getActivity());
+        return new JobListLoader(getActivity(), mCurrentSearch);
     }
 
     @Override
@@ -194,14 +199,22 @@ public class JobListFragment extends SherlockFragment implements LoaderManager.L
         }
     }
 
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putSerializable(KEY_SEARCH, mCurrentSearch);
+        outState.putBoolean(KEY_LOADING, mLoading);
+        outState.putInt(KEY_LAST_TOTAL_ITEM_COUNT, mLastTotalItemCount);
+    }
+
     private void queryList() {
         try {
             LoaderManager loaderManager = getActivity().getSupportLoaderManager();
-            Loader<Object> loader = loaderManager.getLoader(0);
+            Loader<Object> loader = loaderManager.getLoader(mCurrentSearch.hashCode());
             if (loader == null) {
-                loaderManager.initLoader(0, null, this);
+                loaderManager.initLoader(mCurrentSearch.hashCode(), null, this);
             } else {
-                loaderManager.restartLoader(0, null, this);
+                loaderManager.restartLoader(mCurrentSearch.hashCode(), null, this);
             }
         } catch (IllegalStateException e) {
             // happens when activity is closed. We can't use isResumed since it will be false when the activity is
@@ -227,7 +240,7 @@ public class JobListFragment extends SherlockFragment implements LoaderManager.L
     }
 
     private void loadMore() {
-        mCurrentSearch.page++;
+        mCurrentSearch.setPage(mCurrentSearch.getPage() + 1);
         triggerJobSearch();
     }
 
@@ -236,41 +249,33 @@ public class JobListFragment extends SherlockFragment implements LoaderManager.L
         extras.putSerializable(SearchJobsResolver.EXTRA_SEARCH_PACK, mCurrentSearch);
 
         mLoading = true;
-        FragmentManager fm = getFragmentManager();
-        SearchReceiverFragment receiverFragment = (SearchReceiverFragment) fm.findFragmentByTag(ReceiverFragment.TAG);
-        receiverFragment.addSearchListener(mCurrentSearch, new SearchReceiverFragment.SearchCallback() {
-            @Override
-            public void onFinished(Bundle resultData) {
-                Serializable serializable = resultData.getSerializable(SearchJobsResolver.DATA_JOBS);
-                if (!(serializable instanceof ArrayList)) {
-                    return;
-                }
-                ArrayList<Job> jobs = (ArrayList<Job>) serializable;
-                mAdapter.addItems(jobs);
-                if (jobs.size() == 0) {
-                    removeFooterFromList();
-                } else {
-                    addFooterToList();
-                }
-            }
-
-            @Override
-            public void onError(Bundle resultData) {
-                removeFooterFromList();
-            }
-
-            @Override
-            public void onProgressChanged(boolean running) {
-                mLoading = running;
-            }
-        });
-        Groundy.queue(getActivity(), SearchJobsResolver.class, receiverFragment.getReceiver(), extras);
+        HomeActivity activity = (HomeActivity) getActivity();
+        SearchReceiverFragment receiver = activity.getSearchReceiver();
+        Groundy.execute(getActivity(), SearchJobsResolver.class, receiver.getReceiver(), extras);
         ((SherlockFragmentActivity) getActivity()).setSupportProgressBarIndeterminateVisibility(true);
     }
 
-    @Override
-    public void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        outState.putSerializable(KEY_SEARCH, mCurrentSearch);
+    void onFinished(Bundle resultData) {
+        Serializable serializable = resultData.getSerializable(SearchJobsResolver.DATA_JOBS);
+        if (!(serializable instanceof ArrayList)) {
+            return;
+        }
+        ArrayList<Job> jobs = (ArrayList<Job>) serializable;
+        mAdapter.addItems(jobs);
+        if (jobs.size() == 0) {
+            removeFooterFromList();
+        } else {
+            addFooterToList();
+        }
+        mLoading = false;
+    }
+
+    public void onError() {
+        removeFooterFromList();
+        mLoading = false;
+    }
+
+    public void onProgressChanged(boolean running) {
+        mLoading = running;
     }
 }

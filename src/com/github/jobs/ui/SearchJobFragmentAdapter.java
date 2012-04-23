@@ -3,14 +3,13 @@ package com.github.jobs.ui;
 import android.content.Context;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
 import android.text.TextUtils;
 import com.github.jobs.R;
 
 import java.util.ArrayList;
 import java.util.List;
 
-class SearchJobFragmentAdapter extends FragmentPagerAdapter {
+class SearchJobFragmentAdapter extends MyFragmentStatePagerAdapter {
     private final List<SearchPack> mSearchPacks = new ArrayList<SearchPack>();
     private final Context mContext;
 
@@ -37,6 +36,10 @@ class SearchJobFragmentAdapter extends FragmentPagerAdapter {
             return mContext.getString(R.string.all_jobs);
         }
         return toString;
+    }
+
+    int positionFor(SearchPack searchPack) {
+        return mSearchPacks.indexOf(searchPack);
     }
 
     void addSearch(SearchPack searchPack) {

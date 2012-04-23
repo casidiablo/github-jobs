@@ -1,71 +1,71 @@
 package com.github.jobs.ui;
 
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.ResultReceiver;
 import android.widget.Toast;
 import com.actionbarsherlock.app.SherlockFragmentActivity;
+import com.codeslap.groundy.DetachableResultReceiver;
 import com.codeslap.groundy.Groundy;
-import com.codeslap.groundy.ReceiverFragment;
 import com.github.jobs.resolver.SearchJobsResolver;
-
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * @author cristian
  */
-public class SearchReceiverFragment extends ReceiverFragment {
-    private final Map<SearchPack, SearchCallback> mSearchListenerMap = new HashMap<SearchPack, SearchCallback>();
+public class SearchReceiverFragment implements DetachableResultReceiver.Receiver {
+    private SherlockFragmentActivity mActivity;
+    private boolean mSyncing;
+    private final DetachableResultReceiver mReceiver;
 
-    @Override
-    protected void onFinished(Bundle resultData) {
-        super.onFinished(resultData);
-        SearchCallback callback = getCallback(resultData);
-        if (callback != null) {
-            callback.onFinished(resultData);
-        }
+    public SearchReceiverFragment(SherlockFragmentActivity activity) {
+        mActivity = activity;
+        mReceiver = new DetachableResultReceiver(new Handler());
+        mReceiver.setReceiver(this);
     }
 
     @Override
-    protected void onError(Bundle resultData) {
-        super.onError(resultData);
-        Toast.makeText(getActivity(), resultData.getString(Groundy.KEY_ERROR), Toast.LENGTH_LONG).show();
-        SearchCallback callback = getCallback(resultData);
-        if (callback != null) {
-            callback.onError(resultData);
+    public void onReceiveResult(int resultCode, Bundle resultData) {
+        if (mActivity == null) {
+            return;
         }
-    }
 
-    private SearchCallback getCallback(Bundle resultData) {
+        SearchPack searchPack = null;
         if (resultData.containsKey(SearchJobsResolver.DATA_SEARCH_PACK)) {
-            SearchPack searchPack = (SearchPack) resultData.getSerializable(SearchJobsResolver.DATA_SEARCH_PACK);
-            if (mSearchListenerMap.containsKey(searchPack)) {
-                return mSearchListenerMap.get(searchPack);
+            searchPack = (SearchPack) resultData.get(SearchJobsResolver.DATA_SEARCH_PACK);
+        }
+
+        switch (resultCode) {
+            case Groundy.STATUS_RUNNING: {
+                mSyncing = true;
+                break;
+            }
+            case Groundy.STATUS_FINISHED: {
+                mSyncing = false;
+                if (searchPack != null) {
+                    ((HomeActivity) mActivity).onFinished(resultData, searchPack);
+                }
+                break;
+            }
+            case Groundy.STATUS_ERROR: {
+                mSyncing = false;
+                Toast.makeText(mActivity, resultData.getString(Groundy.KEY_ERROR), Toast.LENGTH_LONG).show();
+                if (searchPack != null) {
+                    ((HomeActivity) mActivity).onError(searchPack);
+                }
+                break;
             }
         }
-        return null;
-    }
-
-    @Override
-    protected void onProgressChanged(boolean running) {
-        SherlockFragmentActivity activity = (SherlockFragmentActivity) getActivity();
-        activity.setSupportProgressBarIndeterminateVisibility(running);
-    }
-
-    public void addSearchListener(SearchPack searchPack, SearchCallback searchCallback) {
-        mSearchListenerMap.put(searchPack, searchCallback);
-        if (mSearchListenerMap.size() > 1) {
-            ((HomeActivity) getActivity()).showTabs();
-            ((HomeActivity) getActivity()).selectTab(mSearchListenerMap.size() - 1);
-        } else {
-            ((HomeActivity) getActivity()).hideTabs();
+        mActivity.setSupportProgressBarIndeterminateVisibility(mSyncing);
+        if (searchPack != null) {
+            ((HomeActivity) mActivity).onProgressChanged(mSyncing, searchPack);
         }
     }
 
-    public interface SearchCallback {
-        void onFinished(Bundle resultData);
+    public ResultReceiver getReceiver() {
+        return mReceiver;
+    }
 
-        void onError(Bundle resultData);
-
-        void onProgressChanged(boolean running);
+    public void setActivity(SherlockFragmentActivity activity) {
+        mActivity = activity;
     }
 }

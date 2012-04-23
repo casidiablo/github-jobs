@@ -5,10 +5,42 @@ import android.text.TextUtils;
 import java.io.Serializable;
 
 public class SearchPack implements Serializable {
-    public String search;
-    public String location;
-    public boolean fullTime = true;
-    public int page;
+    private String search;
+    private String location;
+    private boolean fullTime = true;
+    private int page;
+
+    public String getSearch() {
+        return search;
+    }
+
+    public void setSearch(String search) {
+        this.search = search;
+    }
+
+    public String getLocation() {
+        return location;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
+    }
+
+    public boolean isFullTime() {
+        return fullTime;
+    }
+
+    public void setFullTime(boolean fullTime) {
+        this.fullTime = fullTime;
+    }
+
+    public int getPage() {
+        return page;
+    }
+
+    public void setPage(int page) {
+        this.page = page;
+    }
 
     @Override
     public boolean equals(Object o) {
@@ -44,8 +76,8 @@ public class SearchPack implements Serializable {
 
     @Override
     public int hashCode() {
-        int result = search != null ? search.hashCode() : 0;
-        result = 31 * result + (location != null ? location.hashCode() : 0);
+        int result = search != null ? search.toLowerCase().trim().hashCode() : 0;
+        result = 31 * result + (location != null ? location.toLowerCase().trim().hashCode() : 0);
         result = 31 * result + (fullTime ? 1 : 0);
         return result;
     }

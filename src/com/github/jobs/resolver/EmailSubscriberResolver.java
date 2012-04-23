@@ -21,9 +21,9 @@ public class EmailSubscriberResolver extends CallResolver {
         Bundle parameters = getParameters();
         SearchPack searchPack = (SearchPack) parameters.getSerializable(EXTRA_SEARCH);
         String email = parameters.getString(EXTRA_EMAIL);
-        String description = searchPack.search;
-        String location = searchPack.location;
-        boolean fullTime = searchPack.fullTime;
+        String description = searchPack.getSearch();
+        String location = searchPack.getLocation();
+        boolean fullTime = searchPack.isFullTime();
         mResult = GithubJobsApi.subscribe(email, description, location, fullTime);
     }
 
