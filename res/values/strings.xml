@@ -5,9 +5,6 @@
     <string name="search">Search</string>
     <string name="search_example">title, companies, etc.</string>
     <string name="search_title">Search</string>
-    <string name="use_this_time">Use this time</string>
-    <string name="set_as_default">Set as default</string>
-    <string name="clear">Clear</string>
     <string name="location_hint">city, state, zip code or country</string>
     <string name="location_lbl">Location:</string>
     <string name="full_time">Full time</string>
@@ -40,6 +37,7 @@
     <string name="share">Share</string>
     <string name="loading_more">Loading more…</string>
     <string name="all_jobs">All jobs</string>
-    <string name="search_details">Searching: %s. Click here to close.</string>
     <string name="delete_search">Delete search</string>
+    <string name="cancel">Cancel</string>
+    <string name="description_background">Background</string>
 </resources>

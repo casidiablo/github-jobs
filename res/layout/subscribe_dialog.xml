@@ -15,7 +15,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="textEmailAddress"
-            android:hint="email"/>
+            android:hint="@string/email"/>
     <Button
             android:id="@+id/btn_subscribe"
             android:layout_width="match_parent"

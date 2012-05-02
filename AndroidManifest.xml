@@ -3,6 +3,10 @@
           package="com.github.jobs"
           android:versionCode="1"
           android:versionName="1.0">
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.WAKE_LOCK"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <uses-sdk android:minSdkVersion="8" android:targetSdkVersion="14"/>
     <application android:label="@string/app_name" android:icon="@drawable/ic_launcher" android:name=".App"
                  android:theme="@style/Theme.GithubJobs">
         <activity android:name=".ui.HomeActivity" android:label="@string/github_jobs" android:launchMode="singleTop" android:configChanges="orientation|keyboardHidden|keyboard|screenLayout|touchscreen">
@@ -17,9 +21,4 @@
         <activity android:name=".ui.JobDetailsActivity" android:label="@string/job_details" android:configChanges="orientation|keyboardHidden|keyboard|screenLayout|touchscreen"/>
         <service android:name="com.codeslap.groundy.GroundyService"/>
     </application>
-
-    <uses-permission android:name="android.permission.INTERNET"/>
-    <uses-permission android:name="android.permission.WAKE_LOCK"/>
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
-    <uses-sdk android:minSdkVersion="8" android:targetSdkVersion="14"/>
 </manifest>
