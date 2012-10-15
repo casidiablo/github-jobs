@@ -25,6 +25,8 @@
             android:textStyle="bold"
             android:layout_below="@id/title"
             android:layout_toRightOf="@id/company"
+            android:ellipsize="end"
+            android:singleLine="true"
             android:textAppearance="?android:attr/textAppearanceSmall"/>
     <TextView
             android:id="@+id/location"

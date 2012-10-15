@@ -165,6 +165,10 @@ public class JobListFragment extends SherlockFragment implements LoaderManager.L
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        if (mAdapter.getCount() <= position) {
+            // ignore invalid clicks
+            return;
+        }
         Job job = mAdapter.getItem(position);
         Intent intent = new Intent(getActivity(), JobDetailsActivity.class);
         intent.putExtra(JobDetailsActivity.EXTRA_JOB_ID, job.getId());

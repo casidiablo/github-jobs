@@ -88,7 +88,7 @@ public class JobDetailsActivity extends BaseActivity implements View.OnClickList
         menu.add(1, HOW_TO_APPLY, 0, getString(R.string.apply))
                 .setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS | MenuItem.SHOW_AS_ACTION_WITH_TEXT);
         menu.add(0, SHARE, 0, R.string.share)
-                .setActionProvider(new ShareActionProvider(this))
+                .setActionProvider(new ShareActionProvider(getSupportActionBar().getThemedContext()))
                 .setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
 
         // Set file with share history to the provider and set the share intent.
