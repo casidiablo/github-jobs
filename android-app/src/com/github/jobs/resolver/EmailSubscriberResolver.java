@@ -4,7 +4,7 @@ import android.os.Bundle;
 import com.codeslap.github.jobs.api.GithubJobsApi;
 import com.codeslap.groundy.CallResolver;
 import com.codeslap.groundy.Groundy;
-import com.github.jobs.ui.SearchPack;
+import com.github.jobs.bean.SearchPack;
 
 /**
  * @author cristian

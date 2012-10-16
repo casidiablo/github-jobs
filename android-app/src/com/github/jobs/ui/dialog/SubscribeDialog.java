@@ -1,4 +1,4 @@
-package com.github.jobs.ui;
+package com.github.jobs.ui.dialog;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -8,16 +8,18 @@ import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.Toast;
-import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.codeslap.groundy.Groundy;
 import com.codeslap.groundy.ReceiverFragment;
 import com.github.jobs.R;
 import com.github.jobs.resolver.EmailSubscriberResolver;
 
+import static com.github.jobs.utils.AnalyticsHelper.NAME_SUBSCRIBE_DIALOG;
+import static com.github.jobs.utils.AnalyticsHelper.getTracker;
+
 /**
  * @author cristian
  */
-public class SubscribeDialog extends SherlockFragmentActivity implements View.OnClickListener {
+public class SubscribeDialog extends TrackFragmentDialog implements View.OnClickListener {
 
     private EditText mEmail;
 
@@ -26,6 +28,7 @@ public class SubscribeDialog extends SherlockFragmentActivity implements View.On
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getTracker().trackPageView(NAME_SUBSCRIBE_DIALOG);
         setContentView(R.layout.subscribe_dialog);
 
         mEmail = (EditText) findViewById(R.id.edit_email);

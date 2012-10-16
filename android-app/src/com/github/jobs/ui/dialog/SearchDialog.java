@@ -1,4 +1,4 @@
-package com.github.jobs.ui;
+package com.github.jobs.ui.dialog;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -6,11 +6,11 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.EditText;
-import com.actionbarsherlock.app.SherlockActivity;
-import com.actionbarsherlock.view.Window;
 import com.github.jobs.R;
 
-public class SearchDialog extends SherlockActivity implements View.OnClickListener {
+import static com.github.jobs.utils.AnalyticsHelper.*;
+
+public class SearchDialog extends TrackDialog implements View.OnClickListener {
 
     public static final String EXTRA_DESCRIPTION = "description";
     public static final String EXTRA_LOCATION = "location";
@@ -22,6 +22,7 @@ public class SearchDialog extends SherlockActivity implements View.OnClickListen
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getTracker().trackPageView(NAME_SEARCH_DIALOG);
         setContentView(R.layout.search_settings);
 
         mDescription = (EditText) findViewById(R.id.edit_description);
@@ -42,13 +43,17 @@ public class SearchDialog extends SherlockActivity implements View.OnClickListen
                     return;
                 }
                 // everything looks ok, let's search
+                String description = mDescription.getText().toString();
+                String location = mLocation.getText().toString();
                 Intent data = new Intent()
-                        .putExtra(EXTRA_DESCRIPTION, mDescription.getText().toString())
-                        .putExtra(EXTRA_LOCATION, mLocation.getText().toString())
+                        .putExtra(EXTRA_DESCRIPTION, description)
+                        .putExtra(EXTRA_LOCATION, location)
                         .putExtra(EXTRA_FULL_TIME, mFullTime.isChecked());
                 setResult(RESULT_OK, data);
+                getTracker().trackEvent(CATEGORY_SEARCH, ACTION_SEARCH, description + "," + location);
                 break;
             case R.id.btn_cancel:
+                getTracker().trackEvent(CATEGORY_SEARCH, ACTION_CANCEL, LABEL_DIALOG);
                 setResult(RESULT_CANCELED);
                 break;
         }

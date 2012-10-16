@@ -1,4 +1,4 @@
-package com.github.jobs.ui;
+package com.github.jobs.ui.fragment;
 
 import android.content.Context;
 import android.content.Intent;
@@ -25,10 +25,13 @@ import com.actionbarsherlock.widget.ShareActionProvider;
 import com.codeslap.github.jobs.api.Job;
 import com.codeslap.persistence.Persistence;
 import com.github.jobs.R;
+import com.github.jobs.ui.activity.JobDetailsActivity;
 import com.github.jobs.utils.ShareHelper;
 import com.github.jobs.utils.StringUtils;
 import com.telly.wasp.BitmapHelper;
 import com.telly.wasp.CallbackBitmapObserver;
+
+import static com.github.jobs.utils.AnalyticsHelper.*;
 
 /**
  * @author cristian
@@ -106,8 +109,16 @@ public class JobDetailsFragment extends SherlockFragment implements View.OnClick
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
         Context themedContext = getSherlockActivity().getSupportActionBar().getThemedContext();
+        ShareActionProvider shareActionProvider = new ShareActionProvider(themedContext);
+        shareActionProvider.setOnShareTargetSelectedListener(new ShareActionProvider.OnShareTargetSelectedListener() {
+            @Override
+            public boolean onShareTargetSelected(ShareActionProvider shareActionProvider, Intent intent) {
+                getTracker().trackEvent(CATEGORY_JOBS, ACTION_SHARE, intent.getComponent().getPackageName());
+                return false;
+            }
+        });
         menu.add(0, SHARE, 0, R.string.share)
-                .setActionProvider(new ShareActionProvider(themedContext))
+                .setActionProvider(shareActionProvider)
                 .setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
 
         // Set file with share history to the provider and set the share intent.

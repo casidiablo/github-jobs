@@ -1,4 +1,4 @@
-package com.github.jobs.ui;
+package com.github.jobs.loader;
 
 import android.content.Context;
 import com.codeslap.github.jobs.api.Job;
@@ -6,6 +6,7 @@ import com.codeslap.groundy.ListLoader;
 import com.codeslap.persistence.Persistence;
 import com.codeslap.persistence.SqlAdapter;
 import com.github.jobs.adapter.JobsAdapter;
+import com.github.jobs.bean.SearchPack;
 import com.github.jobs.bean.SearchesAndJobs;
 
 import java.text.ParseException;
@@ -14,7 +15,7 @@ import java.util.*;
 /**
  * @author cristian
  */
-class JobListLoader extends ListLoader<Job> {
+public class JobListLoader extends ListLoader<Job> {
 
     private final SearchPack mCurrentSearch;
 

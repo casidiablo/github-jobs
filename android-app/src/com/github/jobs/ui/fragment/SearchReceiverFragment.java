@@ -1,4 +1,4 @@
-package com.github.jobs.ui;
+package com.github.jobs.ui.fragment;
 
 import android.os.Bundle;
 import android.os.Handler;
@@ -7,7 +7,9 @@ import android.widget.Toast;
 import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.codeslap.groundy.DetachableResultReceiver;
 import com.codeslap.groundy.Groundy;
+import com.github.jobs.bean.SearchPack;
 import com.github.jobs.resolver.SearchJobsResolver;
+import com.github.jobs.ui.activity.HomeActivity;
 
 /**
  * @author cristian

@@ -40,4 +40,5 @@
     <string name="delete_search">Delete search</string>
     <string name="cancel">Cancel</string>
     <string name="description_background">Background</string>
+    <string name="ga_api_key">UA-884125-4</string>
 </resources>

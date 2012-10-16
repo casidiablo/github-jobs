@@ -1,4 +1,4 @@
-package com.github.jobs.ui;
+package com.github.jobs.ui.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -7,16 +7,18 @@ import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
 import com.codeslap.github.jobs.api.Job;
 import com.codeslap.persistence.Persistence;
-import com.codeslap.topy.BaseActivity;
 import com.github.jobs.R;
 import com.github.jobs.adapter.JobsDetailsAdapter;
+import com.github.jobs.ui.dialog.HowToApplyDialog;
 
 import java.util.List;
+
+import static com.github.jobs.utils.AnalyticsHelper.*;
 
 /**
  * @author cristian
  */
-public class JobDetailsActivity extends BaseActivity {
+public class JobDetailsActivity extends TrackActivity implements ViewPager.OnPageChangeListener {
 
     public static final String EXTRA_CURRENT_JOB_ID = "com.github.jobs.CURRENT_JOB_ID";
     public static final String EXTRA_JOBS_IDS = "com.github.jobs.JOBS_IDS";
@@ -26,6 +28,7 @@ public class JobDetailsActivity extends BaseActivity {
 
     private ViewPager mJobsPager;
     private List<String> mJobsIds;
+    private int mCurrentJobPosition;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,12 +44,15 @@ public class JobDetailsActivity extends BaseActivity {
         Bundle extras = getIntent().getExtras();
         String jobId = extras.getString(EXTRA_CURRENT_JOB_ID);
         mJobsIds = extras.getStringArrayList(EXTRA_JOBS_IDS);
-        int currentJobPosition = mJobsIds.indexOf(jobId);
+        mCurrentJobPosition = mJobsIds.indexOf(jobId);
 
         // prepare the view pager to show current job
         mJobsPager = (ViewPager) findViewById(R.id.jobs_pager);
         mJobsPager.setAdapter(new JobsDetailsAdapter(getSupportFragmentManager(), mJobsIds));
-        mJobsPager.setCurrentItem(currentJobPosition);
+        mJobsPager.setCurrentItem(mCurrentJobPosition);
+        mJobsPager.setOnPageChangeListener(this);
+
+        getTracker().trackPageView(NAME_DETAILS + "?id=" + jobId);
     }
 
     @Override
@@ -66,6 +72,7 @@ public class JobDetailsActivity extends BaseActivity {
                 Intent howToApplyDialog = new Intent(this, HowToApplyDialog.class);
                 howToApplyDialog.putExtra(HowToApplyDialog.EXTRA_HOW_TO_APPLY, job.getHowToApply());
                 startActivity(howToApplyDialog);
+                getTracker().trackEvent(CATEGORY_JOBS, ACTION_APPLY, job.getTitle() + "," + job.getUrl());
                 return true;
             case android.R.id.home:
                 // app icon in Action Bar clicked; go home
@@ -73,6 +80,7 @@ public class JobDetailsActivity extends BaseActivity {
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intent);
                 overridePendingTransition(R.anim.home_enter, R.anim.home_exit);
+                getTracker().trackEvent(CATEGORY_JOBS, ACTION_BACK, LABEL_FROM_DETAILS);
                 return true;
         }
         return super.onOptionsItemSelected(item);
@@ -88,5 +96,23 @@ public class JobDetailsActivity extends BaseActivity {
         job.setId(jobId);
         job = Persistence.getAdapter(this).findFirst(job);
         return job;
+    }
+
+    @Override
+    public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+    }
+
+    @Override
+    public void onPageSelected(int position) {
+        if (position > mCurrentJobPosition) {
+            getTracker().trackEvent(CATEGORY_JOBS, ACTION_SWIPE, LABEL_LEFT);
+        } else if (position < mCurrentJobPosition) {
+            getTracker().trackEvent(CATEGORY_JOBS, ACTION_SWIPE, LABEL_RIGHT);
+        }
+        mCurrentJobPosition = position;
+    }
+
+    @Override
+    public void onPageScrollStateChanged(int state) {
     }
 }

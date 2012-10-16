@@ -87,6 +87,12 @@
             <version>3.0.3</version>
             <scope>compile</scope>
         </dependency>
+        <dependency>
+            <groupId>com.google.android.analytics</groupId>
+            <artifactId>analytics</artifactId>
+            <version>1.5.1</version>
+            <scope>compile</scope>
+        </dependency>
         <!-- Provided dependencies -->
         <dependency>
             <groupId>com.google.android</groupId>

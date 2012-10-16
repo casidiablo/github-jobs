@@ -8,7 +8,7 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 import com.codeslap.github.jobs.api.Job;
 import com.github.jobs.R;
-import com.github.jobs.ui.JobDetailsActivity;
+import com.github.jobs.ui.activity.JobDetailsActivity;
 import com.github.jobs.utils.RelativeDate;
 import com.github.jobs.utils.StringUtils;
 

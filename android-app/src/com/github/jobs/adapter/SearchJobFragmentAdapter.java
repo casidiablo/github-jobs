@@ -5,8 +5,8 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.text.TextUtils;
 import com.github.jobs.R;
-import com.github.jobs.ui.JobListFragment;
-import com.github.jobs.ui.SearchPack;
+import com.github.jobs.bean.SearchPack;
+import com.github.jobs.ui.fragment.JobListFragment;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -1,4 +1,4 @@
-package com.github.jobs.ui;
+package com.github.jobs.ui.activity;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -7,15 +7,20 @@ import android.support.v4.view.ViewPager;
 import android.view.View;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
-import com.codeslap.topy.BaseActivity;
 import com.github.jobs.R;
 import com.github.jobs.adapter.SearchJobFragmentAdapter;
+import com.github.jobs.bean.SearchPack;
+import com.github.jobs.ui.dialog.SearchDialog;
+import com.github.jobs.ui.fragment.JobListFragment;
+import com.github.jobs.ui.fragment.SearchReceiverFragment;
 import com.viewpagerindicator.TabPageIndicator;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class HomeActivity extends BaseActivity {
+import static com.github.jobs.utils.AnalyticsHelper.*;
+
+public class HomeActivity extends TrackActivity {
     private static final int SEARCH_REQUEST = 534;
 
     private TabPageIndicator mIndicator;
@@ -26,6 +31,7 @@ public class HomeActivity extends BaseActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getTracker().trackPageView(NAME_HOME);
         setContentView(R.layout.main);
 
         mState = (State) getLastCustomNonConfigurationInstance();
@@ -42,6 +48,8 @@ public class HomeActivity extends BaseActivity {
         mViewPager = (ViewPager) findViewById(R.id.pager);
         mSearchJobFragmentAdapter = new SearchJobFragmentAdapter(this, getSupportFragmentManager());
         mViewPager.setAdapter(mSearchJobFragmentAdapter);
+        mViewPager.setPageMargin(10);
+        mViewPager.setPageMarginDrawable(R.drawable.header_back);
 
         mIndicator = (TabPageIndicator) findViewById(R.id.indicator);
         mIndicator.setViewPager(mViewPager);
@@ -95,9 +103,7 @@ public class HomeActivity extends BaseActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.menu_search:
-                if (true) {
-                    throw new RuntimeException("In the same place, but different exception");
-                }
+                getTracker().trackEvent(CATEGORY_SEARCH, ACTION_OPEN, LABEL_DIALOG);
                 startActivityForResult(new Intent(this, SearchDialog.class), SEARCH_REQUEST);
                 break;
         }

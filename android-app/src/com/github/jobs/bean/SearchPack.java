@@ -1,4 +1,4 @@
-package com.github.jobs.ui;
+package com.github.jobs.bean;
 
 import android.text.TextUtils;
 import com.github.jobs.utils.StringUtils;

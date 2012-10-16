@@ -8,8 +8,8 @@ import com.codeslap.groundy.CallResolver;
 import com.codeslap.groundy.Groundy;
 import com.codeslap.persistence.Persistence;
 import com.codeslap.persistence.SqlAdapter;
+import com.github.jobs.bean.SearchPack;
 import com.github.jobs.bean.SearchesAndJobs;
-import com.github.jobs.ui.SearchPack;
 
 import java.util.ArrayList;
 import java.util.List;

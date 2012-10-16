@@ -2,7 +2,7 @@ package com.github.jobs.adapter;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import com.github.jobs.ui.JobDetailsFragment;
+import com.github.jobs.ui.fragment.JobDetailsFragment;
 
 import java.util.List;
 
