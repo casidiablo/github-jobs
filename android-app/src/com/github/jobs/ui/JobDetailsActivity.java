@@ -44,7 +44,7 @@ public class JobDetailsActivity extends BaseActivity implements View.OnClickList
         String jobId = getIntent().getStringExtra(EXTRA_JOB_ID);
         mJob = new Job();
         mJob.setId(jobId);
-        mJob = Persistence.quick(this).findFirst(mJob);
+        mJob = Persistence.getAdapter(this).findFirst(mJob);
 
         TextView title = (TextView) findViewById(R.id.title);
         title.setText(mJob.getTitle());

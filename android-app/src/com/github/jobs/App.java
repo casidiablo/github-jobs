@@ -2,17 +2,20 @@ package com.github.jobs;
 
 import android.app.Application;
 import com.codeslap.github.jobs.api.Job;
+import com.codeslap.persistence.DatabaseSpec;
 import com.codeslap.persistence.PersistenceConfig;
-import com.codeslap.persistence.SqlPersistence;
 import com.github.jobs.bean.SearchesAndJobs;
 
 public class App extends Application {
+
+    private static final int DB_VERSION = 1;
+
     @Override
     public void onCreate() {
         super.onCreate();
         // configure database
-        SqlPersistence database = PersistenceConfig.getDatabase(getPackageName(), 1);
-        database.match(SearchesAndJobs.class);
-        database.matchNotAutoIncrement(Job.class);
+        DatabaseSpec databaseSpec = PersistenceConfig.registerSpec(DB_VERSION);
+        databaseSpec.match(SearchesAndJobs.class);
+        databaseSpec.matchNotAutoIncrement(Job.class);
     }
 }

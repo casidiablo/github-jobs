@@ -24,7 +24,7 @@ class JobListLoader extends ListLoader<Job> {
 
     @Override
     protected List<Job> getData() {
-        SqlAdapter sqlAdapter = Persistence.getSqliteAdapter(getContext());
+        SqlAdapter sqlAdapter = Persistence.getAdapter(getContext());
         if (mCurrentSearch.isDefault()) {
             return sqlAdapter.findAll(Job.class);
         }

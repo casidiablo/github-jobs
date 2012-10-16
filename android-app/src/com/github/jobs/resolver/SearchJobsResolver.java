@@ -44,7 +44,7 @@ public class SearchJobsResolver extends CallResolver {
         }
 
         mJobs = new ArrayList<Job>(jobsList);
-        SqlAdapter sqlAdapter = Persistence.getSqliteAdapter(getContext());
+        SqlAdapter sqlAdapter = Persistence.getAdapter(getContext());
         // delete old content
         if (searchPack.getPage() == 0 && mJobs.size() > 0) {
             if (searchPack.isDefault()) {
