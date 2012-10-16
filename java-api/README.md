@@ -1,0 +1,1 @@
+Minimalist GitHub Jobs Api Wrapper for Java
