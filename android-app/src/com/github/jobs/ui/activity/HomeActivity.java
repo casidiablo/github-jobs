@@ -2,6 +2,7 @@ package com.github.jobs.ui.activity;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.view.View;
@@ -48,8 +49,9 @@ public class HomeActivity extends TrackActivity {
         mViewPager = (ViewPager) findViewById(R.id.pager);
         mSearchJobFragmentAdapter = new SearchJobFragmentAdapter(this, getSupportFragmentManager());
         mViewPager.setAdapter(mSearchJobFragmentAdapter);
-        mViewPager.setPageMargin(10);
-        mViewPager.setPageMarginDrawable(R.drawable.header_back);
+        Drawable drawable = getResources().getDrawable(R.drawable.view_pager_separator);
+        mViewPager.setPageMargin(drawable.getIntrinsicWidth());
+        mViewPager.setPageMarginDrawable(drawable);
 
         mIndicator = (TabPageIndicator) findViewById(R.id.indicator);
         mIndicator.setViewPager(mViewPager);

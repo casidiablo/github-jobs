@@ -1,6 +1,7 @@
 package com.github.jobs.ui.activity;
 
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import com.actionbarsherlock.view.Menu;
@@ -51,6 +52,9 @@ public class JobDetailsActivity extends TrackActivity implements ViewPager.OnPag
         mJobsPager.setAdapter(new JobsDetailsAdapter(getSupportFragmentManager(), mJobsIds));
         mJobsPager.setCurrentItem(mCurrentJobPosition);
         mJobsPager.setOnPageChangeListener(this);
+        Drawable drawable = getResources().getDrawable(R.drawable.view_pager_separator);
+        mJobsPager.setPageMargin(drawable.getIntrinsicWidth());
+        mJobsPager.setPageMarginDrawable(drawable);
 
         getTracker().trackPageView(NAME_DETAILS + "?id=" + jobId);
     }

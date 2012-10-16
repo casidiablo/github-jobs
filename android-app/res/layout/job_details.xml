@@ -14,6 +14,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_centerInParent="true"
+            android:layout_margin="10dip"
             android:contentDescription="@string/description_background"
             android:alpha="10"
             android:adjustViewBounds="false"/>
@@ -52,12 +53,13 @@
     <ScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_below="@id/company_container">
+            android:layout_below="@id/company_container"
+            android:padding="5dip"
+            android:scrollbars="none">
         <com.github.jobs.widget.JellyBeanSpanFixTextView
                 android:id="@+id/description"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="5dip"
                 android:textAppearance="?android:attr/textAppearanceMedium"/>
     </ScrollView>
 </RelativeLayout>
