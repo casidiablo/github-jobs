@@ -4,10 +4,10 @@
           android:icon="@drawable/ic_trash"
           android:title="@string/delete_search"
           android:orderInCategory="98"
-          android:showAsAction="ifRoom" />
+          android:showAsAction="always" />
     <item android:id="@+id/menu_subscribe"
           android:icon="@drawable/ic_subscribe"
           android:title="@string/subscribe"
           android:orderInCategory="99"
-          android:showAsAction="ifRoom" />
+          android:showAsAction="always" />
 </menu>
