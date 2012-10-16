@@ -113,7 +113,7 @@ public class JobDetailsFragment extends SherlockFragment implements View.OnClick
         shareActionProvider.setOnShareTargetSelectedListener(new ShareActionProvider.OnShareTargetSelectedListener() {
             @Override
             public boolean onShareTargetSelected(ShareActionProvider shareActionProvider, Intent intent) {
-                getTracker().trackEvent(CATEGORY_JOBS, ACTION_SHARE, intent.getComponent().getPackageName());
+                getTracker(getActivity()).trackEvent(CATEGORY_JOBS, ACTION_SHARE, intent.getComponent().getPackageName());
                 return false;
             }
         });

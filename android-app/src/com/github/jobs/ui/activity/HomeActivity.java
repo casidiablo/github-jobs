@@ -11,6 +11,7 @@ import com.actionbarsherlock.view.MenuItem;
 import com.github.jobs.R;
 import com.github.jobs.adapter.SearchJobFragmentAdapter;
 import com.github.jobs.bean.SearchPack;
+import com.github.jobs.ui.dialog.AboutDialog;
 import com.github.jobs.ui.dialog.SearchDialog;
 import com.github.jobs.ui.fragment.JobListFragment;
 import com.github.jobs.ui.fragment.SearchReceiverFragment;
@@ -32,7 +33,7 @@ public class HomeActivity extends TrackActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getTracker().trackPageView(NAME_HOME);
+        getTracker(this).trackPageView(NAME_HOME);
         setContentView(R.layout.main);
 
         mState = (State) getLastCustomNonConfigurationInstance();
@@ -105,8 +106,12 @@ public class HomeActivity extends TrackActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.menu_search:
-                getTracker().trackEvent(CATEGORY_SEARCH, ACTION_OPEN, LABEL_DIALOG);
+                getTracker(this).trackEvent(CATEGORY_SEARCH, ACTION_OPEN, LABEL_DIALOG);
                 startActivityForResult(new Intent(this, SearchDialog.class), SEARCH_REQUEST);
+                break;
+            case R.id.menu_about:
+                getTracker(this).trackEvent(CATEGORY_ABOUT, ACTION_OPEN, LABEL_DIALOG);
+                startActivity(new Intent(this, AboutDialog.class));
                 break;
         }
         return super.onOptionsItemSelected(item);

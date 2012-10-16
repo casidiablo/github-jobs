@@ -56,7 +56,7 @@ public class JobDetailsActivity extends TrackActivity implements ViewPager.OnPag
         mJobsPager.setPageMargin(drawable.getIntrinsicWidth());
         mJobsPager.setPageMarginDrawable(drawable);
 
-        getTracker().trackPageView(NAME_DETAILS + "?id=" + jobId);
+        getTracker(this).trackPageView(NAME_DETAILS + "?id=" + jobId);
     }
 
     @Override
@@ -76,7 +76,7 @@ public class JobDetailsActivity extends TrackActivity implements ViewPager.OnPag
                 Intent howToApplyDialog = new Intent(this, HowToApplyDialog.class);
                 howToApplyDialog.putExtra(HowToApplyDialog.EXTRA_HOW_TO_APPLY, job.getHowToApply());
                 startActivity(howToApplyDialog);
-                getTracker().trackEvent(CATEGORY_JOBS, ACTION_APPLY, job.getTitle() + "," + job.getUrl());
+                getTracker(this).trackEvent(CATEGORY_JOBS, ACTION_APPLY, job.getTitle() + "," + job.getUrl());
                 return true;
             case android.R.id.home:
                 // app icon in Action Bar clicked; go home
@@ -84,7 +84,7 @@ public class JobDetailsActivity extends TrackActivity implements ViewPager.OnPag
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intent);
                 overridePendingTransition(R.anim.home_enter, R.anim.home_exit);
-                getTracker().trackEvent(CATEGORY_JOBS, ACTION_BACK, LABEL_FROM_DETAILS);
+                getTracker(this).trackEvent(CATEGORY_JOBS, ACTION_BACK, LABEL_FROM_DETAILS);
                 return true;
         }
         return super.onOptionsItemSelected(item);
@@ -109,9 +109,9 @@ public class JobDetailsActivity extends TrackActivity implements ViewPager.OnPag
     @Override
     public void onPageSelected(int position) {
         if (position > mCurrentJobPosition) {
-            getTracker().trackEvent(CATEGORY_JOBS, ACTION_SWIPE, LABEL_LEFT);
+            getTracker(this).trackEvent(CATEGORY_JOBS, ACTION_SWIPE, LABEL_LEFT);
         } else if (position < mCurrentJobPosition) {
-            getTracker().trackEvent(CATEGORY_JOBS, ACTION_SWIPE, LABEL_RIGHT);
+            getTracker(this).trackEvent(CATEGORY_JOBS, ACTION_SWIPE, LABEL_RIGHT);
         }
         mCurrentJobPosition = position;
     }

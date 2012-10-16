@@ -28,7 +28,7 @@ public class SubscribeDialog extends TrackFragmentDialog implements View.OnClick
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getTracker().trackPageView(NAME_SUBSCRIBE_DIALOG);
+        getTracker(this).trackPageView(NAME_SUBSCRIBE_DIALOG);
         setContentView(R.layout.subscribe_dialog);
 
         mEmail = (EditText) findViewById(R.id.edit_email);

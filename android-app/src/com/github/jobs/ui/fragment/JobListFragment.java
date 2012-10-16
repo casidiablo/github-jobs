@@ -114,7 +114,7 @@ public class JobListFragment extends SherlockFragment implements LoaderManager.L
         menu.add(0, JOB_DETAILS, 0, R.string.job_details);
         menu.add(0, HOW_TO_APPLY, 0, R.string.how_to_apply);
         menu.add(0, SHARE, 0, R.string.share);
-        getTracker().trackEvent(CATEGORY_JOBS, ACTION_OPEN_CONTEXT, mCurrentSearch.getSearch());
+        getTracker(getActivity()).trackEvent(CATEGORY_JOBS, ACTION_OPEN_CONTEXT, mCurrentSearch.getSearch());
     }
 
     @Override
@@ -128,17 +128,17 @@ public class JobListFragment extends SherlockFragment implements LoaderManager.L
                 jobDetailsIntent.putExtra(JobDetailsActivity.EXTRA_CURRENT_JOB_ID, job.getId());
                 jobDetailsIntent.putExtra(JobDetailsActivity.EXTRA_JOBS_IDS, ids);
                 startActivity(jobDetailsIntent);
-                getTracker().trackEvent(CATEGORY_JOBS, ACTION_FOLLOW_CONTEXT, LABEL_DETAILS);
+                getTracker(getActivity()).trackEvent(CATEGORY_JOBS, ACTION_FOLLOW_CONTEXT, LABEL_DETAILS);
                 return true;
             case HOW_TO_APPLY:
                 Intent howToApplyIntent = new Intent(getActivity(), HowToApplyDialog.class);
                 howToApplyIntent.putExtra(HowToApplyDialog.EXTRA_HOW_TO_APPLY, job.getHowToApply());
                 startActivity(howToApplyIntent);
-                getTracker().trackEvent(CATEGORY_JOBS, ACTION_FOLLOW_CONTEXT, LABEL_APPLY);
+                getTracker(getActivity()).trackEvent(CATEGORY_JOBS, ACTION_FOLLOW_CONTEXT, LABEL_APPLY);
                 return true;
             case SHARE:
                 startActivity(ShareHelper.getShareIntent(job));
-                getTracker().trackEvent(CATEGORY_JOBS, ACTION_FOLLOW_CONTEXT, LABEL_SHARE);
+                getTracker(getActivity()).trackEvent(CATEGORY_JOBS, ACTION_FOLLOW_CONTEXT, LABEL_SHARE);
                 return true;
         }
         return super.onContextItemSelected(item);
@@ -151,11 +151,11 @@ public class JobListFragment extends SherlockFragment implements LoaderManager.L
                 Intent subscribeIntent = new Intent(getActivity(), SubscribeDialog.class);
                 subscribeIntent.putExtra(EmailSubscriberResolver.EXTRA_SEARCH, mCurrentSearch);
                 startActivity(subscribeIntent);
-                getTracker().trackEvent(CATEGORY_SUBSCRIBE, ACTION_OPEN, LABEL_DIALOG);
+                getTracker(getActivity()).trackEvent(CATEGORY_SUBSCRIBE, ACTION_OPEN, LABEL_DIALOG);
                 break;
             case R.id.menu_delete:
                 ((HomeActivity) getActivity()).removeSearch(mCurrentSearch);
-                getTracker().trackEvent(CATEGORY_SEARCH, ACTION_REMOVE, mCurrentSearch.getSearch());
+                getTracker(getActivity()).trackEvent(CATEGORY_SEARCH, ACTION_REMOVE, mCurrentSearch.getSearch());
                 break;
         }
         return super.onOptionsItemSelected(item);
@@ -191,7 +191,7 @@ public class JobListFragment extends SherlockFragment implements LoaderManager.L
         intent.putExtra(JobDetailsActivity.EXTRA_CURRENT_JOB_ID, job.getId());
         intent.putExtra(JobDetailsActivity.EXTRA_JOBS_IDS, ids);
         startActivity(intent);
-        getTracker().trackEvent(CATEGORY_JOBS, ACTION_OPEN, job.getTitle() + "," + job.getUrl());
+        getTracker(getActivity()).trackEvent(CATEGORY_JOBS, ACTION_OPEN, job.getTitle() + "," + job.getUrl());
     }
 
     @Override

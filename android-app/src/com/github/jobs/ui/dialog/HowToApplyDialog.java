@@ -22,7 +22,7 @@ public class HowToApplyDialog extends TrackDialog {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getTracker().trackPageView(NAME_HOW_TO_APPLY);
+        getTracker(this).trackPageView(NAME_HOW_TO_APPLY);
         setContentView(R.layout.how_to_apply_dialog);
 
         Spanned html = Html.fromHtml(getIntent().getStringExtra(EXTRA_HOW_TO_APPLY));

@@ -22,7 +22,7 @@ public class SearchDialog extends TrackDialog implements View.OnClickListener {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getTracker().trackPageView(NAME_SEARCH_DIALOG);
+        getTracker(this).trackPageView(NAME_SEARCH_DIALOG);
         setContentView(R.layout.search_settings);
 
         mDescription = (EditText) findViewById(R.id.edit_description);
@@ -50,10 +50,10 @@ public class SearchDialog extends TrackDialog implements View.OnClickListener {
                         .putExtra(EXTRA_LOCATION, location)
                         .putExtra(EXTRA_FULL_TIME, mFullTime.isChecked());
                 setResult(RESULT_OK, data);
-                getTracker().trackEvent(CATEGORY_SEARCH, ACTION_SEARCH, description + "," + location);
+                getTracker(this).trackEvent(CATEGORY_SEARCH, ACTION_SEARCH, description + "," + location);
                 break;
             case R.id.btn_cancel:
-                getTracker().trackEvent(CATEGORY_SEARCH, ACTION_CANCEL, LABEL_DIALOG);
+                getTracker(this).trackEvent(CATEGORY_SEARCH, ACTION_CANCEL, LABEL_DIALOG);
                 setResult(RESULT_CANCELED);
                 break;
         }
