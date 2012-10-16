@@ -6,7 +6,6 @@ import android.text.Spanned;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.widget.TextView;
-import com.github.jobs.BuildConfig;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -83,9 +82,6 @@ public class JellyBeanSpanFixTextView extends TextView {
             SpannableStringBuilder builder = new SpannableStringBuilder(text);
             fixSpannedWithSpaces(builder, widthMeasureSpec, heightMeasureSpec);
         } else {
-            if (BuildConfig.DEBUG) {
-                Log.d(TAG, "The text isn't a Spanned");
-            }
             fallbackToString(widthMeasureSpec, heightMeasureSpec);
         }
     }
@@ -103,11 +99,6 @@ public class JellyBeanSpanFixTextView extends TextView {
             removeUnneededSpaces(widthMeasureSpec, heightMeasureSpec, builder, result);
         } else {
             fallbackToString(widthMeasureSpec, heightMeasureSpec);
-        }
-
-        if (BuildConfig.DEBUG) {
-            long fixDuration = System.currentTimeMillis() - startFix;
-            Log.d(TAG, "fixSpannedWithSpaces() duration in ms: " + fixDuration);
         }
     }
 
@@ -135,9 +126,6 @@ public class JellyBeanSpanFixTextView extends TextView {
                 return FixingResult.fixed(spansWithSpacesBefore, spansWithSpacesAfter);
             } catch (IndexOutOfBoundsException notFixed) {
             }
-        }
-        if (BuildConfig.DEBUG) {
-            Log.d(TAG, "Could not fix the Spanned by adding spaces around spans");
         }
         return FixingResult.notFixed();
     }
