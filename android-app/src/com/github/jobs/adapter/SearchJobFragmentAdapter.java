@@ -1,15 +1,17 @@
-package com.github.jobs.ui;
+package com.github.jobs.adapter;
 
 import android.content.Context;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.text.TextUtils;
 import com.github.jobs.R;
+import com.github.jobs.ui.JobListFragment;
+import com.github.jobs.ui.SearchPack;
 
 import java.util.ArrayList;
 import java.util.List;
 
-class SearchJobFragmentAdapter extends MyFragmentStatePagerAdapter {
+public class SearchJobFragmentAdapter extends MyFragmentStatePagerAdapter {
     private final List<SearchPack> mSearchPacks = new ArrayList<SearchPack>();
     private final Context mContext;
 
@@ -38,16 +40,16 @@ class SearchJobFragmentAdapter extends MyFragmentStatePagerAdapter {
         return toString;
     }
 
-    int positionFor(SearchPack searchPack) {
+    public int positionFor(SearchPack searchPack) {
         return mSearchPacks.indexOf(searchPack);
     }
 
-    void addSearch(SearchPack searchPack) {
+    public void addSearch(SearchPack searchPack) {
         mSearchPacks.add(searchPack);
         notifyDataSetChanged();
     }
 
-    void removeItem(SearchPack searchPack) {
+    public void removeItem(SearchPack searchPack) {
         mSearchPacks.remove(searchPack);
         notifyDataSetChanged();
     }

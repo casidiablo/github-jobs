@@ -3,6 +3,7 @@ package com.github.jobs.ui;
 import android.os.Bundle;
 import android.text.Html;
 import android.text.SpannableString;
+import android.text.Spanned;
 import android.text.method.LinkMovementMethod;
 import android.text.util.Linkify;
 import android.widget.TextView;
@@ -21,7 +22,8 @@ public class HowToApplyDialog extends SherlockActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.how_to_apply_dialog);
 
-        SpannableString application = new SpannableString(Html.fromHtml(getIntent().getStringExtra(EXTRA_HOW_TO_APPLY)));
+        Spanned html = Html.fromHtml(getIntent().getStringExtra(EXTRA_HOW_TO_APPLY));
+        SpannableString application = new SpannableString(html);
         Linkify.addLinks(application, Linkify.ALL);
 
         TextView howToApply = (TextView) findViewById(R.id.lbl_how_to_apply);

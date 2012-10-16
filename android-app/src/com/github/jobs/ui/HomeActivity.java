@@ -9,6 +9,7 @@ import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
 import com.codeslap.topy.BaseActivity;
 import com.github.jobs.R;
+import com.github.jobs.adapter.SearchJobFragmentAdapter;
 import com.viewpagerindicator.TabPageIndicator;
 
 import java.util.ArrayList;

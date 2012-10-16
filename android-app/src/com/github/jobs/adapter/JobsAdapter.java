@@ -10,6 +10,7 @@ import com.codeslap.github.jobs.api.Job;
 import com.github.jobs.R;
 import com.github.jobs.ui.JobDetailsActivity;
 import com.github.jobs.utils.RelativeDate;
+import com.github.jobs.utils.StringUtils;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -65,8 +66,8 @@ public class JobsAdapter extends BaseAdapter {
 
         Job job = getItem(position);
 
-        holder.title.setText(job.getTitle());
-        holder.location.setText(job.getLocation());
+        holder.title.setText(StringUtils.trim(job.getTitle()));
+        holder.location.setText(StringUtils.trim(job.getLocation()));
         if (JobDetailsActivity.FULL_TIME.equals(job.getType())) {
             holder.company.setText(String.format("%s - ", job.getCompany()));
         } else {
@@ -102,6 +103,14 @@ public class JobsAdapter extends BaseAdapter {
     public void addItems(ArrayList<Job> jobs) {
         mJobs.addAll(jobs);
         notifyDataSetChanged();
+    }
+
+    public ArrayList<String> getItemsIds() {
+        ArrayList<String> ids = new ArrayList<String>();
+        for (Job job : mJobs) {
+            ids.add(job.getId());
+        }
+        return ids;
     }
 
     private static class ViewHolder {

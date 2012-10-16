@@ -1,4 +1,4 @@
-package com.github.jobs.ui;
+package com.github.jobs.adapter;
 
 import android.os.Bundle;
 import android.os.Parcelable;
@@ -70,7 +70,7 @@ public abstract class MyFragmentStatePagerAdapter extends PagerAdapter {
         return fragment;
     }
 
-    Fragment getFragment(int position) {
+    public Fragment getFragment(int position) {
         if (position >= mFragments.size()) {
             return null;
         }

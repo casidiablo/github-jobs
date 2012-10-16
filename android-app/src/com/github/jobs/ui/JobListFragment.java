@@ -114,8 +114,10 @@ public class JobListFragment extends SherlockFragment implements LoaderManager.L
         Job job = mAdapter.getItem(info.position);
         switch (item.getItemId()) {
             case JOB_DETAILS:
+                ArrayList<String> ids = mAdapter.getItemsIds();
                 Intent jobDetailsIntent = new Intent(getActivity(), JobDetailsActivity.class);
-                jobDetailsIntent.putExtra(JobDetailsActivity.EXTRA_JOB_ID, job.getId());
+                jobDetailsIntent.putExtra(JobDetailsActivity.EXTRA_CURRENT_JOB_ID, job.getId());
+                jobDetailsIntent.putExtra(JobDetailsActivity.EXTRA_JOBS_IDS, ids);
                 startActivity(jobDetailsIntent);
                 return true;
             case HOW_TO_APPLY:
@@ -170,8 +172,10 @@ public class JobListFragment extends SherlockFragment implements LoaderManager.L
             return;
         }
         Job job = mAdapter.getItem(position);
+        ArrayList<String> ids = mAdapter.getItemsIds();
         Intent intent = new Intent(getActivity(), JobDetailsActivity.class);
-        intent.putExtra(JobDetailsActivity.EXTRA_JOB_ID, job.getId());
+        intent.putExtra(JobDetailsActivity.EXTRA_CURRENT_JOB_ID, job.getId());
+        intent.putExtra(JobDetailsActivity.EXTRA_JOBS_IDS, ids);
         startActivity(intent);
     }
 

@@ -1,6 +1,7 @@
 package com.github.jobs.ui;
 
 import android.text.TextUtils;
+import com.github.jobs.utils.StringUtils;
 
 import java.io.Serializable;
 
@@ -76,8 +77,8 @@ public class SearchPack implements Serializable {
 
     @Override
     public int hashCode() {
-        int result = search != null ? search.toLowerCase().trim().hashCode() : 0;
-        result = 31 * result + (location != null ? location.toLowerCase().trim().hashCode() : 0);
+        int result = search != null ? StringUtils.trim(search.toLowerCase()).hashCode() : 0;
+        result = 31 * result + (location != null ? StringUtils.trim(location.toLowerCase()).hashCode() : 0);
         result = 31 * result + (fullTime ? 1 : 0);
         return result;
     }
