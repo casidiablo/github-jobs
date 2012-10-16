@@ -55,7 +55,13 @@
         <dependency>
             <groupId>com.codeslap</groupId>
             <artifactId>groundy</artifactId>
-            <version>0.0.1</version>
+            <version>0.3</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.telly</groupId>
+            <artifactId>wasp</artifactId>
+            <version>1.7</version>
             <scope>compile</scope>
         </dependency>
         <dependency>

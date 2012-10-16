@@ -18,12 +18,12 @@ import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
 import com.actionbarsherlock.widget.ShareActionProvider;
 import com.codeslap.github.jobs.api.Job;
-import com.codeslap.groundy.bitmap.BitmapHelper;
-import com.codeslap.groundy.bitmap.RawBitmapObserver;
 import com.codeslap.persistence.Persistence;
 import com.codeslap.topy.BaseActivity;
 import com.github.jobs.R;
 import com.github.jobs.utils.ShareHelper;
+import com.telly.wasp.BitmapHelper;
+import com.telly.wasp.CallbackBitmapObserver;
 
 /**
  * @author cristian
@@ -135,9 +135,14 @@ public class JobDetailsActivity extends BaseActivity implements View.OnClickList
         if (mJob.getCompanyLogo() == null) {
             return;
         }
-        RawBitmapObserver rawBitmapObserver = new RawBitmapObserver(mJob.getCompanyLogo(), new Handler()) {
+        CallbackBitmapObserver rawBitmapObserver = new CallbackBitmapObserver(new CallbackBitmapObserver.BitmapCallback() {
             @Override
-            protected void onBitmapDownloaded(Bitmap bitmap) {
+            public boolean stillNeedsUrl(String uri) {
+                return true;
+            }
+
+            @Override
+            public void receiveBitmap(String uri, Bitmap bitmap) {
                 if (bitmap == null) {
                     return;
                 }
@@ -147,7 +152,7 @@ public class JobDetailsActivity extends BaseActivity implements View.OnClickList
                 ImageView background = (ImageView) findViewById(R.id.job_details_background);
                 background.setImageDrawable(bitmapDrawable);
             }
-        };
-        BitmapHelper.getInstance().registerBitmapObserver(this, mJob.getCompanyLogo(), rawBitmapObserver);
+        }, mJob.getCompanyLogo(), new Handler());
+        BitmapHelper.getInstance().registerBitmapObserver(this, rawBitmapObserver);
     }
 }
