@@ -5,10 +5,11 @@ import com.codeslap.github.jobs.api.Job;
 import com.codeslap.groundy.ListLoader;
 import com.codeslap.persistence.Persistence;
 import com.codeslap.persistence.SqlAdapter;
+import com.github.jobs.adapter.JobsAdapter;
 import com.github.jobs.bean.SearchesAndJobs;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.text.ParseException;
+import java.util.*;
 
 /**
  * @author cristian
@@ -26,7 +27,7 @@ class JobListLoader extends ListLoader<Job> {
     protected List<Job> getData() {
         SqlAdapter sqlAdapter = Persistence.getAdapter(getContext());
         if (mCurrentSearch.isDefault()) {
-            return sqlAdapter.findAll(Job.class);
+            return sort(sqlAdapter.findAll(Job.class));
         }
         SearchesAndJobs sample = new SearchesAndJobs();
         sample.setSearchHashCode(mCurrentSearch.hashCode());
@@ -42,6 +43,39 @@ class JobListLoader extends ListLoader<Job> {
             glue = ", ";
         }
         String inStatement = in.toString();
-        return sqlAdapter.findAll(Job.class, "_id IN (" + inStatement + ")", null);
+        return sort(sqlAdapter.findAll(Job.class, "_id IN (" + inStatement + ")", null));
     }
+
+    private List<Job> sort(List<Job> jobs) {
+        if (jobs == null) {
+            return null;
+        }
+        Collections.sort(jobs, JOB_COMPARATOR);
+        return jobs;
+    }
+
+    private static final Comparator<Job> JOB_COMPARATOR = new Comparator<Job>() {
+        @Override
+        public int compare(Job jobA, Job jobB) {
+            if (jobA == null) {
+                return -1;
+            }
+            if (jobB == null) {
+                return 1;
+            }
+            Date dateA;
+            try {
+                dateA = JobsAdapter.DATE_PARSER.parse(jobA.getCreatedAt());
+            } catch (ParseException e) {
+                return 1;
+            }
+            Date dateB;
+            try {
+                dateB = JobsAdapter.DATE_PARSER.parse(jobB.getCreatedAt());
+            } catch (ParseException e) {
+                return -1;
+            }
+            return dateB.compareTo(dateA);
+        }
+    };
 }

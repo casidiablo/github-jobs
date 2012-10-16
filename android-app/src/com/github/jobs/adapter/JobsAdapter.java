@@ -22,13 +22,12 @@ public class JobsAdapter extends BaseAdapter {
 
     private final List<Job> mJobs = new ArrayList<Job>();
     private final LayoutInflater mInflater;
-    private final SimpleDateFormat mDateParser;
+    public static final SimpleDateFormat DATE_PARSER = new SimpleDateFormat("EEE MMM dd kk:mm:ss 'UTC' yyyy");
     private final Context mContext;
 
     public JobsAdapter(Context context) {
         mContext = context;
         mInflater = LayoutInflater.from(context);
-        mDateParser = new SimpleDateFormat("EEE MMM dd kk:mm:ss 'UTC' yyyy");
     }
 
     @Override
@@ -75,7 +74,7 @@ public class JobsAdapter extends BaseAdapter {
         }
         holder.type.setText(job.getType());
         try {
-            Date parsed = mDateParser.parse(job.getCreatedAt());
+            Date parsed = DATE_PARSER.parse(job.getCreatedAt());
             holder.date.setText(getTimeAgo(parsed));
         } catch (ParseException e) {
             e.printStackTrace();
