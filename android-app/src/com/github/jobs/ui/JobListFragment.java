@@ -236,7 +236,7 @@ public class JobListFragment extends SherlockFragment implements LoaderManager.L
 
     private void addFooterToList() {
         if (mMoreRootView == null) {
-            mMoreRootView = getLayoutInflater(null).inflate(R.layout.list_footer, null);
+            mMoreRootView = LayoutInflater.from(getActivity()).inflate(R.layout.list_footer, null);
             mList.addFooterView(mMoreRootView);
         } else if (mList.getFooterViewsCount() == 0) {
             mList.addFooterView(mMoreRootView);

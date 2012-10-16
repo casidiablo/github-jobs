@@ -11,6 +11,9 @@ import com.codeslap.topy.BaseActivity;
 import com.github.jobs.R;
 import com.viewpagerindicator.TabPageIndicator;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class HomeActivity extends BaseActivity {
     private static final int SEARCH_REQUEST = 534;
 
@@ -41,6 +44,15 @@ public class HomeActivity extends BaseActivity {
 
         mIndicator = (TabPageIndicator) findViewById(R.id.indicator);
         mIndicator.setViewPager(mViewPager);
+
+        if (mState.searchPacks != null) {
+            showTabs();
+            for (SearchPack searchPack : mState.searchPacks) {
+                mSearchJobFragmentAdapter.addSearch(searchPack);
+            }
+            mIndicator.notifyDataSetChanged();
+            selectTab(mState.currentTab);
+        }
     }
 
     @Override
@@ -53,6 +65,7 @@ public class HomeActivity extends BaseActivity {
 
     @Override
     public Object onRetainCustomNonConfigurationInstance() {
+        mState.currentTab = mViewPager.getCurrentItem();
         return mState;
     }
 
@@ -68,6 +81,10 @@ public class HomeActivity extends BaseActivity {
         searchPack.setFullTime(data.getBooleanExtra(SearchDialog.EXTRA_FULL_TIME, true));
         showTabs();
         mSearchJobFragmentAdapter.addSearch(searchPack);
+        if (mState.searchPacks == null) {
+            mState.searchPacks = new ArrayList<SearchPack>();
+        }
+        mState.searchPacks.add(searchPack);
         mIndicator.notifyDataSetChanged();
         int position = mSearchJobFragmentAdapter.positionFor(searchPack);
         selectTab(position);
@@ -159,5 +176,7 @@ public class HomeActivity extends BaseActivity {
     private class State {
         SearchReceiverFragment receiver;
         boolean loading;
+        List<SearchPack> searchPacks;
+        int currentTab;
     }
 }

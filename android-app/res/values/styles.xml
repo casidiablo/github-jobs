@@ -4,9 +4,8 @@
         <item name="actionBarStyle">@style/Widget.Styled.ActionBar</item>
         <item name="android:actionBarStyle">@style/Widget.Styled.ActionBar</item>
         <item name="android:buttonStyle">@style/GithubJobsButton</item>
-        <!--<item name="vpiTitlePageIndicatorStyle">@style/Widget.TitlePageIndicator</item>-->
-        <!--<item name="vpiTabPageIndicatorStyle">@style/Widget.TabPageIndicator</item>-->
-        <!--<item name="vpiTabTextStyle">@style/Widget.TabPageIndicator.Text</item>-->
+        <item name="vpiIconPageIndicatorStyle">@style/Widget.IconPageIndicator</item>
+        <item name="vpiTabPageIndicatorStyle">@style/Widget.TabPageIndicator</item>
     </style>
 
     <style name="Theme.GithubJobs.Dialog" parent="Theme.Sherlock.Dialog">
