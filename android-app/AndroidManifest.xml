@@ -19,6 +19,7 @@
         <activity android:name=".ui.SubscribeDialog" android:theme="@style/Theme.GithubJobs.Dialog" android:label="@string/subscribe_by_email" android:configChanges="orientation|keyboardHidden|keyboard|screenLayout|touchscreen"/>
         <activity android:name=".ui.HowToApplyDialog" android:theme="@style/Theme.GithubJobs.Dialog" android:label="@string/how_to_apply" android:configChanges="orientation|keyboardHidden|keyboard|screenLayout|touchscreen"/>
         <activity android:name=".ui.JobDetailsActivity" android:label="@string/job_details" android:configChanges="orientation|keyboardHidden|keyboard|screenLayout|touchscreen"/>
+        <activity android:name="com.crittercism.NotificationActivity"/>
         <service android:name="com.codeslap.groundy.GroundyService"/>
     </application>
 </manifest>

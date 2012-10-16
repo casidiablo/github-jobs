@@ -23,7 +23,7 @@ public class JobsAdapter extends BaseAdapter {
 
     private final List<Job> mJobs = new ArrayList<Job>();
     private final LayoutInflater mInflater;
-    public static final SimpleDateFormat DATE_PARSER = new SimpleDateFormat("EEE MMM dd kk:mm:ss 'UTC' yyyy");
+    public static final SimpleDateFormat DATE_PARSER = new SimpleDateFormat("EEE MMM dd kk:mm:ss 'UTC' yyyy", Locale.ENGLISH);
     private final Context mContext;
 
     public JobsAdapter(Context context) {

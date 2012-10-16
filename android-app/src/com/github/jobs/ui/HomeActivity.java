@@ -95,6 +95,9 @@ public class HomeActivity extends BaseActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.menu_search:
+                if (true) {
+                    throw new RuntimeException("In the same place, but different exception");
+                }
                 startActivityForResult(new Intent(this, SearchDialog.class), SEARCH_REQUEST);
                 break;
         }
