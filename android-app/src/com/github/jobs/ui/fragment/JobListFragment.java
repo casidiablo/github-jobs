@@ -97,9 +97,7 @@ public class JobListFragment extends SherlockFragment implements LoaderManager.L
         registerForContextMenu(mList);
 
         queryList();
-        if (!mCurrentSearch.isDefault()) {
-            removeFooterFromList();
-        }
+        removeFooterFromList();
         if (savedInstanceState == null) {
             triggerJobSearch();
         }
