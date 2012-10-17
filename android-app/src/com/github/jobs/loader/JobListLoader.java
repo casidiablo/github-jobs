@@ -1,6 +1,7 @@
 package com.github.jobs.loader;
 
 import android.content.Context;
+import android.util.Log;
 import com.codeslap.github.jobs.api.Job;
 import com.codeslap.groundy.ListLoader;
 import com.codeslap.persistence.Persistence;
@@ -51,7 +52,11 @@ public class JobListLoader extends ListLoader<Job> {
         if (jobs == null) {
             return null;
         }
-        Collections.sort(jobs, JOB_COMPARATOR);
+        try {
+            Collections.sort(jobs, JOB_COMPARATOR);
+        } catch (Exception e) {
+            Log.wtf("jobs:listLoader", "General contract should not be wrong :-/", e);
+        }
         return jobs;
     }
 
