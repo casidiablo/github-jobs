@@ -37,6 +37,8 @@ public final class AnalyticsHelper {
     public static final String NAME_SUBSCRIBE_DIALOG = "/subscribe_dialog";
     public static final String NAME_DETAILS = "/job_details";
     public static final String NAME_HOW_TO_APPLY = "/how_to_apply";
+    public static final String NAME_TEMPLATES = "/templates";
+    public static final String NAME_EDIT_TEMPLATES = "/edit_templates";
 
     private static AnalyticsHelper INSTANCE;
     private Context mContext;

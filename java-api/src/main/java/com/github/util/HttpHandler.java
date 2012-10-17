@@ -16,6 +16,7 @@
 
 package com.github.util;
 
+import org.apache.http.Header;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
@@ -30,6 +31,7 @@ import org.apache.http.protocol.HTTP;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.Map;
+import java.util.zip.GZIPInputStream;
 
 /**
  * @author cristian
@@ -62,8 +64,13 @@ public class HttpHandler {
         DefaultHttpClient client = new DefaultHttpClient();
         try {
             HttpResponse execute = client.execute(request);
+            Header firstHeader = execute.getFirstHeader("Content-Encoding");
             HttpEntity response = execute.getEntity();
-            return streamToString(response.getContent());
+            InputStream inputStream = response.getContent();
+            if(firstHeader != null && firstHeader.getValue() != null && firstHeader.getValue().equalsIgnoreCase("gzip")) {
+                inputStream = new GZIPInputStream(inputStream);
+            }
+            return streamToString(inputStream);
         } catch (IOException e) {
             return null;
         }

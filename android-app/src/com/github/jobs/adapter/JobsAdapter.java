@@ -1,6 +1,7 @@
 package com.github.jobs.adapter;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,10 +12,12 @@ import com.github.jobs.R;
 import com.github.jobs.ui.activity.JobDetailsActivity;
 import com.github.jobs.utils.RelativeDate;
 import com.github.jobs.utils.StringUtils;
+import org.joda.time.DateTime;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author cristian
@@ -23,8 +26,10 @@ public class JobsAdapter extends BaseAdapter {
 
     private final List<Job> mJobs = new ArrayList<Job>();
     private final LayoutInflater mInflater;
-    public static final SimpleDateFormat DATE_PARSER = new SimpleDateFormat("EEE MMM dd kk:mm:ss 'UTC' yyyy", Locale.ENGLISH);
+    public static final DateTimeFormatter DATE_PARSER = DateTimeFormat.forPattern("EEE MMM dd HH:mm:ss 'UTC' yyyy");
+
     private final Context mContext;
+    private static final String TAG = "github:jobs:jobsAdapter";
 
     public JobsAdapter(Context context) {
         mContext = context;
@@ -71,23 +76,18 @@ public class JobsAdapter extends BaseAdapter {
         if (JobDetailsActivity.FULL_TIME.equals(job.getType())) {
             holder.company.setText(String.format("%s - ", job.getCompany()));
         } else {
-            holder.company.setText(String.format("%s - "));
+            holder.company.setText(job.getCompany());
         }
         holder.type.setText(job.getType());
         try {
-            Date parsed = DATE_PARSER.parse(job.getCreatedAt());
-            holder.date.setText(getTimeAgo(parsed));
-        } catch (ParseException e) {
-            e.printStackTrace();
+            DateTime parsed = DATE_PARSER.withZoneUTC().parseDateTime(job.getCreatedAt());
+            String timeAgo = RelativeDate.getTimeAgo(mContext, parsed.getMillis());
+            holder.date.setText(timeAgo);
+        } catch (Exception e) {
+            Log.wtf(TAG, "Could not parse date: " + job.getCreatedAt(), e);
         }
 
         return view;
-    }
-
-    private String getTimeAgo(Date date) {
-        Calendar calendar = new GregorianCalendar();
-        calendar.setTime(date);
-        return RelativeDate.getRelativeDate(mContext, calendar);
     }
 
     public void updateItems(List<Job> data) {

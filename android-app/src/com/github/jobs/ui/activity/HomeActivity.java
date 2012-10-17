@@ -115,6 +115,10 @@ public class HomeActivity extends TrackActivity {
                 getTracker(this).trackEvent(CATEGORY_ABOUT, ACTION_OPEN, LABEL_DIALOG);
                 startActivity(new Intent(this, AboutDialog.class));
                 break;
+            case R.id.menu_templates:
+                getTracker(this).trackPageView(NAME_TEMPLATES);
+                startActivity(new Intent(this, TemplatesActivity.class));
+                break;
         }
         return super.onOptionsItemSelected(item);
     }

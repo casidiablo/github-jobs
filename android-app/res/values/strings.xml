@@ -55,4 +55,24 @@
     <string name="library_wasp">telly:wasp: library to handle/cache bitmap resources</string>
     <string name="library_persistence">codeslap:persistence: a persistence library for Android I wrote a while ago</string>
     <string name="library_groundy">codeslap:groundy: library for Android containing some boilerplate code for implementing background REST API calls implementations</string>
+    <string name="templates_list">Templates list</string>
+    <string name="cv_templates">Templates</string>
+    <string name="empty_templates_list">You don\'t have templates yet. Click plus to add one.</string>
+    <string name="add_template">Add template</string>
+    <string name="edit_template">Edit template</string>
+    <string name="hint_template_name">Template name</string>
+    <string name="hint_template_content">Template content (use Markdown syntax)</string>
+    <string name="save">Save</string>
+    <string name="template_preview">Template preview…</string>
+    <string name="add_service">Add service</string>
+    <string name="just_now">just now</string>
+    <string name="edit_template">Edit template</string>
+    <string name="invalid_template">Invalid template</string>
+    <string name="default_template_name">Default template</string>
+    <string name="default_template_content"><![CDATA[Hello there. My name is Rajash Sapatin]]></string>
+    <string name="delete_template">Delete template</string>
+    <string name="are_you_sure">Are you sure?</string>
+    <string name="are_you_really_sure">Are you sure you want to delete this template? This cannot be undone.</string>
+    <string name="yes_i_am">Yes, I am</string>
+    <string name="template_deleted_successfully">Template deleted successfully</string>
 </resources>

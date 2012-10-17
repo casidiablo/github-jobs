@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+            android:id="@+id/menu_add_service"
+            android:icon="@drawable/ic_action_add_service"
+            android:title="@string/add_service"
+            android:orderInCategory="100"
+            android:showAsAction="ifRoom"/>
+    <item
+            android:id="@+id/menu_save"
+            android:icon="@drawable/ic_action_content_save"
+            android:title="@string/save"
+            android:orderInCategory="100"
+            android:showAsAction="always"/>
+</menu>

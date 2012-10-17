@@ -3,4 +3,6 @@
     <color name="link">#1D80BE</color>
     <color name="full_time">#aa1D9A00</color>
     <color name="date">#cccccc</color>
+    <color name="search_text_color">#ffffff</color>
+    <color name="template_preview">#cccccc</color>
 </resources>

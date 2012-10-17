@@ -1,7 +1,9 @@
 package com.github.jobs.ui.fragment;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
 import android.view.ContextMenu;
@@ -16,8 +18,8 @@ import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
-import com.github.bean.Job;
 import com.codeslap.groundy.Groundy;
+import com.github.bean.Job;
 import com.github.jobs.R;
 import com.github.jobs.adapter.JobsAdapter;
 import com.github.jobs.bean.SearchPack;
@@ -106,37 +108,45 @@ public class JobListFragment extends SherlockFragment implements LoaderManager.L
     @Override
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
         super.onCreateContextMenu(menu, v, menuInfo);
+        FragmentActivity activity = getActivity();
+        if (activity == null || !isAdded()) {
+            return;
+        }
         AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) menuInfo;
         Job job = mAdapter.getItem(info.position);
         menu.setHeaderTitle(job.getTitle());
         menu.add(0, JOB_DETAILS, 0, R.string.job_details);
         menu.add(0, HOW_TO_APPLY, 0, R.string.how_to_apply);
         menu.add(0, SHARE, 0, R.string.share);
-        getTracker(getActivity()).trackEvent(CATEGORY_JOBS, ACTION_OPEN_CONTEXT, mCurrentSearch.getSearch());
+        getTracker(activity).trackEvent(CATEGORY_JOBS, ACTION_OPEN_CONTEXT, mCurrentSearch.getSearch());
     }
 
     @Override
     public boolean onContextItemSelected(android.view.MenuItem item) {
+        FragmentActivity activity = getActivity();
+        if (activity == null || !isAdded()) {
+            return true;
+        }
         AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
         Job job = mAdapter.getItem(info.position);
         switch (item.getItemId()) {
             case JOB_DETAILS:
                 ArrayList<String> ids = mAdapter.getItemsIds();
-                Intent jobDetailsIntent = new Intent(getActivity(), JobDetailsActivity.class);
+                Intent jobDetailsIntent = new Intent(activity, JobDetailsActivity.class);
                 jobDetailsIntent.putExtra(JobDetailsActivity.EXTRA_CURRENT_JOB_ID, job.getId());
                 jobDetailsIntent.putExtra(JobDetailsActivity.EXTRA_JOBS_IDS, ids);
                 startActivity(jobDetailsIntent);
-                getTracker(getActivity()).trackEvent(CATEGORY_JOBS, ACTION_FOLLOW_CONTEXT, LABEL_DETAILS);
+                getTracker(activity).trackEvent(CATEGORY_JOBS, ACTION_FOLLOW_CONTEXT, LABEL_DETAILS);
                 return true;
             case HOW_TO_APPLY:
-                Intent howToApplyIntent = new Intent(getActivity(), HowToApplyDialog.class);
+                Intent howToApplyIntent = new Intent(activity, HowToApplyDialog.class);
                 howToApplyIntent.putExtra(HowToApplyDialog.EXTRA_HOW_TO_APPLY, job.getHowToApply());
                 startActivity(howToApplyIntent);
-                getTracker(getActivity()).trackEvent(CATEGORY_JOBS, ACTION_FOLLOW_CONTEXT, LABEL_APPLY);
+                getTracker(activity).trackEvent(CATEGORY_JOBS, ACTION_FOLLOW_CONTEXT, LABEL_APPLY);
                 return true;
             case SHARE:
                 startActivity(ShareHelper.getShareIntent(job));
-                getTracker(getActivity()).trackEvent(CATEGORY_JOBS, ACTION_FOLLOW_CONTEXT, LABEL_SHARE);
+                getTracker(activity).trackEvent(CATEGORY_JOBS, ACTION_FOLLOW_CONTEXT, LABEL_SHARE);
                 return true;
         }
         return super.onContextItemSelected(item);
@@ -144,16 +154,20 @@ public class JobListFragment extends SherlockFragment implements LoaderManager.L
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        FragmentActivity activity = getActivity();
+        if (activity == null || !isAdded()) {
+            return true;
+        }
         switch (item.getItemId()) {
             case R.id.menu_subscribe:
-                Intent subscribeIntent = new Intent(getActivity(), SubscribeDialog.class);
+                Intent subscribeIntent = new Intent(activity, SubscribeDialog.class);
                 subscribeIntent.putExtra(EmailSubscriberResolver.EXTRA_SEARCH, mCurrentSearch);
                 startActivity(subscribeIntent);
-                getTracker(getActivity()).trackEvent(CATEGORY_SUBSCRIBE, ACTION_OPEN, LABEL_DIALOG);
+                getTracker(activity).trackEvent(CATEGORY_SUBSCRIBE, ACTION_OPEN, LABEL_DIALOG);
                 break;
             case R.id.menu_delete:
-                ((HomeActivity) getActivity()).removeSearch(mCurrentSearch);
-                getTracker(getActivity()).trackEvent(CATEGORY_SEARCH, ACTION_REMOVE, mCurrentSearch.getSearch());
+                ((HomeActivity) activity).removeSearch(mCurrentSearch);
+                getTracker(activity).trackEvent(CATEGORY_SEARCH, ACTION_REMOVE, mCurrentSearch.getSearch());
                 break;
         }
         return super.onOptionsItemSelected(item);
@@ -161,7 +175,11 @@ public class JobListFragment extends SherlockFragment implements LoaderManager.L
 
     @Override
     public Loader<List<Job>> onCreateLoader(int id, Bundle args) {
-        return new JobListLoader(getActivity(), mCurrentSearch);
+        FragmentActivity activity = getActivity();
+        if (activity == null || !isAdded()) {
+            return null;
+        }
+        return new JobListLoader(activity, mCurrentSearch);
     }
 
     @Override
@@ -230,7 +248,11 @@ public class JobListFragment extends SherlockFragment implements LoaderManager.L
 
     private void queryList() {
         try {
-            LoaderManager loaderManager = getActivity().getSupportLoaderManager();
+            FragmentActivity activity = getActivity();
+            if (activity == null || !isAdded()) {
+                return;
+            }
+            LoaderManager loaderManager = activity.getSupportLoaderManager();
             Loader<Object> loader = loaderManager.getLoader(mCurrentSearch.hashCode());
             if (loader == null) {
                 loaderManager.initLoader(mCurrentSearch.hashCode(), null, this);
@@ -253,7 +275,11 @@ public class JobListFragment extends SherlockFragment implements LoaderManager.L
 
     private void addFooterToList() {
         if (mMoreRootView == null) {
-            mMoreRootView = LayoutInflater.from(getActivity()).inflate(R.layout.list_footer, null);
+            Context activity = getActivity();
+            if (activity == null || !isAdded()) {
+                return;
+            }
+            mMoreRootView = LayoutInflater.from(activity).inflate(R.layout.list_footer, null);
             mList.addFooterView(mMoreRootView);
         } else if (mList.getFooterViewsCount() == 0) {
             mList.addFooterView(mMoreRootView);
@@ -271,6 +297,9 @@ public class JobListFragment extends SherlockFragment implements LoaderManager.L
 
         mLoading = true;
         HomeActivity activity = (HomeActivity) getActivity();
+        if (activity == null || !isAdded()) {
+            return;
+        }
         SearchReceiverFragment receiver = activity.getSearchReceiver();
         Groundy.execute(getActivity(), SearchJobsResolver.class, receiver.getReceiver(), extras);
         ((SherlockFragmentActivity) getActivity()).setSupportProgressBarIndeterminateVisibility(true);

@@ -2,10 +2,8 @@ package com.github.jobs.utils;
 
 import android.content.Context;
 import com.github.jobs.R;
-
-import java.util.Calendar;
-import java.util.GregorianCalendar;
-import java.util.TimeZone;
+import org.joda.time.DateTime;
+import org.joda.time.Period;
 
 public class RelativeDate {
 
@@ -14,82 +12,54 @@ public class RelativeDate {
      * date by comparing the Calendar being passed in to the
      * date / time that it is right now.
      *
-     * @param context
-     * @return String representing the relative date
+     * @param context used to build the string response
+     * @param time    time to compare with current time
+     * @return a string representing the time ago
      */
+    public static String getTimeAgo(Context context, long time) {
+        DateTime baseDate = new DateTime(time);
+        DateTime now = new DateTime();
+        Period period = new Period(baseDate, now);
 
-    public static String getRelativeDate(Context context, Calendar calendar) {
-        long value;
-        int resId;
-
-        Calendar now = GregorianCalendar.getInstance(TimeZone.getTimeZone("UTC")); // Servers use UTC
-        int hourInPacific = now.get(Calendar.HOUR_OF_DAY);
-        int dayInPacific = now.get(Calendar.DAY_OF_YEAR);
-        int hourHere = Calendar.getInstance().get(Calendar.HOUR_OF_DAY);
-        int dayHere = Calendar.getInstance().get(Calendar.DAY_OF_YEAR);
-
-        if (dayHere > dayInPacific) {
-            hourHere += 24;
-        } else if (dayInPacific > dayHere) {
-            hourInPacific += 24;
+        if (period.getSeconds() < 0 || period.getMinutes() < 0) {
+            return context.getString(R.string.just_now);
         }
 
-        long nowMilliseconds = now.getTimeInMillis();
-        nowMilliseconds -= (hourHere - hourInPacific) * 60 * 60 * 1000;// fix hours
-        double diff = (nowMilliseconds - calendar.getTimeInMillis()) / 1000;
-        value = (long) Math.floor(diff);
-
-        if (value < 0) {// if for some weird reason, diff is negative... show the default message
-            return buildString(context, R.string.few_secs_ago, 1);
+        if (period.getYears() > 0) {
+            int resId = period.getYears() == 1 ? R.string.one_year_ago : R.string.years_ago;
+            return buildString(context, resId, period.getYears());
         }
 
-        resId = value == 1 ? R.string.one_second_ago : R.string.seconds_ago;
-        if (value < 60) {
-            return buildString(context, resId, value);
+        if (period.getMonths() > 0) {
+            int resId = period.getMonths() == 1 ? R.string.one_month_ago : R.string.months_ago;
+            return buildString(context, resId, period.getMonths());
         }
 
-        diff = Math.floor(diff / 60);// 60 = secs in a minute
-        value = Math.round(diff);
-        resId = value == 1 ? R.string.one_minute_ago : R.string.minutes_ago;
-        if (value < 60) {
-            return buildString(context, resId, value);
+        if (period.getWeeks() > 0) {
+            int resId = period.getWeeks() == 1 ? R.string.one_week_ago : R.string.weeks_ago;
+            return buildString(context, resId, period.getWeeks());
         }
 
-        diff = diff / 60;// 60 = mins in an hour
-        value = Math.round(diff);
-        resId = value == 1 ? R.string.one_hour_ago : R.string.hours_ago;
-        if (value < 24) {
-            return buildString(context, resId, value);
+        if (period.getDays() > 0) {
+            int resId = period.getDays() == 1 ? R.string.one_day_ago : R.string.days_ago;
+            return buildString(context, resId, period.getDays());
         }
 
-        diff = diff / 24;// 24 = hours in a day
-        value = Math.round(diff);
-        resId = value == 1 ? R.string.one_day_ago : R.string.days_ago;
-        if (value < 7) {
-            return buildString(context, resId, value);
+        if (period.getHours() > 0) {
+            int resId = period.getHours() == 1 ? R.string.one_hour_ago : R.string.hours_ago;
+            return buildString(context, resId, period.getHours());
         }
 
-        diff = diff / 7;// 7 = days in a week
-        value = Math.round(diff);
-        resId = value == 1 ? R.string.one_week_ago : R.string.weeks_ago;
-        if (value < 4) {
-            return buildString(context, resId, value);
+        if (period.getMinutes() > 0) {
+            int resId = period.getMinutes() == 1 ? R.string.one_minute_ago : R.string.minutes_ago;
+            return buildString(context, resId, period.getMinutes());
         }
 
-        diff = diff / 4.28;// 4.28 = weeks in a month
-        value = Math.round(diff);
-        resId = value == 1 ? R.string.one_month_ago : R.string.months_ago;
-        if (value < 12) {
-            return buildString(context, resId, value);
-        }
-
-        diff = diff / 12;// 12 = months in a year
-        value = Math.round(diff);
-        resId = value == 1 ? R.string.one_year_ago : R.string.years_ago;
-        return buildString(context, resId, value);
+        int resId = period.getSeconds() == 1 ? R.string.one_second_ago : R.string.seconds_ago;
+        return buildString(context, resId, period.getSeconds());
     }
 
-    private static String buildString(Context context, int resId, long value) {
+    private static String buildString(Context context, int resId, int value) {
         if (value == 1) {
             return context.getString(resId);
         } else {

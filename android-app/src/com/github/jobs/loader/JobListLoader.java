@@ -2,15 +2,15 @@ package com.github.jobs.loader;
 
 import android.content.Context;
 import android.util.Log;
-import com.github.bean.Job;
 import com.codeslap.groundy.ListLoader;
 import com.codeslap.persistence.Persistence;
 import com.codeslap.persistence.SqlAdapter;
+import com.github.bean.Job;
 import com.github.jobs.adapter.JobsAdapter;
 import com.github.jobs.bean.SearchPack;
 import com.github.jobs.bean.SearchesAndJobs;
+import org.joda.time.DateTime;
 
-import java.text.ParseException;
 import java.util.*;
 
 /**
@@ -69,16 +69,16 @@ public class JobListLoader extends ListLoader<Job> {
             if (jobB == null) {
                 return 1;
             }
-            Date dateA;
+            DateTime dateA;
             try {
-                dateA = JobsAdapter.DATE_PARSER.parse(jobA.getCreatedAt());
-            } catch (ParseException e) {
+                dateA = JobsAdapter.DATE_PARSER.withZoneUTC().parseDateTime(jobA.getCreatedAt());
+            } catch (Exception e) {
                 return 1;
             }
-            Date dateB;
+            DateTime dateB;
             try {
-                dateB = JobsAdapter.DATE_PARSER.parse(jobB.getCreatedAt());
-            } catch (ParseException e) {
+                dateB = JobsAdapter.DATE_PARSER.withZoneUTC().parseDateTime(jobB.getCreatedAt());
+            } catch (Exception e) {
                 return -1;
             }
             return dateB.compareTo(dateA);

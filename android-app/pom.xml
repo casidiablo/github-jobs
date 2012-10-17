@@ -60,7 +60,7 @@
         <dependency>
             <groupId>com.codeslap</groupId>
             <artifactId>persistence</artifactId>
-            <version>0.9.19</version>
+            <version>0.9.20-SNAPSHOT</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
@@ -91,6 +91,18 @@
             <groupId>com.google.android.analytics</groupId>
             <artifactId>analytics</artifactId>
             <version>1.5.1</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.madgag</groupId>
+            <artifactId>markdownj-core</artifactId>
+            <version>0.4.1</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>joda-time</groupId>
+            <artifactId>joda-time</artifactId>
+            <version>2.1</version>
             <scope>compile</scope>
         </dependency>
         <!-- Provided dependencies -->

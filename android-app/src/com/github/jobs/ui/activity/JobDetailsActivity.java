@@ -6,8 +6,8 @@ import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
-import com.github.bean.Job;
 import com.codeslap.persistence.Persistence;
+import com.github.bean.Job;
 import com.github.jobs.R;
 import com.github.jobs.adapter.JobsDetailsAdapter;
 import com.github.jobs.ui.dialog.HowToApplyDialog;
@@ -77,14 +77,6 @@ public class JobDetailsActivity extends TrackActivity implements ViewPager.OnPag
                 howToApplyDialog.putExtra(HowToApplyDialog.EXTRA_HOW_TO_APPLY, job.getHowToApply());
                 startActivity(howToApplyDialog);
                 getTracker(this).trackEvent(CATEGORY_JOBS, ACTION_APPLY, job.getTitle() + "," + job.getUrl());
-                return true;
-            case android.R.id.home:
-                // app icon in Action Bar clicked; go home
-                Intent intent = new Intent(this, HomeActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                startActivity(intent);
-                overridePendingTransition(R.anim.home_enter, R.anim.home_exit);
-                getTracker(this).trackEvent(CATEGORY_JOBS, ACTION_BACK, LABEL_FROM_DETAILS);
                 return true;
         }
         return super.onOptionsItemSelected(item);

@@ -20,7 +20,8 @@
             android:layout_height="wrap_content"
             android:drawableRight="@drawable/ic_description"
             android:singleLine="true"
-            android:hint="@string/search_example"/>
+            android:hint="@string/search_example"
+            android:textColor="@color/search_text_color"/>
     <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -31,7 +32,8 @@
             android:layout_height="wrap_content"
             android:drawableRight="@drawable/ic_location"
             android:singleLine="true"
-            android:hint="@string/location_hint"/>
+            android:hint="@string/location_hint"
+            android:textColor="@color/search_text_color"/>
     <CheckBox
             android:id="@+id/checkbox_full_time"
             android:layout_width="match_parent"
