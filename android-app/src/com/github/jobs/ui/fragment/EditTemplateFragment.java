@@ -3,37 +3,32 @@ package com.github.jobs.ui.fragment;
 import android.content.Context;
 import android.os.Bundle;
 import android.text.Editable;
-import android.text.Html;
 import android.text.TextWatcher;
-import android.text.method.ScrollingMovementMethod;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
+import android.webkit.WebView;
 import android.widget.EditText;
-import android.widget.TextView;
 import com.actionbarsherlock.app.SherlockFragment;
 import com.codeslap.persistence.Persistence;
 import com.codeslap.persistence.SqlAdapter;
 import com.github.jobs.R;
-import com.github.jobs.bean.Service;
 import com.github.jobs.bean.Template;
 import com.github.jobs.ui.activity.TemplateDetailsActivity;
+import com.github.jobs.utils.AppUtils;
 import com.petebevin.markdown.MarkdownProcessor;
-
-import java.util.ArrayList;
 
 /**
  * @author cristian
  * @version 1.0
  */
-public class EditTemplateFragment extends SherlockFragment implements View.OnClickListener {
+public class EditTemplateFragment extends SherlockFragment {
     public static final String TAG = EditTemplateFragment.class.getSimpleName();
-    private static final String P_STARTS = "<p>";
-    private static final String P_ENDS = "</p>";
     private static final MarkdownProcessor MARKDOWN_PROCESSOR = new MarkdownProcessor();
 
-    private TextView mTemplatePreview;
+    private WebView mTemplatePreview;
     private EditText mTemplateContent;
     private EditText mTemplateName;
     private long mTemplateId;
@@ -46,9 +41,9 @@ public class EditTemplateFragment extends SherlockFragment implements View.OnCli
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        mTemplatePreview = (TextView) getView().findViewById(R.id.lbl_template_preview);
-        mTemplatePreview.setMovementMethod(ScrollingMovementMethod.getInstance());
-        mTemplatePreview.setOnClickListener(this);
+        mTemplatePreview = (WebView) getView().findViewById(R.id.lbl_template_preview);
+        AppUtils.setupWebview(mTemplatePreview);
+        mTemplatePreview.setOnTouchListener(mPreviewTouchListener);
 
         mTemplateContent = (EditText) getView().findViewById(R.id.edit_template_content);
         mTemplateContent.addTextChangedListener(mTextWatcher);
@@ -66,20 +61,7 @@ public class EditTemplateFragment extends SherlockFragment implements View.OnCli
             mTemplateName.setText(template.getName());
             mTemplateContent.setText(template.getContent());
             String html = MARKDOWN_PROCESSOR.markdown(template.getContent());
-            mTemplatePreview.setText(Html.fromHtml(html));
-        }
-    }
-
-    @Override
-    public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.lbl_template_preview:
-                mTemplateContent.requestFocus();
-                mTemplateContent.setSelection(mTemplateContent.getText().length());
-                // show the keyboard so that user can start editing this
-                InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-                imm.showSoftInput(mTemplateContent, InputMethodManager.SHOW_IMPLICIT);
-                break;
+            mTemplatePreview.loadData(html, "text/html", "utf-8");
         }
     }
 
@@ -96,12 +78,7 @@ public class EditTemplateFragment extends SherlockFragment implements View.OnCli
         public void afterTextChanged(Editable s) {
             String text = s.toString();
             String html = MARKDOWN_PROCESSOR.markdown(text).trim();
-            // remove last paragraph
-            if (html.endsWith(P_ENDS)) {
-                int i = html.lastIndexOf(P_STARTS);
-                html = html.substring(0, i) + html.substring(i + P_STARTS.length(), html.length() - P_ENDS.length());
-            }
-            mTemplatePreview.setText(Html.fromHtml(html));
+            mTemplatePreview.loadData(html, "text/html", "utf-8");
         }
     };
 
@@ -115,14 +92,33 @@ public class EditTemplateFragment extends SherlockFragment implements View.OnCli
         template.setContent(mTemplateContent.getText().toString().trim());
         template.setLastUpdate(System.currentTimeMillis());
 
-        // create the list of services
-        ArrayList<Service> services = new ArrayList<Service>();
-        Service service = new Service();
-        service.setType("github");
-        service.setData("casidiablo");
-        services.add(service);
-        template.setServices(services);
+//        // create the list of services
+//        ArrayList<Service> services = new ArrayList<Service>();
+//        Service service = new Service();
+//        service.setType("github");
+//        service.setData("casidiablo");
+//        services.add(service);
+//        template.setServices(services);
 
         return template;
     }
+
+    private View.OnTouchListener mPreviewTouchListener = new View.OnTouchListener() {
+        private int previousEvent;
+
+        @Override
+        public boolean onTouch(View v, MotionEvent event) {
+            if (event.getAction() == MotionEvent.ACTION_UP && previousEvent == MotionEvent.ACTION_DOWN) {
+                mTemplateContent.requestFocus();
+                mTemplateContent.setSelection(mTemplateContent.getText().length());
+                // show the keyboard so that user can start editing this
+                InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.showSoftInput(mTemplateContent, InputMethodManager.SHOW_IMPLICIT);
+                previousEvent = MotionEvent.ACTION_UP;
+                return true;
+            }
+            previousEvent = event.getAction();
+            return false;
+        }
+    };
 }

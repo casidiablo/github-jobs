@@ -13,7 +13,7 @@
             android:inputType="text|textCapWords"
             android:hint="@string/hint_template_name"/>
 
-    <com.github.jobs.widget.JellyBeanSpanFixTextView
+    <WebView
             android:id="@+id/lbl_template_preview"
             android:layout_width="match_parent"
             android:layout_height="0dp"

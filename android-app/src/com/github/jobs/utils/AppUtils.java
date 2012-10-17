@@ -3,6 +3,10 @@ package com.github.jobs.utils;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
+import android.view.View;
+import android.webkit.WebSettings;
+import android.webkit.WebView;
 import com.github.jobs.R;
 import com.github.jobs.bean.Template;
 import com.github.jobs.ui.activity.HomeActivity;
@@ -40,5 +44,39 @@ public class AppUtils {
         defaultTemplate.setContent(context.getString(R.string.default_template_content));
         defaultTemplate.setLastUpdate(System.currentTimeMillis());
         return defaultTemplate;
+    }
+
+    public static void setupWebview(WebView webView) {
+        if (webView == null) {
+            return;
+        }
+        webView.setHorizontalScrollBarEnabled(false);
+        webView.setScrollBarStyle(View.SCROLLBARS_INSIDE_OVERLAY);
+        webView.setBackgroundColor(0);
+
+        WebSettings settings = webView.getSettings();
+        settings.setPluginsEnabled(false);
+        settings.setJavaScriptEnabled(false);
+        settings.setBuiltInZoomControls(false);
+        settings.setJavaScriptCanOpenWindowsAutomatically(false);
+        settings.setSupportMultipleWindows(false);
+        settings.setAppCacheEnabled(true);
+        settings.setCacheMode(WebSettings.LOAD_NORMAL);
+        if (AppUtils.isHoneycombPlus()) {
+            settings.enableSmoothTransition();
+        }
+        settings.setLoadsImagesAutomatically(true);
+        settings.setGeolocationEnabled(true);
+        settings.setDomStorageEnabled(true);
+        settings.setSupportZoom(false);
+        settings.setSaveFormData(false);
+        settings.setSavePassword(false);
+        settings.setLightTouchEnabled(false);
+        settings.setDatabaseEnabled(true);
+        settings.setAllowFileAccess(true);
+    }
+
+    public static boolean isHoneycombPlus() {
+        return Build.VERSION.SDK_INT >= 11;
     }
 }

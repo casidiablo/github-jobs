@@ -32,7 +32,7 @@
 
     </LinearLayout>
 
-    <com.github.jobs.widget.JellyBeanSpanFixTextView
+    <WebView
             android:id="@+id/lbl_template_preview"
             android:layout_width="0dp"
             android:layout_height="match_parent"

@@ -55,7 +55,7 @@
     <string name="library_wasp">telly:wasp: library to handle/cache bitmap resources</string>
     <string name="library_persistence">codeslap:persistence: a persistence library for Android I wrote a while ago</string>
     <string name="library_groundy">codeslap:groundy: library for Android containing some boilerplate code for implementing background REST API calls implementations</string>
-    <string name="templates_list">Templates list</string>
+    <string name="templates_list">CV templates</string>
     <string name="cv_templates">Templates</string>
     <string name="empty_templates_list">You don\'t have templates yet. Click plus to add one.</string>
     <string name="add_template">Add template</string>

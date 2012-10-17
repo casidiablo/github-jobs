@@ -69,7 +69,9 @@ public class TemplatesAdapter extends BaseAdapter {
 
         // set template content
         String content = template.getContent();
-        holder.content.setText(StringUtils.trim(Html.fromHtml(MARKDOWN.markdown(content)).toString()));
+        String html = Html.fromHtml(MARKDOWN.markdown(content)).toString();
+        html = html.replace("\n\n", " ").replace("\n", " ");
+        holder.content.setText(StringUtils.trim(html));
 
         // set date
         holder.date.setText(RelativeDate.getTimeAgo(mContext, template.getLastUpdate()));

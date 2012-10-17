@@ -2,11 +2,11 @@ package com.github.jobs.ui.fragment;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.text.Html;
+import android.support.v4.app.FragmentActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
+import android.webkit.WebView;
 import android.widget.Toast;
 import com.actionbarsherlock.app.SherlockFragment;
 import com.codeslap.persistence.Persistence;
@@ -14,6 +14,7 @@ import com.codeslap.persistence.SqlAdapter;
 import com.github.jobs.R;
 import com.github.jobs.bean.Template;
 import com.github.jobs.ui.activity.TemplateDetailsActivity;
+import com.github.jobs.utils.AppUtils;
 import com.petebevin.markdown.MarkdownProcessor;
 
 /**
@@ -24,8 +25,7 @@ public class TemplateDetailsFragment extends SherlockFragment {
     public static final String TAG = TemplateDetailsFragment.class.getSimpleName();
     private static final MarkdownProcessor MARKDOWN_PROCESSOR = new MarkdownProcessor();
 
-    private TextView mTemplateName;
-    private TextView mTemplateContent;
+    private WebView mTemplateContent;
     private SqlAdapter mAdapter;
     private long mTemplateId;
 
@@ -51,23 +51,27 @@ public class TemplateDetailsFragment extends SherlockFragment {
         }
 
         mAdapter = Persistence.getAdapter(getActivity());
-        mTemplateName = (TextView) getView().findViewById(R.id.lbl_template_name);
-        mTemplateContent = (TextView) getView().findViewById(R.id.lbl_template_preview);
+        mTemplateContent = (WebView) getView().findViewById(R.id.lbl_template_content);
+        AppUtils.setupWebview(mTemplateContent);
 
         onTemplateChanged();
     }
 
     public void onTemplateChanged() {
+        FragmentActivity activity = getActivity();
+        if (activity == null) {
+            return;
+        }
         // retrieve the template from the database
         Template template = new Template();
         template.setId(mTemplateId);
         template = mAdapter.findFirst(template);
 
         // set the template name
-        mTemplateName.setText(template.getName());
+        activity.setTitle(template.getName());
 
         // set the template content
         String html = MARKDOWN_PROCESSOR.markdown(template.getContent());
-        mTemplateContent.setText(Html.fromHtml(html));
+        mTemplateContent.loadData(html, "text/html", "utf-8");
     }
 }
