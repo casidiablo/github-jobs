@@ -92,12 +92,14 @@ public class HomeActivity extends TrackActivity {
         searchPack.setLocation(data.getStringExtra(SearchDialog.EXTRA_LOCATION));
         searchPack.setFullTime(data.getBooleanExtra(SearchDialog.EXTRA_FULL_TIME, true));
         showTabs();
-        mSearchJobFragmentAdapter.addSearch(searchPack);
-        if (mState.searchPacks == null) {
-            mState.searchPacks = new ArrayList<SearchPack>();
+        if (!mSearchJobFragmentAdapter.containsSearch(searchPack)) {
+            mSearchJobFragmentAdapter.addSearch(searchPack);
+            if (mState.searchPacks == null) {
+                mState.searchPacks = new ArrayList<SearchPack>();
+            }
+            mState.searchPacks.add(searchPack);
+            mIndicator.notifyDataSetChanged();
         }
-        mState.searchPacks.add(searchPack);
-        mIndicator.notifyDataSetChanged();
         int position = mSearchJobFragmentAdapter.positionFor(searchPack);
         selectTab(position);
     }

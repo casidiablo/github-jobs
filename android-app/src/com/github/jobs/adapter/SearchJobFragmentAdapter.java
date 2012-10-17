@@ -53,4 +53,8 @@ public class SearchJobFragmentAdapter extends MyFragmentStatePagerAdapter {
         mSearchPacks.remove(searchPack);
         notifyDataSetChanged();
     }
+
+    public boolean containsSearch(SearchPack searchPack) {
+        return mSearchPacks.contains(searchPack);
+    }
 }
