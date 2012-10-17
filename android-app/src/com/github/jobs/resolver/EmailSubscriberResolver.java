@@ -1,7 +1,7 @@
 package com.github.jobs.resolver;
 
 import android.os.Bundle;
-import com.codeslap.github.jobs.api.GithubJobsApi;
+import com.github.jobs.api.GithubJobsApi;
 import com.codeslap.groundy.CallResolver;
 import com.codeslap.groundy.Groundy;
 import com.github.jobs.bean.SearchPack;

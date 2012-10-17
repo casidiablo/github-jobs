@@ -1,7 +1,7 @@
 package com.github.jobs.utils;
 
 import android.content.Intent;
-import com.codeslap.github.jobs.api.Job;
+import com.github.bean.Job;
 
 /**
  * @author cristian

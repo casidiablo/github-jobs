@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.codeslap.github.jobs.api;
+package com.github.util;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;

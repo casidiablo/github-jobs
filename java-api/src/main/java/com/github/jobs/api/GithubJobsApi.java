@@ -14,8 +14,11 @@
  * limitations under the License.
  */
 
-package com.codeslap.github.jobs.api;
+package com.github.jobs.api;
 
+import com.github.bean.Job;
+import com.github.bean.Search;
+import com.github.util.HttpHandler;
 import com.google.gson.Gson;
 import org.apache.commons.httpclient.HttpMethod;
 import org.apache.commons.httpclient.NameValuePair;

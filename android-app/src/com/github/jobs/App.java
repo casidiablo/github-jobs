@@ -1,7 +1,7 @@
 package com.github.jobs;
 
 import android.app.Application;
-import com.codeslap.github.jobs.api.Job;
+import com.github.bean.Job;
 import com.codeslap.persistence.DatabaseSpec;
 import com.codeslap.persistence.PersistenceConfig;
 import com.crittercism.app.Crittercism;

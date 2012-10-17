@@ -6,7 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
-import com.codeslap.github.jobs.api.Job;
+import com.github.bean.Job;
 import com.github.jobs.R;
 import com.github.jobs.ui.activity.JobDetailsActivity;
 import com.github.jobs.utils.RelativeDate;

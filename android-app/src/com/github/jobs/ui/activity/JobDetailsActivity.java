@@ -6,7 +6,7 @@ import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
-import com.codeslap.github.jobs.api.Job;
+import com.github.bean.Job;
 import com.codeslap.persistence.Persistence;
 import com.github.jobs.R;
 import com.github.jobs.adapter.JobsDetailsAdapter;

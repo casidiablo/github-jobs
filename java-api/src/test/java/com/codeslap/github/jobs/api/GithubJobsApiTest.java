@@ -16,6 +16,9 @@
 
 package com.codeslap.github.jobs.api;
 
+import com.github.jobs.api.GithubJobsApi;
+import com.github.bean.Job;
+import com.github.bean.Search;
 import org.json.JSONException;
 
 import java.util.List;

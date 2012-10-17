@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.codeslap.github.jobs.api;
+package com.github.bean;
 
 import com.google.gson.annotations.SerializedName;
 

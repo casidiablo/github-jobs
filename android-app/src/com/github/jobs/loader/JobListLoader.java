@@ -2,7 +2,7 @@ package com.github.jobs.loader;
 
 import android.content.Context;
 import android.util.Log;
-import com.codeslap.github.jobs.api.Job;
+import com.github.bean.Job;
 import com.codeslap.groundy.ListLoader;
 import com.codeslap.persistence.Persistence;
 import com.codeslap.persistence.SqlAdapter;
