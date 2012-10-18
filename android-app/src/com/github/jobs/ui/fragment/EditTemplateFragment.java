@@ -20,6 +20,8 @@ import com.github.jobs.ui.activity.TemplateDetailsActivity;
 import com.github.jobs.utils.AppUtils;
 import com.petebevin.markdown.MarkdownProcessor;
 
+import static com.github.jobs.ui.fragment.TemplateDetailsFragment.GithubJobsJavascriptInterface;
+
 /**
  * @author cristian
  * @version 1.0
@@ -28,10 +30,10 @@ public class EditTemplateFragment extends SherlockFragment {
     public static final String TAG = EditTemplateFragment.class.getSimpleName();
     private static final MarkdownProcessor MARKDOWN_PROCESSOR = new MarkdownProcessor();
 
-    private WebView mTemplatePreview;
     private EditText mTemplateContent;
     private EditText mTemplateName;
     private long mTemplateId;
+    private GithubJobsJavascriptInterface mJavascriptInterface;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -41,9 +43,12 @@ public class EditTemplateFragment extends SherlockFragment {
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        mTemplatePreview = (WebView) getView().findViewById(R.id.lbl_template_preview);
-        AppUtils.setupWebview(mTemplatePreview);
-        mTemplatePreview.setOnTouchListener(mPreviewTouchListener);
+        WebView templatePreview = (WebView) getView().findViewById(R.id.lbl_template_preview);
+        AppUtils.setupWebview(templatePreview);
+        templatePreview.setOnTouchListener(mPreviewTouchListener);
+        mJavascriptInterface = new GithubJobsJavascriptInterface(templatePreview, null);
+        templatePreview.addJavascriptInterface(mJavascriptInterface, TemplateDetailsFragment.JS_INTERFACE);
+        templatePreview.loadUrl(TemplateDetailsFragment.PREVIEW_TEMPLATE_URL);
 
         mTemplateContent = (EditText) getView().findViewById(R.id.edit_template_content);
         mTemplateContent.addTextChangedListener(mTextWatcher);
@@ -58,10 +63,12 @@ public class EditTemplateFragment extends SherlockFragment {
             template.setId(mTemplateId);
             template = adapter.findFirst(template);
 
+            // set name and raw content
             mTemplateName.setText(template.getName());
-            mTemplateContent.setText(template.getContent());
-            String html = MARKDOWN_PROCESSOR.markdown(template.getContent());
-            mTemplatePreview.loadData(html, "text/html", "utf-8");
+            String content = template.getContent();
+            mTemplateContent.setText(content);
+            mJavascriptInterface.setContent(content);
+            mJavascriptInterface.onLoaded();
         }
     }
 
@@ -76,9 +83,11 @@ public class EditTemplateFragment extends SherlockFragment {
 
         @Override
         public void afterTextChanged(Editable s) {
-            String text = s.toString();
-            String html = MARKDOWN_PROCESSOR.markdown(text).trim();
-            mTemplatePreview.loadData(html, "text/html", "utf-8");
+            if (mJavascriptInterface != null) {
+                String text = s.toString();
+                mJavascriptInterface.setContent(text);
+                mJavascriptInterface.onLoaded();
+            }
         }
     };
 
@@ -91,14 +100,6 @@ public class EditTemplateFragment extends SherlockFragment {
         template.setName(mTemplateName.getText().toString().trim());
         template.setContent(mTemplateContent.getText().toString().trim());
         template.setLastUpdate(System.currentTimeMillis());
-
-//        // create the list of services
-//        ArrayList<Service> services = new ArrayList<Service>();
-//        Service service = new Service();
-//        service.setType("github");
-//        service.setData("casidiablo");
-//        services.add(service);
-//        template.setServices(services);
 
         return template;
     }

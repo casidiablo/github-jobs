@@ -22,7 +22,8 @@ import com.github.jobs.utils.AppUtils;
  */
 public class TemplateDetailsFragment extends SherlockFragment {
     public static final String TAG = TemplateDetailsFragment.class.getSimpleName();
-    private static final String PREVIEW_TEMPLATE_URL = "file:///android_asset/preview_template.html";
+    public static final String PREVIEW_TEMPLATE_URL = "file:///android_asset/preview_template.html";
+    public static final String JS_INTERFACE = "githubJobs";
 
     private WebView mTemplateContent;
     private SqlAdapter mAdapter;
@@ -71,24 +72,33 @@ public class TemplateDetailsFragment extends SherlockFragment {
 
         // set the template content
         final String content = template.getContent();
-        mTemplateContent.addJavascriptInterface(new GithubJobsJavascriptInterface(mTemplateContent, content), "githubJobs");
+        mTemplateContent.addJavascriptInterface(new GithubJobsJavascriptInterface(mTemplateContent, content), JS_INTERFACE);
         mTemplateContent.loadUrl(PREVIEW_TEMPLATE_URL);
     }
 
-    private static class GithubJobsJavascriptInterface {
+    public static class GithubJobsJavascriptInterface {
         private final WebView mWebView;
-        private final String mContent;
+        private String mContent;
 
         public GithubJobsJavascriptInterface(WebView webView, String content) {
             mWebView = webView;
+            setContent(content);
+        }
+
+        public void setContent(String content) {
+            if (content == null) {
+                mContent = null;
+                return;
+            }
             mContent = content.replaceAll("'", "\\\\'")
                     .replaceAll("\n", "\\\\n")
                     .replaceAll("\r", "\\\\n");
         }
 
-        @SuppressWarnings("UnusedDeclaration")
         public void onLoaded() {
-            mWebView.loadUrl("javascript:updatePreview('" + mContent + "')");
+            if (mContent != null) {
+                mWebView.loadUrl("javascript:updatePreview('" + mContent + "')");
+            }
         }
     }
 }
