@@ -80,9 +80,9 @@
     <string name="edit_template">Edit template</string>
     <string name="invalid_template">Invalid template</string>
     <string name="default_template_name">Template example</string>
-    <string name="default_template_content"><![CDATA[Dear employeer! My name is **Foo Bar** and I\'m a senior bar programmer.
+    <string name="default_template_content"><![CDATA[Dear employeer! My name is **Foo Bar** and I\'m a senior FooBar programmer.
 \n\n
-My primary focus right now is (back|fron)-end development in, let\'s say, [Ruby on Rails][1]. Also I have decent baz experience. So, my core skills are the following: blah, blah, blah, blah, etc. In my practice I always pay a lot of attention to quality of code, testing and project organization.
+My primary focus right now is (back|front)-end development in, let\'s say, [Ruby on Rails][1]. Also I have decent baz experience. So, my core skills are the following: blah, blah, blah, blah, etc. In my practice I always pay a lot of attention to quality of code, testing and project organization.
 \n\n
 I always prefer to use foo-bar approaches and thus use various foo-bar frameworks like SomeFramework. Also I have realized a lot of Foo and Bar projects already. Please contact me if you consider that I can help to realize your project.
 \n\n

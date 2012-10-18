@@ -1,0 +1,18 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+    <script src="file:///android_asset/Markdown.Converter.js" type="text/javascript"></script>
+    <script language="javascript" type="text/javascript">
+        function updatePreview(text) {
+            var converter = new Markdown.Converter();
+            var preview = document.getElementById("content");
+            var html = converter.makeHtml(text);
+            preview.innerHTML = html;
+        }
+    </script>
+</head>
+<body>
+<div id="content"></div>
+<script type="text/javascript">githubJobs.onLoaded();</script>
+</body>
+</html>

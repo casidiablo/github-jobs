@@ -52,11 +52,10 @@ public class AppUtils {
         }
         webView.setHorizontalScrollBarEnabled(false);
         webView.setScrollBarStyle(View.SCROLLBARS_INSIDE_OVERLAY);
-        webView.setBackgroundColor(0);
 
         WebSettings settings = webView.getSettings();
         settings.setPluginsEnabled(false);
-        settings.setJavaScriptEnabled(false);
+        settings.setJavaScriptEnabled(true);
         settings.setBuiltInZoomControls(false);
         settings.setJavaScriptCanOpenWindowsAutomatically(false);
         settings.setSupportMultipleWindows(false);

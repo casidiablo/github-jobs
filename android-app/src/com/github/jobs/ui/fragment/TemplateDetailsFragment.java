@@ -15,7 +15,6 @@ import com.github.jobs.R;
 import com.github.jobs.bean.Template;
 import com.github.jobs.ui.activity.TemplateDetailsActivity;
 import com.github.jobs.utils.AppUtils;
-import com.petebevin.markdown.MarkdownProcessor;
 
 /**
  * @author cristian
@@ -23,7 +22,7 @@ import com.petebevin.markdown.MarkdownProcessor;
  */
 public class TemplateDetailsFragment extends SherlockFragment {
     public static final String TAG = TemplateDetailsFragment.class.getSimpleName();
-    private static final MarkdownProcessor MARKDOWN_PROCESSOR = new MarkdownProcessor();
+    private static final String PREVIEW_TEMPLATE_URL = "file:///android_asset/preview_template.html";
 
     private WebView mTemplateContent;
     private SqlAdapter mAdapter;
@@ -71,7 +70,25 @@ public class TemplateDetailsFragment extends SherlockFragment {
         activity.setTitle(template.getName());
 
         // set the template content
-        String html = MARKDOWN_PROCESSOR.markdown(template.getContent());
-        mTemplateContent.loadData(html, "text/html", "utf-8");
+        final String content = template.getContent();
+        mTemplateContent.addJavascriptInterface(new GithubJobsJavascriptInterface(mTemplateContent, content), "githubJobs");
+        mTemplateContent.loadUrl(PREVIEW_TEMPLATE_URL);
+    }
+
+    private static class GithubJobsJavascriptInterface {
+        private final WebView mWebView;
+        private final String mContent;
+
+        public GithubJobsJavascriptInterface(WebView webView, String content) {
+            mWebView = webView;
+            mContent = content.replaceAll("'", "\\\\'")
+                    .replaceAll("\n", "\\\\n")
+                    .replaceAll("\r", "\\\\n");
+        }
+
+        @SuppressWarnings("UnusedDeclaration")
+        public void onLoaded() {
+            mWebView.loadUrl("javascript:updatePreview('" + mContent + "')");
+        }
     }
 }
