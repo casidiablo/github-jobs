@@ -18,6 +18,7 @@ import org.joda.time.format.DateTimeFormatter;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * @author cristian
@@ -26,7 +27,7 @@ public class JobsAdapter extends BaseAdapter {
 
     private final List<Job> mJobs = new ArrayList<Job>();
     private final LayoutInflater mInflater;
-    public static final DateTimeFormatter DATE_PARSER = DateTimeFormat.forPattern("EEE MMM dd HH:mm:ss 'UTC' yyyy");
+    public static final DateTimeFormatter DATE_PARSER = DateTimeFormat.forPattern("EEE MMM dd HH:mm:ss 'UTC' yyyy").withLocale(Locale.ENGLISH);
 
     private final Context mContext;
     private static final String TAG = "github:jobs:jobsAdapter";
