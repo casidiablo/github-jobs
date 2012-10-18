@@ -18,7 +18,6 @@ import com.github.jobs.R;
 import com.github.jobs.bean.Template;
 import com.github.jobs.ui.activity.TemplateDetailsActivity;
 import com.github.jobs.utils.AppUtils;
-import com.petebevin.markdown.MarkdownProcessor;
 
 import static com.github.jobs.ui.fragment.TemplateDetailsFragment.GithubJobsJavascriptInterface;
 
@@ -28,7 +27,6 @@ import static com.github.jobs.ui.fragment.TemplateDetailsFragment.GithubJobsJava
  */
 public class EditTemplateFragment extends SherlockFragment {
     public static final String TAG = EditTemplateFragment.class.getSimpleName();
-    private static final MarkdownProcessor MARKDOWN_PROCESSOR = new MarkdownProcessor();
 
     private EditText mTemplateContent;
     private EditText mTemplateName;

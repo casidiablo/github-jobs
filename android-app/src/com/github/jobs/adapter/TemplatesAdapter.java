@@ -69,9 +69,16 @@ public class TemplatesAdapter extends BaseAdapter {
 
         // set template content
         String content = template.getContent();
-        String html = Html.fromHtml(MARKDOWN.markdown(content)).toString();
-        html = html.replace("\n\n", " ").replace("\n", " ");
-        holder.content.setText(StringUtils.trim(html));
+        if (content != null) {
+            if (content.length() > 150) {
+                content = content.substring(0, 150);
+            }
+            String html = Html.fromHtml(MARKDOWN.markdown(content)).toString();
+            html = html.replace("\n\n", " ").replace("\n", " ");
+            holder.content.setText(StringUtils.trim(html));
+        } else {
+            holder.content.setText("");
+        }
 
         // set date
         holder.date.setText(RelativeDate.getTimeAgo(mContext, template.getLastUpdate()));
