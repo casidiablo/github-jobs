@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="5dip">
+    <ImageView
+            android:id="@+id/img_user_avatar"
+            android:layout_width="50dip"
+            android:layout_height="50dip"
+            android:layout_marginRight="5dip"
+            android:src="@drawable/ic_default_avatar"
+            android:contentDescription="@string/user_avatar"/>
+    <TextView
+            android:id="@+id/lbl_username"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@id/img_user_avatar"
+            android:layout_marginTop="3dip"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:textColor="@color/title"
+            android:textStyle="bold"/>
+    <TextView
+            android:id="@+id/lbl_reputation"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@id/img_user_avatar"
+            android:layout_below="@id/lbl_username"
+            android:textAppearance="?android:attr/textAppearanceMedium"/>
+</RelativeLayout>

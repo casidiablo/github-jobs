@@ -12,8 +12,8 @@ import android.view.ViewGroup;
 
 import java.util.ArrayList;
 
-public abstract class MyFragmentStatePagerAdapter extends PagerAdapter {
-    private static final String TAG = "MyFragmentStatePagerAdapter";
+public abstract class FragmentStatePagerAdapter extends PagerAdapter {
+    private static final String TAG = "FragmentStatePagerAdapter";
     private static final boolean DEBUG = false;
 
     private final FragmentManager mFragmentManager;
@@ -23,7 +23,7 @@ public abstract class MyFragmentStatePagerAdapter extends PagerAdapter {
     private final ArrayList<Fragment> mFragments = new ArrayList<Fragment>();
     private Fragment mCurrentPrimaryItem = null;
 
-    public MyFragmentStatePagerAdapter(FragmentManager fm) {
+    public FragmentStatePagerAdapter(FragmentManager fm) {
         mFragmentManager = fm;
     }
 

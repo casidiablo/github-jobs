@@ -2,44 +2,27 @@ package com.github.jobs.adapter;
 
 import android.content.Context;
 import android.text.Html;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
 import android.widget.TextView;
+import com.codeslap.groundy.adapter.Layout;
+import com.codeslap.groundy.adapter.ListBaseAdapter;
 import com.github.jobs.R;
 import com.github.jobs.bean.Template;
 import com.github.jobs.utils.RelativeDate;
 import com.github.jobs.utils.StringUtils;
 import com.petebevin.markdown.MarkdownProcessor;
 
-import java.util.ArrayList;
-import java.util.List;
-
 /**
  * @author cristian
  * @version 1.0
  */
-public class TemplatesAdapter extends BaseAdapter {
+public class TemplatesAdapter extends ListBaseAdapter<Template, TemplatesAdapter.ViewHolder> {
 
     private static final MarkdownProcessor MARKDOWN = new MarkdownProcessor();
-    private final LayoutInflater mInflater;
-    private final List<Template> mTemplates = new ArrayList<Template>();
-    private final Context mContext;
 
     public TemplatesAdapter(Context context) {
-        mContext = context;
-        mInflater = LayoutInflater.from(context);
-    }
-
-    @Override
-    public int getCount() {
-        return mTemplates.size();
-    }
-
-    @Override
-    public Template getItem(int position) {
-        return mTemplates.get(position);
+        super(context, ViewHolder.class);
     }
 
     @Override
@@ -48,22 +31,7 @@ public class TemplatesAdapter extends BaseAdapter {
     }
 
     @Override
-    public View getView(int position, View view, ViewGroup parent) {
-        ViewHolder holder;
-        if (view == null) {
-            holder = new ViewHolder();
-            view = mInflater.inflate(R.layout.template_row, null);
-
-            holder.title = (TextView) view.findViewById(com.github.jobs.R.id.title);
-            holder.content = (TextView) view.findViewById(com.github.jobs.R.id.content);
-            holder.date = (TextView) view.findViewById(com.github.jobs.R.id.date);
-
-            view.setTag(holder);
-        } else {
-            holder = (ViewHolder) view.getTag();
-        }
-
-        Template template = getItem(position);
+    public void populateHolder(int position, View view, ViewGroup parent, Template template, ViewHolder holder) {
         // set template name
         holder.title.setText(StringUtils.trim(template.getName()));
 
@@ -81,22 +49,11 @@ public class TemplatesAdapter extends BaseAdapter {
         }
 
         // set date
-        holder.date.setText(RelativeDate.getTimeAgo(mContext, template.getLastUpdate()));
-
-        return view;
+        holder.date.setText(RelativeDate.getTimeAgo(getContext(), template.getLastUpdate()));
     }
 
-    public void updateItems(List<Template> data) {
-        mTemplates.clear();
-        mTemplates.addAll(data);
-        notifyDataSetChanged();
-    }
-
-    public void clear() {
-        mTemplates.clear();
-    }
-
-    private static class ViewHolder {
+    @Layout(R.layout.template_row)
+    public static class ViewHolder {
         TextView title;
         TextView content;
         TextView date;

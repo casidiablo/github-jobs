@@ -32,7 +32,6 @@ import static com.github.jobs.utils.AnalyticsHelper.getTracker;
  * @version 1.0
  */
 public class TemplatesListFragment extends SherlockListFragment implements LoaderManager.LoaderCallbacks<List<Template>> {
-    public static final String TAG = TemplatesListFragment.class.getSimpleName();
     private static final int TEMPLATES_LOADER_ID = 8432;
     private TemplatesAdapter mAdapter;
 

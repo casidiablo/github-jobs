@@ -1,10 +1,8 @@
 package com.github.jobs.ui.activity;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
 import com.codeslap.persistence.Persistence;
@@ -24,15 +22,7 @@ public class EditTemplateActivity extends TrackActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        setContentView(R.layout.base_fragment_activity);
-
-        EditTemplateFragment fragment = findEditTemplateFragment();
-        if (fragment == null) {
-            FragmentManager fm = getSupportFragmentManager();
-            FragmentTransaction ft = fm.beginTransaction();
-            ft.add(R.id.container, new EditTemplateFragment(), EditTemplateFragment.TAG);
-            ft.commit();
-        }
+        setupBaseFragment(R.id.base_container, EditTemplateFragment.class);
     }
 
     @Override
@@ -48,8 +38,13 @@ public class EditTemplateActivity extends TrackActivity {
             case android.R.id.home:
                 onBackPressed();
                 return true;
+            case R.id.menu_add_service:
+                Intent soUserPicker = new Intent(this, SOUserPickerActivity.class);
+                soUserPicker.putExtra(SOUserPickerActivity.EXTRA_SEARCH, "cristian");
+                startActivityForResult(soUserPicker, SOUserPickerActivity.REQUEST_CODE);
+                return true;
             case R.id.menu_save:
-                EditTemplateFragment fragment = findEditTemplateFragment();
+                EditTemplateFragment fragment = findFragment(EditTemplateFragment.class);
                 Template template = fragment.buildTemplate();
                 SqlAdapter adapter = Persistence.getAdapter(this);
                 if (template.getId() > 0) {
@@ -66,12 +61,11 @@ public class EditTemplateActivity extends TrackActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    private EditTemplateFragment findEditTemplateFragment() {
-        FragmentManager fm = getSupportFragmentManager();
-        Fragment fragment = fm.findFragmentByTag(EditTemplateFragment.TAG);
-        if (!(fragment instanceof EditTemplateFragment)) {
-            return null;
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == SOUserPickerActivity.REQUEST_CODE && resultCode == RESULT_OK) {
+            // do something
         }
-        return (EditTemplateFragment) fragment;
     }
 }

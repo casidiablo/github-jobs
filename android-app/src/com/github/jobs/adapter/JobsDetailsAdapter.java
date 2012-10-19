@@ -9,7 +9,7 @@ import java.util.List;
 /**
  * @author cristian
  */
-public class JobsDetailsAdapter extends MyFragmentStatePagerAdapter {
+public class JobsDetailsAdapter extends FragmentStatePagerAdapter {
     private final List<String> mIds;
 
     public JobsDetailsAdapter(FragmentManager fm, List<String> ids) {

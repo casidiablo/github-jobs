@@ -94,4 +94,9 @@ Best regards, Foo Bar.
     <string name="are_you_really_sure">Are you sure you want to delete this template? This cannot be undone.</string>
     <string name="yes_i_am">Yes, I am</string>
     <string name="template_deleted_successfully">Template deleted successfully</string>
+    <string name="so_user_picker">StackOverflow user picker</string>
+    <string name="search_by_username">Search by username</string>
+    <string name="user_avatar">User avatar</string>
+    <string name="invalid_so_user">Invalid StackOverflow user</string>
+    <string name="reputation">Rep: %s</string>
 </resources>

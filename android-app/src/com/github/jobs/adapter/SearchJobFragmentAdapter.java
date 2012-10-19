@@ -11,7 +11,7 @@ import com.github.jobs.ui.fragment.JobListFragment;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SearchJobFragmentAdapter extends MyFragmentStatePagerAdapter {
+public class SearchJobFragmentAdapter extends FragmentStatePagerAdapter {
     private final List<SearchPack> mSearchPacks = new ArrayList<SearchPack>();
     private final Context mContext;
 

@@ -11,8 +11,8 @@ import com.github.jobs.bean.SearchPack;
  */
 public class EmailSubscriberResolver extends CallResolver {
 
-    public static final String EXTRA_EMAIL = "com.github.jobs.extra_email";
-    public static final String EXTRA_SEARCH = "com.github.jobs.extra_search";
+    public static final String EXTRA_EMAIL = "com.github.jobs.extra.email";
+    public static final String EXTRA_SEARCH = "com.github.jobs.extra.search";
 
     private boolean mResult;
 

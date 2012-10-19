@@ -26,7 +26,6 @@ import static com.github.jobs.ui.fragment.TemplateDetailsFragment.GithubJobsJava
  * @version 1.0
  */
 public class EditTemplateFragment extends SherlockFragment {
-    public static final String TAG = EditTemplateFragment.class.getSimpleName();
 
     private EditText mTemplateContent;
     private EditText mTemplateName;

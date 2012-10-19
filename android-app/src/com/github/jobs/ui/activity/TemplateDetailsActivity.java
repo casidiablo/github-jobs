@@ -2,9 +2,7 @@ package com.github.jobs.ui.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.widget.Toast;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
@@ -32,9 +30,6 @@ public class TemplateDetailsActivity extends TrackActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        setContentView(R.layout.base_fragment_activity);
-
         mTemplateId = getIntent().getLongExtra(EXTRA_TEMPLATE_ID, -1);
         if (mTemplateId == -1) {
             finish();
@@ -42,13 +37,8 @@ public class TemplateDetailsActivity extends TrackActivity {
             return;
         }
 
-        TemplateDetailsFragment fragment = findTemplateDetailsFragment();
-        if (fragment == null) {
-            FragmentManager fm = getSupportFragmentManager();
-            FragmentTransaction ft = fm.beginTransaction();
-            ft.add(R.id.container, new TemplateDetailsFragment(), TemplateDetailsFragment.TAG);
-            ft.commit();
-        }
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        setupBaseFragment(R.id.base_container, TemplateDetailsFragment.class);
     }
 
     @Override
@@ -84,7 +74,7 @@ public class TemplateDetailsActivity extends TrackActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == EditTemplateActivity.EDIT_TEMPLATE_REQUEST && resultCode == RESULT_OK) {
-            TemplateDetailsFragment templateDetailsFragment = findTemplateDetailsFragment();
+            TemplateDetailsFragment templateDetailsFragment = findFragment(TemplateDetailsFragment.class);
             templateDetailsFragment.onTemplateChanged();
             setResult(DATA_CHANGED);
         }
@@ -101,14 +91,5 @@ public class TemplateDetailsActivity extends TrackActivity {
 
         setResult(DATA_CHANGED);
         finish();
-    }
-
-    private TemplateDetailsFragment findTemplateDetailsFragment() {
-        FragmentManager fm = getSupportFragmentManager();
-        Fragment fragment = fm.findFragmentByTag(TemplateDetailsFragment.TAG);
-        if (!(fragment instanceof TemplateDetailsFragment)) {
-            return null;
-        }
-        return (TemplateDetailsFragment) fragment;
     }
 }

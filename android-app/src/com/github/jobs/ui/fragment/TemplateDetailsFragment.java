@@ -21,7 +21,6 @@ import com.github.jobs.utils.AppUtils;
  * @version 1.0
  */
 public class TemplateDetailsFragment extends SherlockFragment {
-    public static final String TAG = TemplateDetailsFragment.class.getSimpleName();
     public static final String PREVIEW_TEMPLATE_URL = "file:///android_asset/preview_template.html";
     public static final String JS_INTERFACE = "githubJobs";
 

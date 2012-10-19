@@ -19,10 +19,12 @@
         <activity android:name=".ui.dialog.SubscribeDialog" android:theme="@style/Theme.GithubJobs.Dialog" android:label="@string/subscribe_by_email" android:configChanges="orientation|keyboardHidden|keyboard|screenLayout|touchscreen"/>
         <activity android:name=".ui.dialog.HowToApplyDialog" android:theme="@style/Theme.GithubJobs.Dialog" android:label="@string/how_to_apply" android:configChanges="orientation|keyboardHidden|keyboard|screenLayout|touchscreen"/>
         <activity android:name=".ui.dialog.AboutDialog" android:theme="@style/Theme.GithubJobs.Dialog.NoTitle" android:label="@string/about_this_app" android:configChanges="orientation|keyboardHidden|keyboard|screenLayout|touchscreen"/>
+        <activity android:name=".ui.dialog.SOUserDialog" android:theme="@style/Theme.GithubJobs.Dialog" android:label="@string/about_this_app" android:configChanges="orientation|keyboardHidden|keyboard|screenLayout|touchscreen"/>
         <activity android:name=".ui.activity.JobDetailsActivity" android:label="@string/job_details" android:configChanges="orientation|keyboardHidden|keyboard|screenLayout|touchscreen"/>
         <activity android:name=".ui.activity.TemplatesActivity" android:label="@string/templates_list" android:configChanges="orientation|keyboardHidden|keyboard|screenLayout|touchscreen"/>
         <activity android:name=".ui.activity.EditTemplateActivity" android:label="@string/edit_template"/>
         <activity android:name=".ui.activity.TemplateDetailsActivity" android:label="@string/edit_template"/>
+        <activity android:name=".ui.activity.SOUserPickerActivity" android:label="@string/so_user_picker"/>
         <activity android:name="com.crittercism.NotificationActivity"/>
         <service android:name="com.codeslap.groundy.GroundyService"/>
     </application>
