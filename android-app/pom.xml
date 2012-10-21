@@ -175,6 +175,13 @@
         </dependency>
     </dependencies>
 
+    <repositories>
+        <repository>
+            <id>third-party</id>
+            <url>http://casidiablo.github.com/codeslap-maven/repository/</url>
+        </repository>
+    </repositories>
+
     <build>
         <finalName>${project.artifactId}</finalName>
         <sourceDirectory>src</sourceDirectory>
