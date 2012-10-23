@@ -107,7 +107,7 @@ Best regards, Foo Bar.
     <string name="reputation">Reputation: %s</string>
     <string name="link">Link: %s</string>
     <string name="website">Website: %s</string>
-    <string name="badge_counts">Badge Counts\n</string>
+    <string name="badge_counts">Badge Counts:</string>
     <string name="gold">Gold:</string>
     <string name="silver">Silver:</string>
     <string name="bronze">Bronze:</string>

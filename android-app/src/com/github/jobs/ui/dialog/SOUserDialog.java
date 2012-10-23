@@ -53,11 +53,11 @@ public class SOUserDialog extends TrackDialog {
         int bronze = soUser.getBadgeCount().getBronze();
         if (gold > 0) {
             goldBadge.setVisibility(View.VISIBLE);
-            goldBadge.setText(" " + String.valueOf(gold));
+            goldBadge.setText(" " + String.valueOf(gold) + " ");
         }
         if (silver > 0) {
             silverBadge.setVisibility(View.VISIBLE);
-            silverBadge.setText(" " + String.valueOf(silver));
+            silverBadge.setText(" " + String.valueOf(silver) + " ");
         }
         if (bronze > 0) {
             bronzeBadge.setVisibility(View.VISIBLE);
