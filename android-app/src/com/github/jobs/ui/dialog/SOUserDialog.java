@@ -1,8 +1,6 @@
 package com.github.jobs.ui.dialog;
 
-import android.content.Intent;
 import android.graphics.Bitmap;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.util.Linkify;
@@ -12,6 +10,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 import com.github.jobs.R;
 import com.github.jobs.bean.SOUser;
+import com.github.jobs.utils.WebsiteHelper;
 import com.telly.wasp.BitmapHelper;
 import com.telly.wasp.BitmapObserver;
 import com.telly.wasp.BitmapUtils;
@@ -53,15 +52,15 @@ public class SOUserDialog extends TrackDialog {
         int bronze = soUser.getBadgeCount().getBronze();
         if (gold > 0) {
             goldBadge.setVisibility(View.VISIBLE);
-            goldBadge.setText(" " + String.valueOf(gold) + " ");
+            goldBadge.setText(String.valueOf(gold));
         }
         if (silver > 0) {
             silverBadge.setVisibility(View.VISIBLE);
-            silverBadge.setText(" " + String.valueOf(silver) + " ");
+            silverBadge.setText(String.valueOf(silver));
         }
         if (bronze > 0) {
             bronzeBadge.setVisibility(View.VISIBLE);
-            bronzeBadge.setText(" " + String.valueOf(bronze));
+            bronzeBadge.setText(String.valueOf(bronze));
         }
 
         Linkify.addLinks(website, Linkify.WEB_URLS);
@@ -79,20 +78,9 @@ public class SOUserDialog extends TrackDialog {
         userAvatar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                launchWebsite(soUser.getLink());
+                WebsiteHelper.launchWebsite(SOUserDialog.this, soUser.getLink());
             }
         });
-    }
-
-    private void launchWebsite(String url) {
-        try {
-            Intent intent = new Intent(Intent.ACTION_VIEW);
-            intent.addCategory(Intent.CATEGORY_BROWSABLE);
-            intent.setData(Uri.parse(url));
-            startActivity(intent);
-        } catch (Exception e) {
-            Toast.makeText(this, R.string.could_not_launch_url, Toast.LENGTH_LONG).show();
-        }
     }
 
     @Override

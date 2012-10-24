@@ -2,13 +2,13 @@ package com.github.jobs.ui.dialog;
 
 import android.content.Intent;
 import android.graphics.Typeface;
-import android.net.Uri;
 import android.os.Bundle;
 import android.text.util.Linkify;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.github.jobs.R;
+import com.github.jobs.utils.WebsiteHelper;
 
 import static com.github.jobs.utils.AnalyticsHelper.*;
 
@@ -47,13 +47,13 @@ public class AboutDialog extends TrackDialog implements View.OnClickListener {
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.btn_tweet:
-                launchWebsite("http://twitter.com/casidiablo");
+                WebsiteHelper.launchWebsite(this, "http://twitter.com/casidiablo");
                 break;
             case R.id.btn_github:
-                launchWebsite("http://github.com/casidiablo");
+                WebsiteHelper.launchWebsite(this, "http://github.com/casidiablo");
                 break;
             case R.id.btn_stackoverflow:
-                launchWebsite("http://stackoverflow.com/users/244296/cristian");
+                WebsiteHelper.launchWebsite(this, "http://stackoverflow.com/users/244296/cristian");
                 break;
             case R.id.btn_feedback:
                 Intent intent = new Intent(Intent.ACTION_SEND);
@@ -68,37 +68,25 @@ public class AboutDialog extends TrackDialog implements View.OnClickListener {
                 }
                 break;
             case R.id.library_maven:
-                launchWebsite("http://maven.apache.org/");
+                WebsiteHelper.launchWebsite(this, "http://maven.apache.org/");
                 break;
             case R.id.library_abs:
-                launchWebsite("http://actionbarsherlock.com/");
+                WebsiteHelper.launchWebsite(this, "http://actionbarsherlock.com/");
                 break;
             case R.id.library_wasp:
-                launchWebsite("https://github.com/twitvid/wasp");
+                WebsiteHelper.launchWebsite(this, "https://github.com/twitvid/wasp");
                 break;
             case R.id.library_groundy:
-                launchWebsite("https://github.com/casidiablo/groundy");
+                WebsiteHelper.launchWebsite(this, "https://github.com/casidiablo/groundy");
                 break;
             case R.id.library_persistence:
-                launchWebsite("https://github.com/casidiablo/persistence");
+                WebsiteHelper.launchWebsite(this, "https://github.com/casidiablo/persistence");
                 break;
             case R.id.lbl_about_me:
                 findViewById(R.id.about_author_container).setVisibility(View.VISIBLE);
                 findViewById(R.id.contact_buttons_container).setVisibility(View.VISIBLE);
                 findViewById(R.id.lbl_about_me).setOnClickListener(null);
                 break;
-        }
-    }
-
-    private void launchWebsite(String url) {
-        try {
-            getTracker(this).trackEvent(CATEGORY_ABOUT, ACTION_OPEN, url);
-            Intent intent = new Intent(Intent.ACTION_VIEW);
-            intent.addCategory(Intent.CATEGORY_BROWSABLE);
-            intent.setData(Uri.parse(url));
-            startActivity(intent);
-        } catch (Exception e) {
-            Toast.makeText(this, R.string.could_not_launch_url, Toast.LENGTH_LONG).show();
         }
     }
 }
