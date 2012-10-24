@@ -1,21 +1,18 @@
 package com.github.jobs.ui.fragment;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
+import android.os.IBinder;
 import android.support.v4.app.FragmentManager;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 import com.actionbarsherlock.app.SherlockFragment;
-import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
@@ -113,31 +110,11 @@ public class SOUserPickerFragment extends SherlockFragment implements AdapterVie
         Groundy.execute(getActivity(), StackOverflowUserResolver.class, mSOUserFetcherReceiver.getReceiver(), extras);
     }
 
-    private class SOUserFetcherReceiver extends ReceiverFragment {
-        @Override
-        protected void onFinished(Bundle resultData) {
-            super.onFinished(resultData);
-            ArrayList<SOUser> parcelableArrayList = resultData.getParcelableArrayList(StackOverflowUserResolver.RESULT_USERS);
-            mAdapter.updateItems(parcelableArrayList);
-        }
+    public IBinder getWindowToken() {
+        return mUserSearch.getWindowToken();
+    }
 
-        @Override
-        protected void onError(Bundle resultData) {
-            super.onError(resultData);
-
-        }
-
-        @Override
-        protected void onProgressChanged(boolean running) {
-            FragmentActivity activity = getActivity();
-            if (activity == null) {
-                return;
-            }
-            ((SherlockFragmentActivity) activity).setSupportProgressBarIndeterminateVisibility(running);
-            InputMethodManager imm = (InputMethodManager) activity.getSystemService(Context.INPUT_METHOD_SERVICE);
-            if (running) {
-                imm.hideSoftInputFromWindow(mUserSearch.getWindowToken(), 0);
-            }
-        }
+    public void updateItems(ArrayList<SOUser> users) {
+        mAdapter.updateItems(users);
     }
 }
