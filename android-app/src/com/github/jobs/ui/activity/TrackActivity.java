@@ -1,7 +1,7 @@
 package com.github.jobs.ui.activity;
 
 import com.actionbarsherlock.view.MenuItem;
-import com.codeslap.topy.BaseActivity;
+import com.codeslap.groundy.activity.BaseActivity;
 import com.github.jobs.utils.AnalyticsHelper;
 import com.github.jobs.utils.AppUtils;
 
