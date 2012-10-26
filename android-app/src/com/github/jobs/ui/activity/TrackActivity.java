@@ -1,7 +1,7 @@
 package com.github.jobs.ui.activity;
 
 import com.actionbarsherlock.view.MenuItem;
-import com.codeslap.groundy.activity.BaseActivity;
+import com.codeslap.groundy.activity.GuiceBaseActivity;
 import com.github.jobs.utils.AnalyticsHelper;
 import com.github.jobs.utils.AppUtils;
 
@@ -9,7 +9,7 @@ import com.github.jobs.utils.AppUtils;
  * @author cristian
  * @version 1.0
  */
-public class TrackActivity extends BaseActivity {
+public class TrackActivity extends GuiceBaseActivity {
 
     @Override
     protected void onStart() {

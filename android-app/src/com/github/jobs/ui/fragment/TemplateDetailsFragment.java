@@ -8,22 +8,24 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebView;
 import android.widget.Toast;
-import com.actionbarsherlock.app.SherlockFragment;
 import com.codeslap.persistence.Persistence;
 import com.codeslap.persistence.SqlAdapter;
 import com.github.jobs.R;
 import com.github.jobs.bean.Template;
 import com.github.jobs.ui.activity.TemplateDetailsActivity;
 import com.github.jobs.utils.AppUtils;
+import com.github.rtyley.android.sherlock.roboguice.fragment.RoboSherlockFragment;
+import roboguice.inject.InjectView;
 
 /**
  * @author cristian
  * @version 1.0
  */
-public class TemplateDetailsFragment extends SherlockFragment {
+public class TemplateDetailsFragment extends RoboSherlockFragment {
     public static final String PREVIEW_TEMPLATE_URL = "file:///android_asset/preview_template.html";
     public static final String JS_INTERFACE = "githubJobs";
 
+    @InjectView(R.id.lbl_template_content)
     private WebView mTemplateContent;
     private SqlAdapter mAdapter;
     private long mTemplateId;
@@ -50,7 +52,6 @@ public class TemplateDetailsFragment extends SherlockFragment {
         }
 
         mAdapter = Persistence.getAdapter(getActivity());
-        mTemplateContent = (WebView) getView().findViewById(R.id.lbl_template_content);
         AppUtils.setupWebview(mTemplateContent);
 
         onTemplateChanged();
