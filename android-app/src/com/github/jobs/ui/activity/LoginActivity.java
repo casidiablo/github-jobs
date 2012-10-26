@@ -11,6 +11,7 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.*;
 import com.github.jobs.R;
 import com.github.jobs.utils.TextWatcherAdapter;
+import roboguice.inject.InjectView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,13 +23,15 @@ public class LoginActivity extends TrackActivity {
     private AccountManager accountManager;
     private TextWatcher watcher = validationTextWatcher();
 
-
     /**
      * Was the original caller asking for an entirely new account?
      */
     protected boolean requestNewAccount = false;
     private AutoCompleteTextView mEmailText;
+
+    @InjectView(R.id.et_password)
     private EditText mPasswordText;
+    @InjectView(R.id.btn_signin)
     private Button mSigninButton;
 
     @Override
@@ -36,18 +39,14 @@ public class LoginActivity extends TrackActivity {
         super.onCreate(bundle);
 
         accountManager = AccountManager.get(this);
-        //        String email = intent.getStringExtra(PARAM_USERNAME);
+        //String email = intent.getStringExtra(PARAM_USERNAME);
         requestNewAccount = true;// email == null;
-
         setContentView(R.layout.login_activity);
-
-        mSigninButton = (Button) findViewById(R.id.btn_signin);
 
         mEmailText = (AutoCompleteTextView) findViewById(R.id.et_email);
         mEmailText.setAdapter(new ArrayAdapter<String>(this,
                 android.R.layout.simple_dropdown_item_1line, userEmailAccounts()));
 
-        mPasswordText = (EditText) findViewById(R.id.et_password);
         mPasswordText.setOnKeyListener(new View.OnKeyListener() {
 
             public boolean onKey(View v, int keyCode, KeyEvent event) {
@@ -113,7 +112,6 @@ public class LoginActivity extends TrackActivity {
      * the server for authentication.
      * <p/>
      * Specified by android:onClick="handleLogin" in the layout xml
-     *
      */
     public void handleLogin() {
     }

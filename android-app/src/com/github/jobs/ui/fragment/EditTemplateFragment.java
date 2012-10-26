@@ -11,13 +11,14 @@ import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.webkit.WebView;
 import android.widget.EditText;
-import com.actionbarsherlock.app.SherlockFragment;
 import com.codeslap.persistence.Persistence;
 import com.codeslap.persistence.SqlAdapter;
 import com.github.jobs.R;
 import com.github.jobs.bean.Template;
 import com.github.jobs.ui.activity.TemplateDetailsActivity;
 import com.github.jobs.utils.AppUtils;
+import com.github.rtyley.android.sherlock.roboguice.fragment.RoboSherlockFragment;
+import roboguice.inject.InjectView;
 
 import static com.github.jobs.ui.fragment.TemplateDetailsFragment.GithubJobsJavascriptInterface;
 
@@ -25,10 +26,13 @@ import static com.github.jobs.ui.fragment.TemplateDetailsFragment.GithubJobsJava
  * @author cristian
  * @version 1.0
  */
-public class EditTemplateFragment extends SherlockFragment {
+public class EditTemplateFragment extends RoboSherlockFragment {
 
+    @InjectView(R.id.edit_template_content)
     private EditText mTemplateContent;
+    @InjectView(R.id.edit_template_name)
     private EditText mTemplateName;
+
     private long mTemplateId;
     private GithubJobsJavascriptInterface mJavascriptInterface;
 
@@ -47,10 +51,7 @@ public class EditTemplateFragment extends SherlockFragment {
         templatePreview.addJavascriptInterface(mJavascriptInterface, TemplateDetailsFragment.JS_INTERFACE);
         templatePreview.loadUrl(TemplateDetailsFragment.PREVIEW_TEMPLATE_URL);
 
-        mTemplateContent = (EditText) getView().findViewById(R.id.edit_template_content);
         mTemplateContent.addTextChangedListener(mTextWatcher);
-
-        mTemplateName = (EditText) getView().findViewById(R.id.edit_template_name);
 
         mTemplateId = getActivity().getIntent().getLongExtra(TemplateDetailsActivity.EXTRA_TEMPLATE_ID, -1);
         if (mTemplateId != -1) {

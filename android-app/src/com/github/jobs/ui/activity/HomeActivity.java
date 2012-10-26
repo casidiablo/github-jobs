@@ -16,6 +16,7 @@ import com.github.jobs.ui.dialog.SearchDialog;
 import com.github.jobs.ui.fragment.JobListFragment;
 import com.github.jobs.ui.fragment.SearchReceiverFragment;
 import com.viewpagerindicator.TabPageIndicator;
+import roboguice.inject.InjectView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,6 +28,7 @@ public class HomeActivity extends TrackActivity {
 
     private TabPageIndicator mIndicator;
     private SearchJobFragmentAdapter mSearchJobFragmentAdapter;
+    @InjectView(R.id.pager)
     private ViewPager mViewPager;
     private State mState;
 
@@ -47,7 +49,6 @@ public class HomeActivity extends TrackActivity {
             }
         }
 
-        mViewPager = (ViewPager) findViewById(R.id.pager);
         mSearchJobFragmentAdapter = new SearchJobFragmentAdapter(this, getSupportFragmentManager());
         mViewPager.setAdapter(mSearchJobFragmentAdapter);
         Drawable drawable = getResources().getDrawable(R.drawable.view_pager_separator);

@@ -12,7 +12,6 @@ import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
-import com.actionbarsherlock.app.SherlockFragment;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
@@ -24,6 +23,8 @@ import com.github.jobs.bean.SOUser;
 import com.github.jobs.resolver.StackOverflowUserResolver;
 import com.github.jobs.ui.activity.SOUserPickerActivity;
 import com.github.jobs.ui.dialog.SOUserDialog;
+import com.github.rtyley.android.sherlock.roboguice.fragment.RoboSherlockFragment;
+import roboguice.inject.InjectView;
 
 import java.util.ArrayList;
 
@@ -31,11 +32,12 @@ import java.util.ArrayList;
  * @author cristian
  * @version 1.0
  */
-public class SOUserPickerFragment extends SherlockFragment implements AdapterView.OnItemClickListener {
+public class SOUserPickerFragment extends RoboSherlockFragment implements AdapterView.OnItemClickListener {
 
     private SOUserFetcherReceiver mSOUserFetcherReceiver;
-    private EditText mUserSearch;
     private SOUsersAdapter mAdapter;
+    @InjectView(R.id.edit_user_search)
+    private EditText mUserSearch;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -53,7 +55,6 @@ public class SOUserPickerFragment extends SherlockFragment implements AdapterVie
             fm.beginTransaction().add(mSOUserFetcherReceiver, ReceiverFragment.TAG).commit();
         }
 
-        mUserSearch = (EditText) getView().findViewById(R.id.edit_user_search);
         mUserSearch.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
