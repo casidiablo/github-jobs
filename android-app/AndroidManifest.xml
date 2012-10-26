@@ -33,6 +33,8 @@
         <activity android:name=".ui.dialog.SOUserDialog" android:theme="@style/Theme.GithubJobs.Dialog"
                   android:label="@string/about_this_app"
                   android:configChanges="orientation|keyboardHidden|keyboard|screenLayout|touchscreen"/>
+        <activity android:name=".ui.dialog.ServiceChooserDialog" android:theme="@style/Theme.GithubJobs.Dialog"
+                  android:label="@string/service_chooser"/>
         <activity android:name=".ui.activity.LoginActivity" android:label="@string/authenticate"/>
         <activity android:name=".ui.activity.JobDetailsActivity" android:label="@string/job_details"
                   android:configChanges="orientation|keyboardHidden|keyboard|screenLayout|touchscreen"/>

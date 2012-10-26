@@ -111,4 +111,11 @@ Best regards, Foo Bar.
     <string name="gold">Gold:</string>
     <string name="silver">Silver:</string>
     <string name="bronze">Bronze:</string>
+    <string name="service_chooser">Service chooser</string>
+    <string name="lbl_github">Github</string>
+    <string name="lbl_stackoverflow">Stackoverflow</string>
+    <string name="lbl_twitter">Twitter</string>
+    <string name="lbl_skype">Skype</string>
+    <string name="lbl_about_me">About me</string>
+    <string name="service_explanation">This will be placed at the end of your template</string>
 </resources>

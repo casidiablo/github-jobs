@@ -6,8 +6,8 @@ package com.github.jobs.bean;
  */
 public class Service {
     private long id;
-    private String type;
-    private String data;
+    private String name;
+    private int drawable;
 
     public long getId() {
         return id;
@@ -17,20 +17,20 @@ public class Service {
         this.id = id;
     }
 
-    public String getType() {
-        return type;
+    public String getName() {
+        return name;
     }
 
-    public void setType(String type) {
-        this.type = type;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public String getData() {
-        return data;
+    public int getDrawable() {
+        return drawable;
     }
 
-    public void setData(String data) {
-        this.data = data;
+    public void setDrawable(int drawable) {
+        this.drawable = drawable;
     }
 
     @Override
@@ -40,9 +40,9 @@ public class Service {
 
         Service service = (Service) o;
 
+        if (drawable != service.drawable) return false;
         if (id != service.id) return false;
-        if (data != null ? !data.equals(service.data) : service.data != null) return false;
-        if (type != null ? !type.equals(service.type) : service.type != null) return false;
+        if (name != null ? !name.equals(service.name) : service.name != null) return false;
 
         return true;
     }
@@ -50,8 +50,8 @@ public class Service {
     @Override
     public int hashCode() {
         int result = (int) (id ^ (id >>> 32));
-        result = 31 * result + (type != null ? type.hashCode() : 0);
-        result = 31 * result + (data != null ? data.hashCode() : 0);
+        result = 31 * result + (name != null ? name.hashCode() : 0);
+        result = 31 * result + drawable;
         return result;
     }
 
@@ -59,8 +59,8 @@ public class Service {
     public String toString() {
         return "Service{" +
                 "id=" + id +
-                ", type='" + type + '\'' +
-                ", data='" + data + '\'' +
+                ", name='" + name + '\'' +
+                ", drawable=" + drawable +
                 '}';
     }
 }

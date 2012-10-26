@@ -11,7 +11,7 @@ public class Template {
     private String name;
     private String content;
     private long lastUpdate;
-    private List<Service> services;
+    private List<TemplateService> templateServices;
 
     public long getId() {
         return id;
@@ -45,12 +45,12 @@ public class Template {
         this.lastUpdate = lastUpdate;
     }
 
-    public List<Service> getServices() {
-        return services;
+    public List<TemplateService> getTemplateServices() {
+        return templateServices;
     }
 
-    public void setServices(List<Service> services) {
-        this.services = services;
+    public void setTemplateServices(List<TemplateService> templateServices) {
+        this.templateServices = templateServices;
     }
 
     @Override
@@ -64,7 +64,7 @@ public class Template {
         if (id != template.id) return false;
         if (content != null ? !content.equals(template.content) : template.content != null) return false;
         if (name != null ? !name.equals(template.name) : template.name != null) return false;
-        if (services != null ? !services.equals(template.services) : template.services != null) return false;
+        if (templateServices != null ? !templateServices.equals(template.templateServices) : template.templateServices != null) return false;
 
         return true;
     }
@@ -75,7 +75,7 @@ public class Template {
         result = 31 * result + (name != null ? name.hashCode() : 0);
         result = 31 * result + (content != null ? content.hashCode() : 0);
         result = 31 * result + (int) (lastUpdate ^ (lastUpdate >>> 32));
-        result = 31 * result + (services != null ? services.hashCode() : 0);
+        result = 31 * result + (templateServices != null ? templateServices.hashCode() : 0);
         return result;
     }
 
@@ -86,7 +86,7 @@ public class Template {
                 ", name='" + name + '\'' +
                 ", content='" + content + '\'' +
                 ", lastUpdate=" + lastUpdate +
-                ", services=" + services +
+                ", templateServices=" + templateServices +
                 '}';
     }
 }

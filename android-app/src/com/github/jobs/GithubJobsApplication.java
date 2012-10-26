@@ -9,7 +9,7 @@ import com.crittercism.app.Crittercism;
 import com.github.bean.Job;
 import com.github.jobs.bean.GeneralSettings;
 import com.github.jobs.bean.SearchesAndJobs;
-import com.github.jobs.bean.Service;
+import com.github.jobs.bean.TemplateService;
 import com.github.jobs.bean.Template;
 import com.github.jobs.utils.AppUtils;
 import com.parse.Parse;
@@ -35,7 +35,7 @@ public class GithubJobsApplication extends Application {
         DatabaseSpec databaseSpec = PersistenceConfig.registerSpec(DB_VERSION);
         databaseSpec.match(SearchesAndJobs.class);
         databaseSpec.matchNotAutoIncrement(Job.class);
-        databaseSpec.match(new HasMany(Template.class, Service.class));
+        databaseSpec.match(new HasMany(Template.class, TemplateService.class));
 
         PersistenceConfig.getPreference().match(GeneralSettings.class);
     }

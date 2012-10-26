@@ -9,6 +9,7 @@ import com.codeslap.persistence.Persistence;
 import com.codeslap.persistence.SqlAdapter;
 import com.github.jobs.R;
 import com.github.jobs.bean.Template;
+import com.github.jobs.ui.dialog.ServiceChooserDialog;
 import com.github.jobs.ui.fragment.EditTemplateFragment;
 
 /**
@@ -39,9 +40,8 @@ public class EditTemplateActivity extends TrackActivity {
                 onBackPressed();
                 return true;
             case R.id.menu_add_service:
-                Intent soUserPicker = new Intent(this, SOUserPickerActivity.class);
-                soUserPicker.putExtra(SOUserPickerActivity.EXTRA_SEARCH, "cristian");
-                startActivityForResult(soUserPicker, SOUserPickerActivity.REQUEST_CODE);
+                Intent serviceChooser = new Intent(this, ServiceChooserDialog.class);
+                startActivity(serviceChooser);
                 return true;
             case R.id.menu_save:
                 EditTemplateFragment fragment = findFragment(EditTemplateFragment.class);
