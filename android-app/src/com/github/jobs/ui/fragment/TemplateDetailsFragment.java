@@ -52,7 +52,7 @@ public class TemplateDetailsFragment extends SherlockFragment {
 
         mAdapter = Persistence.getAdapter(getActivity());
         mTemplateContent = (WebView) getView().findViewById(R.id.lbl_template_content);
-        AppUtils.setupWebview(mTemplateContent);
+        AppUtils.setupWebView(mTemplateContent);
 
         onTemplateChanged();
     }

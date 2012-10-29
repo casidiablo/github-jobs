@@ -1,7 +1,6 @@
 package com.github.jobs.ui.fragment;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Parcelable;
@@ -9,12 +8,11 @@ import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.InputMethodManager;
 import android.webkit.WebView;
 import android.widget.EditText;
+import android.widget.ViewSwitcher;
 import com.actionbarsherlock.app.SherlockFragment;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
@@ -25,11 +23,11 @@ import com.github.jobs.R;
 import com.github.jobs.bean.SOUser;
 import com.github.jobs.bean.Template;
 import com.github.jobs.bean.TemplateService;
+import com.github.jobs.templates.TemplateServicesUtil;
 import com.github.jobs.ui.activity.SOUserPickerActivity;
 import com.github.jobs.ui.activity.TemplateDetailsActivity;
 import com.github.jobs.ui.dialog.ServiceChooserDialog;
 import com.github.jobs.utils.AppUtils;
-import com.github.jobs.templates.TemplateServicesUtil;
 
 import java.util.ArrayList;
 
@@ -41,6 +39,8 @@ import static com.github.jobs.ui.fragment.TemplateDetailsFragment.GithubJobsJava
  */
 public class EditTemplateFragment extends SherlockFragment {
     private static final String KEY_TEMPLATE_SERVICES = "com.github.jobs.key.template_services";
+    private static final int EDITOR_MODE = 0;
+    private static final int PREVIEW_MODE = 1;
 
     private EditText mTemplateContent;
     private EditText mTemplateName;
@@ -48,6 +48,8 @@ public class EditTemplateFragment extends SherlockFragment {
     private long mTemplateId;
     private GithubJobsJavascriptInterface mJavascriptInterface;
     private ArrayList<TemplateService> mTemplateServices;
+    private ViewSwitcher mViewSwitcher;
+    private boolean mShowEditor = true;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -74,9 +76,14 @@ public class EditTemplateFragment extends SherlockFragment {
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         View root = getView();
+
+        mViewSwitcher = (ViewSwitcher) root.findViewById(R.id.switcher_edit_mode);
+        if (!mShowEditor) {
+            mViewSwitcher.setDisplayedChild(PREVIEW_MODE);
+        }
+
         WebView templatePreview = (WebView) root.findViewById(R.id.lbl_template_preview);
-        AppUtils.setupWebview(templatePreview);
-        templatePreview.setOnTouchListener(mPreviewTouchListener);
+        AppUtils.setupWebView(templatePreview);
         mJavascriptInterface = new GithubJobsJavascriptInterface(getActivity(), templatePreview, null);
         templatePreview.addJavascriptInterface(mJavascriptInterface, TemplateDetailsFragment.JS_INTERFACE);
         templatePreview.loadUrl(TemplateDetailsFragment.PREVIEW_TEMPLATE_URL);
@@ -202,25 +209,6 @@ public class EditTemplateFragment extends SherlockFragment {
         return template;
     }
 
-    private View.OnTouchListener mPreviewTouchListener = new View.OnTouchListener() {
-        private int previousEvent;
-
-        @Override
-        public boolean onTouch(View v, MotionEvent event) {
-            if (event.getAction() == MotionEvent.ACTION_UP && previousEvent == MotionEvent.ACTION_DOWN) {
-                mTemplateContent.requestFocus();
-                mTemplateContent.setSelection(mTemplateContent.getText().length());
-                // show the keyboard so that user can start editing this
-                InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-                imm.showSoftInput(mTemplateContent, InputMethodManager.SHOW_IMPLICIT);
-                previousEvent = MotionEvent.ACTION_UP;
-                return true;
-            }
-            previousEvent = event.getAction();
-            return false;
-        }
-    };
-
     public boolean isTemplateValid() {
         if (TextUtils.isEmpty(mTemplateName.getText().toString().trim())) {
             mTemplateName.setError(getString(R.string.template_name_is_empty));
@@ -233,5 +221,13 @@ public class EditTemplateFragment extends SherlockFragment {
             return false;
         }
         return true;
+    }
+
+    public void showEditor(boolean showEditor) {
+        mShowEditor = showEditor;
+        if (mViewSwitcher == null) {
+            return;
+        }
+        mViewSwitcher.setDisplayedChild(showEditor ? EDITOR_MODE : PREVIEW_MODE);
     }
 }

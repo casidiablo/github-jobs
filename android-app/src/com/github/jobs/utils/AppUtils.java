@@ -46,7 +46,7 @@ public class AppUtils {
         return defaultTemplate;
     }
 
-    public static void setupWebview(WebView webView) {
+    public static void setupWebView(WebView webView) {
         if (webView == null) {
             return;
         }
