@@ -76,7 +76,6 @@ public class SOUserDialog extends TrackDialog implements View.OnClickListener {
         if (BitmapUtils.isBitmapValid(avatar)) {
             userAvatar.setImageBitmap(avatar);
         } else {
-            userAvatar.setTag(mSoUser.getProfileImage());
             BitmapObserver observer = new BitmapObserver(userAvatar, mSoUser.getProfileImage(), new Handler());
             bitmapHelper.registerBitmapObserver(this, observer);
         }

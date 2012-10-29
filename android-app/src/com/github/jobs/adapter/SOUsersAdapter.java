@@ -39,7 +39,6 @@ public class SOUsersAdapter extends ListBaseAdapter<SOUser, SOUsersAdapter.SOUse
         BitmapHelper bitmapHelper = BitmapHelper.getInstance();
         String avatarUrl = item.getProfileImage();
         Bitmap bitmap = bitmapHelper.getBitmap(avatarUrl);
-        holder.avatar.setTag(avatarUrl);
         if (BitmapUtils.isBitmapValid(bitmap)) {
             holder.avatar.setImageBitmap(bitmap);
         } else {
