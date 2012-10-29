@@ -11,7 +11,6 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.*;
 import com.github.jobs.R;
 import com.github.jobs.utils.TextWatcherAdapter;
-import roboguice.inject.InjectView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,10 +28,8 @@ public class LoginActivity extends TrackActivity {
     protected boolean requestNewAccount = false;
     private AutoCompleteTextView mEmailText;
 
-    @InjectView(R.id.et_password)
     private EditText mPasswordText;
-    @InjectView(R.id.btn_signin)
-    private Button mSigninButton;
+    private Button mSignInButton;
 
     @Override
     public void onCreate(Bundle bundle) {
@@ -47,11 +44,13 @@ public class LoginActivity extends TrackActivity {
         mEmailText.setAdapter(new ArrayAdapter<String>(this,
                 android.R.layout.simple_dropdown_item_1line, userEmailAccounts()));
 
+        mSignInButton = (Button) findViewById(R.id.btn_signin);
+        mPasswordText = (EditText) findViewById(R.id.et_password);
         mPasswordText.setOnKeyListener(new View.OnKeyListener() {
 
             public boolean onKey(View v, int keyCode, KeyEvent event) {
                 if (event != null && KeyEvent.ACTION_DOWN == event.getAction()
-                        && keyCode == KeyEvent.KEYCODE_ENTER && mSigninButton.isEnabled()) {
+                        && keyCode == KeyEvent.KEYCODE_ENTER && mSignInButton.isEnabled()) {
                     handleLogin();
                     return true;
                 }
@@ -63,7 +62,7 @@ public class LoginActivity extends TrackActivity {
 
             public boolean onEditorAction(TextView v, int actionId,
                                           KeyEvent event) {
-                if (actionId == EditorInfo.IME_ACTION_DONE && mSigninButton.isEnabled()) {
+                if (actionId == EditorInfo.IME_ACTION_DONE && mSignInButton.isEnabled()) {
                     handleLogin();
                     return true;
                 }
@@ -100,7 +99,7 @@ public class LoginActivity extends TrackActivity {
 
     private void updateUIWithValidation() {
         boolean populated = populated(mEmailText) && populated(mPasswordText);
-        mSigninButton.setEnabled(populated);
+        mSignInButton.setEnabled(populated);
     }
 
     private boolean populated(EditText editText) {

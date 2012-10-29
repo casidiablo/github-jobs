@@ -11,7 +11,6 @@ import com.github.bean.Job;
 import com.github.jobs.R;
 import com.github.jobs.adapter.JobsDetailsAdapter;
 import com.github.jobs.ui.dialog.HowToApplyDialog;
-import roboguice.inject.InjectView;
 
 import java.util.List;
 
@@ -28,7 +27,6 @@ public class JobDetailsActivity extends TrackActivity implements ViewPager.OnPag
     private static final int HOW_TO_APPLY = 4734;
     public static final String FULL_TIME = "Full Time";
 
-    @InjectView(R.id.jobs_pager)
     private ViewPager mJobsPager;
     private List<String> mJobsIds;
     private int mCurrentJobPosition;
@@ -50,6 +48,7 @@ public class JobDetailsActivity extends TrackActivity implements ViewPager.OnPag
         mCurrentJobPosition = mJobsIds.indexOf(jobId);
 
         // prepare the view pager to show current job
+        mJobsPager = (ViewPager) findViewById(R.id.jobs_pager);
         mJobsPager.setAdapter(new JobsDetailsAdapter(getSupportFragmentManager(), mJobsIds));
         mJobsPager.setCurrentItem(mCurrentJobPosition);
         mJobsPager.setOnPageChangeListener(this);

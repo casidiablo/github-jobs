@@ -1,65 +1,76 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
+<LinearLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:padding="5dip">
-    <!--Dummy view used to make the width of the activity bigger-->
-    <View
-            android:layout_width="1000dp"
-            android:layout_height="1dip"/>
-    <ImageView
-            android:id="@+id/img_user_avatar"
-            android:layout_width="50dip"
-            android:layout_height="50dip"
-            android:layout_marginRight="5dip"
-            android:src="@drawable/ic_default_avatar"
-            android:contentDescription="@string/user_avatar"/>
-    <TextView
-            android:id="@+id/lbl_reputation"
+        android:orientation="vertical">
+    <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:padding="5dip">
+        <!--Dummy view used to make the width of the activity bigger-->
+        <View
+                android:layout_width="1000dp"
+                android:layout_height="1dip"/>
+        <ImageView
+                android:id="@+id/img_user_avatar"
+                android:layout_width="80dip"
+                android:layout_height="80dip"
+                android:layout_marginRight="10dip"
+                android:src="@drawable/ic_default_avatar"
+                android:contentDescription="@string/user_avatar"/>
+        <TextView
+                android:id="@+id/lbl_reputation"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@id/img_user_avatar"
+                android:textAppearance="?android:attr/textAppearanceSmall"/>
+        <TextView
+                android:id="@+id/lbl_website"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@id/img_user_avatar"
+                android:layout_below="@id/lbl_reputation"
+                android:textAppearance="?android:attr/textAppearanceSmall"/>
+        <TextView
+                android:id="@+id/lbl_badge_counts"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/badge_counts"
+                android:layout_toRightOf="@id/img_user_avatar"
+                android:layout_below="@id/lbl_website"
+                android:textAppearance="?android:attr/textAppearanceSmall"/>
+        <TextView
+                android:id="@+id/lbl_gold"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingRight="5dip"
+                android:drawableLeft="@drawable/ic_gold_badge"
+                android:layout_toRightOf="@id/img_user_avatar"
+                android:layout_below="@id/lbl_badge_counts"
+                android:visibility="gone"/>
+        <TextView
+                android:id="@+id/lbl_silver"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingRight="5dip"
+                android:drawableLeft="@drawable/ic_silver_badge"
+                android:layout_toRightOf="@id/lbl_gold"
+                android:layout_below="@id/lbl_badge_counts"
+                android:visibility="gone"/>
+        <TextView
+                android:id="@+id/lbl_bronze"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:drawableLeft="@drawable/ic_bronze_badge"
+                android:layout_toRightOf="@id/lbl_silver"
+                android:layout_below="@id/lbl_badge_counts"
+                android:visibility="gone"/>
+    </RelativeLayout>
+    <Button
+            android:id="@+id/btn_choose_user"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_toRightOf="@id/img_user_avatar"
-            android:textAppearance="?android:attr/textAppearanceSmall"/>
-    <TextView
-            android:id="@+id/lbl_website"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_toRightOf="@id/img_user_avatar"
-            android:layout_below="@id/lbl_reputation"
-            android:textAppearance="?android:attr/textAppearanceSmall"/>
-    <TextView
-            android:id="@+id/lbl_badge_counts"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/badge_counts"
-            android:layout_toRightOf="@id/img_user_avatar"
-            android:layout_below="@id/lbl_website"
-            android:textAppearance="?android:attr/textAppearanceSmall"/>
-    <TextView
-            android:id="@+id/lbl_gold"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:paddingRight="5dip"
-            android:drawableLeft="@drawable/ic_gold_badge"
-            android:layout_toRightOf="@id/img_user_avatar"
-            android:layout_below="@id/lbl_badge_counts"
-            android:visibility="gone"/>
-    <TextView
-            android:id="@+id/lbl_silver"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:paddingRight="5dip"
-            android:drawableLeft="@drawable/ic_silver_badge"
-            android:layout_toRightOf="@id/lbl_gold"
-            android:layout_below="@id/lbl_badge_counts"
-            android:visibility="gone"/>
-    <TextView
-            android:id="@+id/lbl_bronze"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:drawableLeft="@drawable/ic_bronze_badge"
-            android:layout_toRightOf="@id/lbl_silver"
-            android:layout_below="@id/lbl_badge_counts"
-            android:visibility="gone"/>
-</RelativeLayout>
+            android:text="@string/choose_user"/>
+</LinearLayout>

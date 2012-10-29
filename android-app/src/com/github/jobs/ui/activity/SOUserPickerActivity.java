@@ -10,7 +10,8 @@ import com.github.jobs.ui.fragment.SOUserPickerFragment;
  */
 public class SOUserPickerActivity extends TrackActivity {
     public static final String EXTRA_SEARCH = "com.github.jobs.extra.search";
-    public static final int REQUEST_CODE = 7623;
+    public static final int REQUEST_CODE = 123;
+    public static final String EXTRA_USER = "com.github.jobs.extra.user";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

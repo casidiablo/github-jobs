@@ -1,5 +1,7 @@
 package com.github.jobs.bean;
 
+import android.content.Context;
+
 /**
  * @author cristian
  * @version 1.0
@@ -62,5 +64,13 @@ public class Service {
                 ", name='" + name + '\'' +
                 ", drawable=" + drawable +
                 '}';
+    }
+
+    public static Service from(Context context, int id, int label, int logo) {
+        Service service = new Service();
+        service.setId(id);
+        service.setName(context.getString(label));
+        service.setDrawable(logo);
+        return service;
     }
 }

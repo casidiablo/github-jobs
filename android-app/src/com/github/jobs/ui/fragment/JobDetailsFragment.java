@@ -17,6 +17,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import com.actionbarsherlock.app.SherlockFragment;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
@@ -27,23 +28,20 @@ import com.github.jobs.R;
 import com.github.jobs.ui.activity.JobDetailsActivity;
 import com.github.jobs.utils.ShareHelper;
 import com.github.jobs.utils.StringUtils;
-import com.github.rtyley.android.sherlock.roboguice.fragment.RoboSherlockFragment;
 import com.telly.wasp.BitmapHelper;
 import com.telly.wasp.CallbackBitmapObserver;
-import roboguice.inject.InjectView;
 
 import static com.github.jobs.utils.AnalyticsHelper.*;
 
 /**
  * @author cristian
  */
-public class JobDetailsFragment extends RoboSherlockFragment implements View.OnClickListener {
+public class JobDetailsFragment extends SherlockFragment implements View.OnClickListener {
 
     private static final int SHARE = 484;
     private static final String KEY_JOB_ID = "com.github.jobs.KEY_JOB_ID";
 
     private Job mJob;
-    @InjectView(R.id.job_details_background)
     private ImageView mBackground;
 
     public static JobDetailsFragment newInstance(String id) {
@@ -103,6 +101,7 @@ public class JobDetailsFragment extends RoboSherlockFragment implements View.OnC
             getView().findViewById(R.id.full_time).setVisibility(View.INVISIBLE);
         }
 
+        mBackground = (ImageView) getView().findViewById(R.id.job_details_background);
         setLogoBackground();
     }
 

@@ -80,7 +80,7 @@
     <string name="edit_template">Edit template</string>
     <string name="invalid_template">Invalid template</string>
     <string name="default_template_name">Template example</string>
-    <string name="default_template_content"><![CDATA[Dear employeer! My name is **Foo Bar** and I\'m a senior FooBar programmer.
+    <string name="default_template_content"><![CDATA[Dear employer! My name is **Foo Bar** and I\'m a senior FooBar developer.
 \n\n
 My primary focus right now is (back|front)-end development in, let\'s say, [Ruby on Rails][1]. Also I have decent baz experience. So, my core skills are the following: blah, blah, blah, blah, etc. In my practice I always pay a lot of attention to quality of code, testing and project organization.
 \n\n
@@ -118,4 +118,7 @@ Best regards, Foo Bar.
     <string name="lbl_skype">Skype</string>
     <string name="lbl_about_me">About me</string>
     <string name="service_explanation">This will be placed at the end of your template</string>
+    <string name="choose_user">Choose user</string>
+    <string name="template_name_is_empty">Template name shall not be empty</string>
+    <string name="template_content_is_empty">Template content shall not be empty</string>
 </resources>

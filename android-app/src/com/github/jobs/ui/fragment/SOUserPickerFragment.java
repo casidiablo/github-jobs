@@ -3,6 +3,7 @@ package com.github.jobs.ui.fragment;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -12,6 +13,7 @@ import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
+import com.actionbarsherlock.app.SherlockFragment;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
@@ -23,20 +25,19 @@ import com.github.jobs.bean.SOUser;
 import com.github.jobs.resolver.StackOverflowUserResolver;
 import com.github.jobs.ui.activity.SOUserPickerActivity;
 import com.github.jobs.ui.dialog.SOUserDialog;
-import com.github.rtyley.android.sherlock.roboguice.fragment.RoboSherlockFragment;
-import roboguice.inject.InjectView;
 
 import java.util.ArrayList;
+
+import static android.app.Activity.RESULT_OK;
 
 /**
  * @author cristian
  * @version 1.0
  */
-public class SOUserPickerFragment extends RoboSherlockFragment implements AdapterView.OnItemClickListener {
+public class SOUserPickerFragment extends SherlockFragment implements AdapterView.OnItemClickListener {
 
     private SOUserFetcherReceiver mSOUserFetcherReceiver;
     private SOUsersAdapter mAdapter;
-    @InjectView(R.id.edit_user_search)
     private EditText mUserSearch;
 
     @Override
@@ -55,6 +56,7 @@ public class SOUserPickerFragment extends RoboSherlockFragment implements Adapte
             fm.beginTransaction().add(mSOUserFetcherReceiver, ReceiverFragment.TAG).commit();
         }
 
+        mUserSearch = (EditText) getView().findViewById(R.id.edit_user_search);
         mUserSearch.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
@@ -91,8 +93,21 @@ public class SOUserPickerFragment extends RoboSherlockFragment implements Adapte
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         SOUser soUser = mAdapter.getItem(position);
         Intent soUserDialog = new Intent(getActivity(), SOUserDialog.class);
-        soUserDialog.putExtra(SOUserDialog.EXTRA_USER, soUser);
-        startActivity(soUserDialog);
+        soUserDialog.putExtra(SOUserPickerActivity.EXTRA_USER, soUser);
+        startActivityForResult(soUserDialog, SOUserDialog.REQUEST_CODE);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        FragmentActivity activity = getActivity();
+        if (activity == null || !isAdded()) {
+            return;
+        }
+        if (requestCode == SOUserDialog.REQUEST_CODE && resultCode == RESULT_OK) {
+            activity.setResult(RESULT_OK, data);
+            activity.finish();
+        }
     }
 
     @Override
