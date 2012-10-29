@@ -6,8 +6,7 @@
         android:orientation="vertical">
     <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
+            android:layout_height="wrap_content"
             android:padding="5dip">
         <!--Dummy view used to make the width of the activity bigger-->
         <View
@@ -73,4 +72,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/choose_user"/>
+    <Button
+            android:id="@+id/btn_choose_user_and_website"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/choose_user_and_website"/>
 </LinearLayout>

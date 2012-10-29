@@ -24,11 +24,14 @@ import com.codeslap.persistence.SqlAdapter;
 import com.github.jobs.R;
 import com.github.jobs.bean.SOUser;
 import com.github.jobs.bean.Template;
+import com.github.jobs.bean.TemplateService;
 import com.github.jobs.ui.activity.SOUserPickerActivity;
 import com.github.jobs.ui.activity.TemplateDetailsActivity;
 import com.github.jobs.ui.dialog.ServiceChooserDialog;
 import com.github.jobs.utils.AppUtils;
-import com.github.jobs.utils.TemplateServicesUtil;
+import com.github.jobs.templates.TemplateServicesUtil;
+
+import java.util.ArrayList;
 
 import static com.github.jobs.ui.fragment.TemplateDetailsFragment.GithubJobsJavascriptInterface;
 
@@ -37,17 +40,34 @@ import static com.github.jobs.ui.fragment.TemplateDetailsFragment.GithubJobsJava
  * @version 1.0
  */
 public class EditTemplateFragment extends SherlockFragment {
+    private static final String KEY_TEMPLATE_SERVICES = "com.github.jobs.key.template_services";
 
     private EditText mTemplateContent;
     private EditText mTemplateName;
 
     private long mTemplateId;
     private GithubJobsJavascriptInterface mJavascriptInterface;
+    private ArrayList<TemplateService> mTemplateServices;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         setHasOptionsMenu(true);
+        mTemplateServices = new ArrayList<TemplateService>();
+        if (savedInstanceState != null) {
+            ArrayList<Parcelable> list = savedInstanceState.getParcelableArrayList(KEY_TEMPLATE_SERVICES);
+            if (list != null) {
+                for (Parcelable parcelable : list) {
+                    mTemplateServices.add((TemplateService) parcelable);
+                }
+            }
+        }
         return inflater.inflate(R.layout.edit_template, null, false);
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putParcelableArrayList(KEY_TEMPLATE_SERVICES, mTemplateServices);
     }
 
     @Override
@@ -116,7 +136,17 @@ public class EditTemplateFragment extends SherlockFragment {
                 if (userParcel instanceof SOUser) {
                     SOUser soUser = (SOUser) userParcel;
                     // add this to the template
-                    updatePreview(soUser.toString());
+                    TemplateService soService = new TemplateService();
+                    soService.setType(TemplateServicesUtil.STACK_OVERFLOW);
+                    soService.setData(soUser.getLink());
+                    mTemplateServices.add(soService);
+                    if (soUser.getWebsiteUrl() != null && !TemplateServicesUtil.containsWebsite(mTemplateServices)) {
+                        TemplateService webService = new TemplateService();
+                        webService.setType(TemplateServicesUtil.WEBSITE);
+                        webService.setData(soUser.getWebsiteUrl());
+                        mTemplateServices.add(webService);
+                    }
+                    updatePreview();
                 }
                 break;
             case ServiceChooserDialog.REQUEST_CODE:
@@ -138,17 +168,24 @@ public class EditTemplateFragment extends SherlockFragment {
         }
 
         @Override
-        public void afterTextChanged(Editable s) {
-            String text = s.toString();
-            updatePreview(text);
+        public void afterTextChanged(Editable editable) {
+            updatePreview();
         }
     };
 
-    private void updatePreview(final String text) {
+    private void updatePreview() {
         if (mJavascriptInterface == null) {
             return;
         }
-        mJavascriptInterface.setContent(text);
+        String markdownContent = mTemplateContent.getText().toString().trim();
+        if (mTemplateServices != null && !mTemplateServices.isEmpty()) {
+            markdownContent += "\n\n---\n";
+            for (TemplateService service : mTemplateServices) {
+                markdownContent += TemplateServicesUtil.getContent(getActivity(), service) + "\n\n";
+            }
+
+        }
+        mJavascriptInterface.setContent(markdownContent);
         mJavascriptInterface.onLoaded();
     }
 

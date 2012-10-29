@@ -107,18 +107,21 @@ Best regards, Foo Bar.
     <string name="reputation">Reputation: %s</string>
     <string name="link">Link: %s</string>
     <string name="website">Website: %s</string>
-    <string name="badge_counts">Badge Counts:</string>
+    <string name="badge_counts">Badges:</string>
     <string name="gold">Gold:</string>
     <string name="silver">Silver:</string>
     <string name="bronze">Bronze:</string>
     <string name="service_chooser">Service chooser</string>
     <string name="lbl_github">Github</string>
-    <string name="lbl_stackoverflow">Stackoverflow</string>
+    <string name="lbl_stack_overflow">StackOverflow</string>
     <string name="lbl_twitter">Twitter</string>
     <string name="lbl_skype">Skype</string>
     <string name="lbl_about_me">About me</string>
+    <string name="lbl_website">Website</string>
     <string name="service_explanation">This will be placed at the end of your template</string>
-    <string name="choose_user">Choose user</string>
+    <string name="choose_user">Import user</string>
+    <string name="choose_user_and_website">Import user and website</string>
     <string name="template_name_is_empty">Template name shall not be empty</string>
     <string name="template_content_is_empty">Template content shall not be empty</string>
+    <string name="basic_template_footer"><![CDATA[<strong>%1$s</strong>: %2$s]]></string>
 </resources>

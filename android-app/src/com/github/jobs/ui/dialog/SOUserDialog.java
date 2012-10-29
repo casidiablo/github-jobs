@@ -39,14 +39,22 @@ public class SOUserDialog extends TrackDialog implements View.OnClickListener {
         }
         setContentView(R.layout.so_user_dialog);
 
+        String websiteUrl = mSoUser.getWebsiteUrl();
+
         findViewById(R.id.btn_choose_user).setOnClickListener(this);
+        findViewById(R.id.btn_choose_user_and_website).setOnClickListener(this);
         mTitle = mSoUser.getDisplayName();
 
         TextView reputation = (TextView) findViewById(R.id.lbl_reputation);
         reputation.setText(getString(R.string.reputation, mSoUser.getReputation()));
 
         TextView website = (TextView) findViewById(R.id.lbl_website);
-        website.setText(getString(R.string.website, mSoUser.getWebsiteUrl()));
+        if (websiteUrl == null) {
+            website.setVisibility(View.GONE);
+            findViewById(R.id.btn_choose_user_and_website).setVisibility(View.GONE);
+        } else {
+            website.setText(getString(R.string.website, websiteUrl));
+        }
 
         TextView goldBadge = (TextView) findViewById(R.id.lbl_gold);
         TextView silverBadge = (TextView) findViewById(R.id.lbl_silver);
@@ -96,11 +104,19 @@ public class SOUserDialog extends TrackDialog implements View.OnClickListener {
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btn_choose_user:
-                Intent data = new Intent();
-                data.putExtra(SOUserPickerActivity.EXTRA_USER, mSoUser);
-                setResult(RESULT_OK, data);
-                finish();
+                mSoUser.setWebsiteUrl(null);
+                sendResultBack();
+                break;
+            case R.id.btn_choose_user_and_website:
+                sendResultBack();
                 break;
         }
+    }
+
+    private void sendResultBack() {
+        Intent data = new Intent();
+        data.putExtra(SOUserPickerActivity.EXTRA_USER, mSoUser);
+        setResult(RESULT_OK, data);
+        finish();
     }
 }

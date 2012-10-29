@@ -7,7 +7,7 @@ import android.widget.AdapterView;
 import android.widget.GridView;
 import com.github.jobs.R;
 import com.github.jobs.adapter.ServicesAdapter;
-import com.github.jobs.utils.TemplateServicesUtil;
+import com.github.jobs.templates.TemplateServicesUtil;
 
 /**
  * @author cristian
