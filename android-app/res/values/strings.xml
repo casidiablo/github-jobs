@@ -124,4 +124,5 @@ Best regards, Foo Bar.
     <string name="preview">Preview</string>
     <string name="edit_cover_letter">Edit cover letter</string>
     <string name="new_cover_letter">New cover letter</string>
+    <string name="so_link_added">StackOverflow link added. See preview footer.</string>
 </resources>

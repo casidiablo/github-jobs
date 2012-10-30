@@ -174,9 +174,7 @@ public class EditTemplateActivity extends TrackActivity {
                         webService.setData(soUser.getWebsiteUrl());
                         fragment.addTemplateService(webService);
                     }
-
-                    // update fragment views
-                    fragment.updatePreview();
+                    Toast.makeText(this, getString(R.string.so_link_added), Toast.LENGTH_LONG).show();
                 }
                 break;
             case ServiceChooserDialog.REQUEST_CODE:

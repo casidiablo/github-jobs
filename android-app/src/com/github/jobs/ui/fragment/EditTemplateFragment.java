@@ -126,7 +126,7 @@ public class EditTemplateFragment extends SherlockFragment {
         }
     };
 
-    public void updatePreview() {
+    private void updatePreview() {
         if (mJavascriptInterface == null) {
             return;
         }
@@ -179,5 +179,6 @@ public class EditTemplateFragment extends SherlockFragment {
 
     public void addTemplateService(TemplateService templateService) {
         mTemplateServices.add(templateService);
+        updatePreview();
     }
 }
