@@ -46,15 +46,11 @@ public class TemplateServicesUtil {
         return sServices;
     }
 
-    public static void resolve(Activity activity, Fragment fragment, int id) {
+    public static void resolve(Activity activity, int id) {
         switch (id) {
             case R.id.service_so:
                 Intent intent = new Intent(activity, SOUserPickerActivity.class);
-                if (fragment != null) {
-                    fragment.startActivityForResult(intent, SOUserPickerActivity.REQUEST_CODE);
-                } else {
-                    activity.startActivityForResult(intent, SOUserPickerActivity.REQUEST_CODE);
-                }
+                activity.startActivityForResult(intent, SOUserPickerActivity.REQUEST_CODE);
                 break;
         }
     }

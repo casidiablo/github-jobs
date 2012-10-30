@@ -1,7 +1,5 @@
 package com.github.jobs.ui.fragment;
 
-import android.app.Activity;
-import android.content.Intent;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.text.Editable;
@@ -14,18 +12,12 @@ import android.webkit.WebView;
 import android.widget.EditText;
 import android.widget.ViewSwitcher;
 import com.actionbarsherlock.app.SherlockFragment;
-import com.actionbarsherlock.view.Menu;
-import com.actionbarsherlock.view.MenuInflater;
-import com.actionbarsherlock.view.MenuItem;
 import com.codeslap.persistence.Persistence;
 import com.codeslap.persistence.SqlAdapter;
 import com.github.jobs.R;
-import com.github.jobs.bean.SOUser;
 import com.github.jobs.bean.Template;
 import com.github.jobs.bean.TemplateService;
 import com.github.jobs.templates.TemplateServicesUtil;
-import com.github.jobs.ui.activity.SOUserPickerActivity;
-import com.github.jobs.ui.dialog.ServiceChooserDialog;
 import com.github.jobs.utils.AppUtils;
 import com.github.jobs.utils.GithubJobsJavascriptInterface;
 
@@ -56,11 +48,9 @@ public class EditTemplateFragment extends SherlockFragment {
     private ArrayList<TemplateService> mTemplateServices;
     private ViewSwitcher mViewSwitcher;
     private boolean mShowEditor = false;
-    private MenuItem mMenuAddService;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        setHasOptionsMenu(true);
         mTemplateServices = new ArrayList<TemplateService>();
         if (savedInstanceState != null) {
             ArrayList<Parcelable> list = savedInstanceState.getParcelableArrayList(KEY_TEMPLATE_SERVICES);
@@ -121,63 +111,6 @@ public class EditTemplateFragment extends SherlockFragment {
         }
     }
 
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        super.onCreateOptionsMenu(menu, inflater);
-        inflater.inflate(R.menu.edit_template_service_menu, menu);
-        mMenuAddService = menu.findItem(R.id.menu_add_service);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int itemId = item.getItemId();
-        switch (itemId) {
-            case R.id.menu_add_service:
-                Intent serviceChooser = new Intent(getActivity(), ServiceChooserDialog.class);
-                startActivityForResult(serviceChooser, ServiceChooserDialog.REQUEST_CODE);
-                return true;
-        }
-        return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode != Activity.RESULT_OK) {
-            return;
-        }
-        switch (requestCode) {
-            case SOUserPickerActivity.REQUEST_CODE:
-                if (data == null) {
-                    // meh... there was no data
-                    return;
-                }
-                Parcelable userParcel = data.getParcelableExtra(SOUserPickerActivity.EXTRA_USER);
-                if (userParcel instanceof SOUser) {
-                    SOUser soUser = (SOUser) userParcel;
-                    // add this to the template
-                    TemplateService soService = new TemplateService();
-                    soService.setType(TemplateServicesUtil.STACK_OVERFLOW);
-                    soService.setData(soUser.getLink());
-                    mTemplateServices.add(soService);
-                    if (soUser.getWebsiteUrl() != null && !TemplateServicesUtil.containsWebsite(mTemplateServices)) {
-                        TemplateService webService = new TemplateService();
-                        webService.setType(TemplateServicesUtil.WEBSITE);
-                        webService.setData(soUser.getWebsiteUrl());
-                        mTemplateServices.add(webService);
-                    }
-                    updatePreview();
-                }
-                break;
-            case ServiceChooserDialog.REQUEST_CODE:
-                int serviceId = data.getIntExtra(ServiceChooserDialog.EXTRA_SERVICE_ID, -1);
-                if (serviceId != 1) {
-                    TemplateServicesUtil.resolve(getActivity(), this, serviceId);
-                }
-                break;
-        }
-    }
-
     private final TextWatcher mTextWatcher = new TextWatcher() {
         @Override
         public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -193,7 +126,7 @@ public class EditTemplateFragment extends SherlockFragment {
         }
     };
 
-    private void updatePreview() {
+    public void updatePreview() {
         if (mJavascriptInterface == null) {
             return;
         }
@@ -242,6 +175,9 @@ public class EditTemplateFragment extends SherlockFragment {
             return;
         }
         mViewSwitcher.setDisplayedChild(showEditor ? EDITOR_MODE : PREVIEW_MODE);
-        mMenuAddService.setVisible(showEditor);
+    }
+
+    public void addTemplateService(TemplateService templateService) {
+        mTemplateServices.add(templateService);
     }
 }

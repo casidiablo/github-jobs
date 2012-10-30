@@ -1,8 +1,12 @@
 package com.github.jobs.ui.activity;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.util.Log;
 import android.widget.Toast;
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.view.Menu;
@@ -10,9 +14,12 @@ import com.actionbarsherlock.view.MenuItem;
 import com.codeslap.persistence.Persistence;
 import com.codeslap.persistence.SqlAdapter;
 import com.github.jobs.R;
+import com.github.jobs.bean.SOUser;
 import com.github.jobs.bean.Template;
 import com.github.jobs.bean.TemplateService;
+import com.github.jobs.templates.TemplateServicesUtil;
 import com.github.jobs.ui.dialog.DeleteTemplateDialog;
+import com.github.jobs.ui.dialog.ServiceChooserDialog;
 import com.github.jobs.ui.fragment.EditTemplateFragment;
 import com.github.jobs.utils.AppUtils;
 import com.github.jobs.utils.TabListenerAdapter;
@@ -22,12 +29,15 @@ import com.github.jobs.utils.TabListenerAdapter;
  * @version 1.0
  */
 public class EditTemplateActivity extends TrackActivity {
+    private static final String TAG = "github:jobs:templates";
+
     public static final int REQUEST_CODE = 7874;
     private static final String KEY_CURRENT_TAB = "com.github.jobs.key.current_tab";
     private static final String KEY_EDIT_MODE = "com.github.jobs.key.edit_mode";
     public static final String EXTRA_TEMPLATE_ID = "com.github.jobs.extra.template_id";
     private int mCurrentTab;
     private MenuItem mMenuEditOrSave;
+    private MenuItem mMenuAddService;
     private boolean mEditModeEnabled;
     private long mTemplateId;
 
@@ -71,6 +81,7 @@ public class EditTemplateActivity extends TrackActivity {
             mMenuEditOrSave.setIcon(R.drawable.ic_action_save);
             menu.findItem(R.id.menu_delete_template).setVisible(false);
         }
+        mMenuAddService = menu.findItem(R.id.menu_add_service);
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -120,8 +131,61 @@ public class EditTemplateActivity extends TrackActivity {
                     new DeleteTemplateDialog().show(fm, DeleteTemplateDialog.TAG);
                 }
                 break;
+            case R.id.menu_add_service:
+                Intent serviceChooser = new Intent(this, ServiceChooserDialog.class);
+                startActivityForResult(serviceChooser, ServiceChooserDialog.REQUEST_CODE);
+                return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode != Activity.RESULT_OK) {
+            return;
+        }
+        switch (requestCode) {
+            case SOUserPickerActivity.REQUEST_CODE:
+                if (data == null) {
+                    // meh... there was no data
+                    return;
+                }
+                Parcelable userParcel = data.getParcelableExtra(SOUserPickerActivity.EXTRA_USER);
+                if (userParcel instanceof SOUser) {
+                    SOUser soUser = (SOUser) userParcel;
+                    // create new cover letter service
+                    TemplateService soService = new TemplateService();
+                    soService.setType(TemplateServicesUtil.STACK_OVERFLOW);
+                    soService.setData(soUser.getLink());
+
+                    // push cover letter to the fragment holding template information
+                    EditTemplateFragment fragment = findFragment(EditTemplateFragment.class);
+                    if (fragment == null) {
+                        Log.wtf(TAG, "Fragment shall not be null here", new RuntimeException());
+                        return;
+                    }
+                    fragment.addTemplateService(soService);
+
+                    // add the website service if possible
+                    if (soUser.getWebsiteUrl() != null) {
+                        TemplateService webService = new TemplateService();
+                        webService.setType(TemplateServicesUtil.WEBSITE);
+                        webService.setData(soUser.getWebsiteUrl());
+                        fragment.addTemplateService(webService);
+                    }
+
+                    // update fragment views
+                    fragment.updatePreview();
+                }
+                break;
+            case ServiceChooserDialog.REQUEST_CODE:
+                int serviceId = data.getIntExtra(ServiceChooserDialog.EXTRA_SERVICE_ID, -1);
+                if (serviceId != 1) {
+                    TemplateServicesUtil.resolve(this, serviceId);
+                }
+                break;
+        }
     }
 
     public void doDelete() {
@@ -170,6 +234,7 @@ public class EditTemplateActivity extends TrackActivity {
         }
         mEditModeEnabled = true;
         setTitle(mTemplateId != -1 ? R.string.edit_cover_letter : R.string.new_cover_letter);
+        mMenuAddService.setVisible(true);
     }
 
     private void disableEditMode() {
@@ -184,6 +249,7 @@ public class EditTemplateActivity extends TrackActivity {
             mMenuEditOrSave.setIcon(R.drawable.ic_action_edit);
         }
         mEditModeEnabled = false;
+        mMenuAddService.setVisible(false);
     }
 
     private void showEditor(boolean showEditor) {
