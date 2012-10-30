@@ -10,6 +10,7 @@ import com.codeslap.persistence.Persistence;
 import com.codeslap.persistence.SqlAdapter;
 import com.github.jobs.R;
 import com.github.jobs.bean.Template;
+import com.github.jobs.bean.TemplateService;
 import com.github.jobs.ui.fragment.EditTemplateFragment;
 import com.github.jobs.utils.TabListenerAdapter;
 
@@ -60,9 +61,16 @@ public class EditTemplateActivity extends TrackActivity {
                 Template template = fragment.buildTemplate();
                 SqlAdapter adapter = Persistence.getAdapter(this);
                 if (template.getId() > 0) {
+                    String[] args = {String.valueOf(template.getId())};
+                    adapter.delete(TemplateService.class, "template_id = ?", args);
+
                     Template where = new Template();
                     where.setId(template.getId());
                     adapter.update(template, where);
+
+                    if (template.getTemplateServices() != null) {
+                        adapter.storeCollection(template.getTemplateServices(), template, null);
+                    }
                 } else {
                     adapter.store(template);
                 }

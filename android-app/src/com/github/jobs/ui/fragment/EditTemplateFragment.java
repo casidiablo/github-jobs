@@ -99,13 +99,13 @@ public class EditTemplateFragment extends SherlockFragment {
             Template template = new Template();
             template.setId(mTemplateId);
             template = adapter.findFirst(template);
+            mTemplateServices = new ArrayList<TemplateService>(template.getTemplateServices());
 
             // set name and raw content
             mTemplateName.setText(template.getName());
             String content = template.getContent();
             mTemplateContent.setText(content);
-            mJavascriptInterface.setContent(content);
-            mJavascriptInterface.onLoaded();
+            updatePreview();
         }
     }
 
@@ -205,6 +205,10 @@ public class EditTemplateFragment extends SherlockFragment {
         template.setName(mTemplateName.getText().toString().trim());
         template.setContent(mTemplateContent.getText().toString().trim());
         template.setLastUpdate(System.currentTimeMillis());
+        template.setTemplateServices(mTemplateServices);
+        //INSERT OR IGNORE INTO template_services (data, type) SELECT 'http://stackoverflow.com/users/22656/jon-skeet' AS data,
+        // 'stack_overflow' AS type
+        // UNION SELECT 'http://csharpindepth.com', 'website';
 
         return template;
     }
