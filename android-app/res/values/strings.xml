@@ -66,21 +66,17 @@
     <string name="library_groundy">codeslap:groundy: library for Android containing some boilerplate code for
         implementing background REST API calls implementations
     </string>
-    <string name="templates_list">CV templates</string>
-    <string name="cv_templates">Templates</string>
-    <string name="empty_templates_list">You don\'t have templates yet. Click plus to add one.</string>
-    <string name="add_template">Add template</string>
-    <string name="edit_template">Edit template</string>
-    <string name="hint_template_name">Template name</string>
-    <string name="hint_template_content">Template content (use Markdown syntax)</string>
+    <string name="cover_letters_list">Cover letters</string>
+    <string name="empty_cover_letters_list">You don\'t have cover letter yet. Click plus to add one.</string>
+    <string name="add_cover_letter">Add cover letter</string>
+    <string name="hint_cover_letter_name">Cover letter name</string>
+    <string name="hint_cover_letter_content">Cover letter content (use Markdown syntax)</string>
     <string name="save">Save</string>
-    <string name="template_preview">Template preview…</string>
+    <string name="cover_letter_preview">Cover letter preview…</string>
     <string name="add_service">Add service</string>
     <string name="just_now">just now</string>
-    <string name="edit_template">Edit template</string>
-    <string name="invalid_template">Invalid template</string>
-    <string name="default_template_name">Template example</string>
-    <string name="default_template_content"><![CDATA[Dear employer! My name is **Foo Bar** and I\'m a senior FooBar developer.
+    <string name="default_cover_letter_name">Cover letter example</string>
+    <string name="default_cover_letter_content"><![CDATA[Dear employer! My name is **Foo Bar** and I\'m a senior FooBar developer.
 \n\n
 My primary focus right now is (back|front)-end development in, let\'s say, [Ruby on Rails][1]. Also I have decent baz experience. So, my core skills are the following: blah, blah, blah, blah, etc. In my practice I always pay a lot of attention to quality of code, testing and project organization.
 \n\n
@@ -89,11 +85,11 @@ I always prefer to use foo-bar approaches and thus use various foo-bar framework
 Best regards, Foo Bar.
 \n\n
   [1]: http://rubyonrails.org/]]></string>
-    <string name="delete_template">Delete template</string>
+    <string name="delete_cover_letter">Delete cover letter</string>
     <string name="are_you_sure">Are you sure?</string>
-    <string name="are_you_really_sure">Are you sure you want to delete this template? This cannot be undone.</string>
+    <string name="are_you_really_sure">Are you sure you want to delete this cover letter? This cannot be undone.</string>
     <string name="yes_i_am">Yes, I am</string>
-    <string name="template_deleted_successfully">Template deleted successfully</string>
+    <string name="cover_letter_deleted_successfully">Cover letter deleted successfully</string>
     <string name="so_user_picker">StackOverflow user picker</string>
     <string name="search_by_username">Search by username</string>
     <string name="user_avatar">User avatar</string>
@@ -118,12 +114,14 @@ Best regards, Foo Bar.
     <string name="lbl_skype">Skype</string>
     <string name="lbl_about_me">About me</string>
     <string name="lbl_website">Website</string>
-    <string name="service_explanation">This will be placed at the end of your template</string>
+    <string name="service_explanation">This will be placed at the end of your cover letter</string>
     <string name="choose_user">Import user</string>
     <string name="choose_user_and_website">Import user and website</string>
-    <string name="template_name_is_empty">Template name shall not be empty</string>
-    <string name="template_content_is_empty">Template content shall not be empty</string>
-    <string name="basic_template_footer"><![CDATA[<strong>%1$s</strong>: %2$s]]></string>
+    <string name="cover_letter_name_is_empty">Cover letter name shall not be empty</string>
+    <string name="cover_letter_content_is_empty">Cover letter content shall not be empty</string>
+    <string name="basic_cover_letter_footer"><![CDATA[<strong>%1$s</strong>: %2$s]]></string>
     <string name="lbl_editor">Editor</string>
     <string name="preview">Preview</string>
+    <string name="edit_cover_letter">Edit cover letter</string>
+    <string name="new_cover_letter">New cover letter</string>
 </resources>

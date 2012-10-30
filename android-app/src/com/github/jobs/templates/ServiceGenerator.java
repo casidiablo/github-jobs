@@ -28,7 +28,7 @@ public abstract class ServiceGenerator extends TemplateGenerator {
     }
 
     protected String generate(TemplateService templateService) {
-        return getString(R.string.basic_template_footer, getLabel(), templateService.getData());
+        return getString(R.string.basic_cover_letter_footer, getLabel(), templateService.getData());
     }
 
     protected abstract String getLabel();

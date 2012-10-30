@@ -38,10 +38,9 @@
         <activity android:name=".ui.activity.LoginActivity" android:label="@string/authenticate"/>
         <activity android:name=".ui.activity.JobDetailsActivity" android:label="@string/job_details"
                   android:configChanges="orientation|keyboardHidden|keyboard|screenLayout|touchscreen"/>
-        <activity android:name=".ui.activity.TemplatesActivity" android:label="@string/templates_list"
+        <activity android:name=".ui.activity.TemplatesActivity" android:label="@string/cover_letters_list"
                   android:configChanges="orientation|keyboardHidden|keyboard|screenLayout|touchscreen"/>
-        <activity android:name=".ui.activity.EditTemplateActivity" android:label="@string/edit_template"/>
-        <activity android:name=".ui.activity.TemplateDetailsActivity" android:label="@string/edit_template"/>
+        <activity android:name=".ui.activity.EditTemplateActivity" android:label="@string/edit_cover_letter"/>
         <activity android:name=".ui.activity.SOUserPickerActivity" android:label="@string/so_user_picker"/>
         <activity android:name="com.crittercism.NotificationActivity"/>
         <service android:name="com.codeslap.groundy.GroundyService"/>

@@ -40,8 +40,8 @@ public class AppUtils {
 
     public static Template getDefaultTemplate(Context context) {
         Template defaultTemplate = new Template();
-        defaultTemplate.setName(context.getString(R.string.default_template_name));
-        defaultTemplate.setContent(context.getString(R.string.default_template_content));
+        defaultTemplate.setName(context.getString(R.string.default_cover_letter_name));
+        defaultTemplate.setContent(context.getString(R.string.default_cover_letter_content));
         defaultTemplate.setLastUpdate(System.currentTimeMillis());
         return defaultTemplate;
     }

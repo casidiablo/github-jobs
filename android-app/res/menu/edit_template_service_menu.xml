@@ -5,5 +5,6 @@
             android:icon="@drawable/ic_action_add_service"
             android:title="@string/add_service"
             android:orderInCategory="99"
-            android:showAsAction="ifRoom"/>
+            android:showAsAction="ifRoom"
+            android:visible="false"/>
 </menu>

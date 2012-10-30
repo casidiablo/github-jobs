@@ -3,7 +3,7 @@
     <item
             android:id="@+id/menu_templates"
             android:icon="@drawable/ic_action_template"
-            android:title="@string/cv_templates"
+            android:title="@string/cover_letters_list"
             android:orderInCategory="100"
             android:showAsAction="ifRoom"/>
     <item

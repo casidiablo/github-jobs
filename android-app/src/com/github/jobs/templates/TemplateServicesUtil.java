@@ -87,6 +87,6 @@ public class TemplateServicesUtil {
                 Log.wtf(TAG, "Failed to generate template for: " + templateService, e);
             }
         }
-        return context.getString(string.basic_template_footer, templateService.getType(), templateService.getData());
+        return context.getString(string.basic_cover_letter_footer, templateService.getType(), templateService.getData());
     }
 }

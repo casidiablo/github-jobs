@@ -25,13 +25,15 @@ import com.github.jobs.bean.Template;
 import com.github.jobs.bean.TemplateService;
 import com.github.jobs.templates.TemplateServicesUtil;
 import com.github.jobs.ui.activity.SOUserPickerActivity;
-import com.github.jobs.ui.activity.TemplateDetailsActivity;
 import com.github.jobs.ui.dialog.ServiceChooserDialog;
 import com.github.jobs.utils.AppUtils;
+import com.github.jobs.utils.GithubJobsJavascriptInterface;
 
 import java.util.ArrayList;
 
-import static com.github.jobs.ui.fragment.TemplateDetailsFragment.GithubJobsJavascriptInterface;
+import static com.github.jobs.utils.GithubJobsJavascriptInterface.JS_INTERFACE;
+import static com.github.jobs.utils.GithubJobsJavascriptInterface.PREVIEW_TEMPLATE_URL;
+
 
 /**
  * @author cristian
@@ -39,6 +41,10 @@ import static com.github.jobs.ui.fragment.TemplateDetailsFragment.GithubJobsJava
  */
 public class EditTemplateFragment extends SherlockFragment {
     private static final String KEY_TEMPLATE_SERVICES = "com.github.jobs.key.template_services";
+
+    public static final String ARG_TEMPLATE_ID = "com.github.jobs.arg.template_id";
+    public static final String ARG_EDIT_MODE = "com.github.jobs.arg.edit_mode";
+
     private static final int EDITOR_MODE = 0;
     private static final int PREVIEW_MODE = 1;
 
@@ -49,7 +55,8 @@ public class EditTemplateFragment extends SherlockFragment {
     private GithubJobsJavascriptInterface mJavascriptInterface;
     private ArrayList<TemplateService> mTemplateServices;
     private ViewSwitcher mViewSwitcher;
-    private boolean mShowEditor = true;
+    private boolean mShowEditor = false;
+    private MenuItem mMenuAddService;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -75,24 +82,28 @@ public class EditTemplateFragment extends SherlockFragment {
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        View root = getView();
+        // init argument fields
+        Bundle arguments = getArguments();
+        mShowEditor = arguments.getBoolean(ARG_EDIT_MODE, false);
+        mTemplateId = arguments.getLong(ARG_TEMPLATE_ID, -1);
 
+        // prepare ui
+        View root = getView();
         mViewSwitcher = (ViewSwitcher) root.findViewById(R.id.switcher_edit_mode);
         if (!mShowEditor) {
-            mViewSwitcher.setDisplayedChild(PREVIEW_MODE);
+            showEditor(mShowEditor);
         }
 
-        WebView templatePreview = (WebView) root.findViewById(R.id.lbl_template_preview);
+        WebView templatePreview = (WebView) root.findViewById(R.id.lbl_cover_letter_preview);
         AppUtils.setupWebView(templatePreview);
         mJavascriptInterface = new GithubJobsJavascriptInterface(getActivity(), templatePreview, null);
-        templatePreview.addJavascriptInterface(mJavascriptInterface, TemplateDetailsFragment.JS_INTERFACE);
-        templatePreview.loadUrl(TemplateDetailsFragment.PREVIEW_TEMPLATE_URL);
+        templatePreview.addJavascriptInterface(mJavascriptInterface, JS_INTERFACE);
+        templatePreview.loadUrl(PREVIEW_TEMPLATE_URL);
 
-        mTemplateName = (EditText) root.findViewById(R.id.edit_template_name);
-        mTemplateContent = (EditText) root.findViewById(R.id.edit_template_content);
+        mTemplateName = (EditText) root.findViewById(R.id.edit_cover_letter_name);
+        mTemplateContent = (EditText) root.findViewById(R.id.edit_cover_letter_content);
         mTemplateContent.addTextChangedListener(mTextWatcher);
 
-        mTemplateId = getActivity().getIntent().getLongExtra(TemplateDetailsActivity.EXTRA_TEMPLATE_ID, -1);
         if (mTemplateId != -1) {
             // retrieve template from database
             SqlAdapter adapter = Persistence.getAdapter(getActivity());
@@ -103,6 +114,7 @@ public class EditTemplateFragment extends SherlockFragment {
 
             // set name and raw content
             mTemplateName.setText(template.getName());
+            getActivity().setTitle(template.getName());
             String content = template.getContent();
             mTemplateContent.setText(content);
             updatePreview();
@@ -113,6 +125,7 @@ public class EditTemplateFragment extends SherlockFragment {
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
         inflater.inflate(R.menu.edit_template_service_menu, menu);
+        mMenuAddService = menu.findItem(R.id.menu_add_service);
     }
 
     @Override
@@ -206,21 +219,17 @@ public class EditTemplateFragment extends SherlockFragment {
         template.setContent(mTemplateContent.getText().toString().trim());
         template.setLastUpdate(System.currentTimeMillis());
         template.setTemplateServices(mTemplateServices);
-        //INSERT OR IGNORE INTO template_services (data, type) SELECT 'http://stackoverflow.com/users/22656/jon-skeet' AS data,
-        // 'stack_overflow' AS type
-        // UNION SELECT 'http://csharpindepth.com', 'website';
-
         return template;
     }
 
     public boolean isTemplateValid() {
         if (TextUtils.isEmpty(mTemplateName.getText().toString().trim())) {
-            mTemplateName.setError(getString(R.string.template_name_is_empty));
+            mTemplateName.setError(getString(R.string.cover_letter_name_is_empty));
             mTemplateName.requestFocus();
             return false;
         }
         if (TextUtils.isEmpty(mTemplateContent.getText().toString().trim())) {
-            mTemplateContent.setError(getString(R.string.template_content_is_empty));
+            mTemplateContent.setError(getString(R.string.cover_letter_content_is_empty));
             mTemplateContent.requestFocus();
             return false;
         }
@@ -233,5 +242,6 @@ public class EditTemplateFragment extends SherlockFragment {
             return;
         }
         mViewSwitcher.setDisplayedChild(showEditor ? EDITOR_MODE : PREVIEW_MODE);
+        mMenuAddService.setVisible(showEditor);
     }
 }

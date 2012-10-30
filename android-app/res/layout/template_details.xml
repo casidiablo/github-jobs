@@ -7,5 +7,5 @@
         android:layout_weight="1"
         android:layout_margin="5dip"
         android:padding="3dip"
-        android:text="@string/template_preview"
+        android:text="@string/cover_letter_preview"
         android:background="@drawable/preview_bg"/>

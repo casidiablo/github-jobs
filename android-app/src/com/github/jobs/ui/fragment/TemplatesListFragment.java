@@ -16,14 +16,11 @@ import com.github.jobs.adapter.TemplatesAdapter;
 import com.github.jobs.bean.Template;
 import com.github.jobs.loader.TemplatesLoader;
 import com.github.jobs.ui.activity.EditTemplateActivity;
-import com.github.jobs.ui.activity.TemplateDetailsActivity;
 
 import java.util.List;
 
 import static android.app.Activity.RESULT_OK;
-import static com.github.jobs.ui.activity.EditTemplateActivity.EDIT_TEMPLATE_REQUEST;
-import static com.github.jobs.ui.activity.TemplateDetailsActivity.DATA_CHANGED;
-import static com.github.jobs.ui.activity.TemplateDetailsActivity.TEMPLATE_DETAILS_REQUEST;
+import static com.github.jobs.ui.activity.EditTemplateActivity.REQUEST_CODE;
 import static com.github.jobs.utils.AnalyticsHelper.NAME_EDIT_TEMPLATES;
 import static com.github.jobs.utils.AnalyticsHelper.getTracker;
 
@@ -46,9 +43,9 @@ public class TemplatesListFragment extends SherlockListFragment implements Loade
 
     @Override
     public void onListItemClick(ListView l, View v, int position, long id) {
-        Intent templateDetails = new Intent(getActivity(), TemplateDetailsActivity.class);
-        templateDetails.putExtra(TemplateDetailsActivity.EXTRA_TEMPLATE_ID, id);
-        startActivityForResult(templateDetails, TEMPLATE_DETAILS_REQUEST);
+        Intent templateDetails = new Intent(getActivity(), EditTemplateActivity.class);
+        templateDetails.putExtra(EditTemplateActivity.EXTRA_TEMPLATE_ID, id);
+        startActivityForResult(templateDetails, EditTemplateActivity.REQUEST_CODE);
     }
 
     @Override
@@ -63,7 +60,7 @@ public class TemplatesListFragment extends SherlockListFragment implements Loade
             case R.id.menu_add_template:
                 getTracker(getActivity()).trackPageView(NAME_EDIT_TEMPLATES);
                 Intent editTemplate = new Intent(getActivity(), EditTemplateActivity.class);
-                startActivityForResult(editTemplate, EDIT_TEMPLATE_REQUEST);
+                startActivityForResult(editTemplate, REQUEST_CODE);
                 break;
         }
         return super.onOptionsItemSelected(item);
@@ -72,8 +69,7 @@ public class TemplatesListFragment extends SherlockListFragment implements Loade
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == EDIT_TEMPLATE_REQUEST && resultCode == RESULT_OK ||
-                requestCode == TEMPLATE_DETAILS_REQUEST && resultCode == DATA_CHANGED) {
+        if (requestCode == REQUEST_CODE && resultCode == RESULT_OK) {
             queryList();
         }
     }
@@ -91,7 +87,7 @@ public class TemplatesListFragment extends SherlockListFragment implements Loade
     public void onLoadFinished(Loader<List<Template>> loader, List<Template> data) {
         mAdapter.updateItems(data);
         if (data.isEmpty()) {
-            setEmptyText(getString(R.string.empty_templates_list));
+            setEmptyText(getString(R.string.empty_cover_letters_list));
         } else {
             setEmptyText(null);
         }

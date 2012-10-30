@@ -7,7 +7,7 @@ import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentActivity;
 import com.github.jobs.R;
-import com.github.jobs.ui.activity.TemplateDetailsActivity;
+import com.github.jobs.ui.activity.EditTemplateActivity;
 
 /**
  * @author cristian
@@ -26,8 +26,8 @@ public class DeleteTemplateDialog extends DialogFragment {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         FragmentActivity activity = getActivity();
-                        if (activity instanceof TemplateDetailsActivity) {
-                            TemplateDetailsActivity templateDetailsActivity = (TemplateDetailsActivity) activity;
+                        if (activity instanceof EditTemplateActivity) {
+                            EditTemplateActivity templateDetailsActivity = (EditTemplateActivity) activity;
                             templateDetailsActivity.doDelete();
                         }
                     }

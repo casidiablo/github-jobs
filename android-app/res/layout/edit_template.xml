@@ -11,14 +11,14 @@
             android:padding="5dip">
 
         <EditText
-                android:id="@+id/edit_template_name"
+                android:id="@+id/edit_cover_letter_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="text|textCapWords"
-                android:hint="@string/hint_template_name"/>
+                android:hint="@string/hint_cover_letter_name"/>
 
         <EditText
-                android:id="@+id/edit_template_content"
+                android:id="@+id/edit_cover_letter_content"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="1"
@@ -26,15 +26,14 @@
                 android:inputType="text|textCapSentences|textMultiLine"
                 android:typeface="monospace"
                 android:textAppearance="?android:attr/textAppearanceSmall"
-                android:hint="@string/hint_template_content"/>
+                android:hint="@string/hint_cover_letter_content"/>
     </LinearLayout>
 
     <WebView
-            android:id="@+id/lbl_template_preview"
+            android:id="@+id/lbl_cover_letter_preview"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:padding="3dip"
-            android:text="@string/template_preview"
+            android:text="@string/cover_letter_preview"
             android:background="@drawable/preview_bg"/>
 
 </ViewSwitcher>
