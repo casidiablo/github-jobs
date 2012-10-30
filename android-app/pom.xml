@@ -48,7 +48,7 @@
         <dependency>
             <groupId>com.telly</groupId>
             <artifactId>wasp</artifactId>
-            <version>1.8-SNAPSHOT</version>
+            <version>1.8</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
