@@ -141,4 +141,8 @@ Best regards, Foo Bar.
     <string name="import_services">Import services</string>
     <string name="lbl_facebook">Facebook</string>
     <string name="no_services_checked">No services checked</string>
+    <string name="remove_service">Remove service</string>
+    <string name="title_remove_services">Remove services</string>
+    <string name="remove_selected_services">Remove selected services</string>
+    <string name="service_list_item">%1$s (%2$s)</string>
 </resources>

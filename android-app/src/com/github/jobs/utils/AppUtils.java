@@ -4,7 +4,9 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
+import android.os.IBinder;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import com.github.jobs.R;
@@ -77,5 +79,10 @@ public class AppUtils {
 
     public static boolean isHoneycombPlus() {
         return Build.VERSION.SDK_INT >= 11;
+    }
+
+    public static void hideKeyboard(Context context, IBinder token) {
+        InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(token, 0);
     }
 }

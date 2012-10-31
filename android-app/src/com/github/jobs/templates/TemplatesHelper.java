@@ -1,13 +1,11 @@
 package com.github.jobs.templates;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import com.github.jobs.R;
 import com.github.jobs.bean.Service;
 import com.github.jobs.bean.TemplateService;
 import com.github.jobs.templates.services.*;
-import com.github.jobs.ui.activity.SOUserPickerActivity;
 import com.github.jobs.ui.dialog.ServiceChooserDialog;
 
 import java.util.ArrayList;
@@ -78,20 +76,21 @@ public class TemplatesHelper {
         return findService(id).getAddServiceLabel();
     }
 
-    public static void resolve(Activity activity, int id) {
-        switch (id) {
-            case R.id.service_so:
-                Intent intent = new Intent(activity, SOUserPickerActivity.class);
-                activity.startActivityForResult(intent, SOUserPickerActivity.REQUEST_CODE);
-                break;
-        }
-    }
-
+    /**
+     * Returns content for a template service
+     *
+     * @param context         used to create the content strings
+     * @param templateService service to generate the content from
+     * @return a string result with the service content
+     */
     public static String getContent(Context context, TemplateService templateService) {
         if (templateService == null) {
             return null;
         }
         ServiceContract service = findService(templateService.getType());
+        if (service == null) {
+            return context.getString(R.string.cover_letter_footer, templateService.getType(), templateService.getData());
+        }
         return service.getGenerator(context).generate(templateService);
     }
 

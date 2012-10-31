@@ -101,7 +101,13 @@ public class EditTemplateFragment extends SherlockFragment {
             Template template = new Template();
             template.setId(mTemplateId);
             template = adapter.findFirst(template);
-            mTemplateServices = new ArrayList<TemplateService>(template.getTemplateServices());
+            ArrayList<TemplateService> templateServices = new ArrayList<TemplateService>(template.getTemplateServices());
+            for (TemplateService savedService : mTemplateServices) {
+                if (!templateServices.contains(savedService)) {
+                    templateServices.add(savedService);
+                }
+            }
+            mTemplateServices = templateServices;
 
             // set name and raw content
             mTemplateName.setText(template.getName());
@@ -189,6 +195,15 @@ public class EditTemplateFragment extends SherlockFragment {
 
     public void addTemplateService(TemplateService templateService) {
         mTemplateServices.add(templateService);
+        updatePreview();
+    }
+
+    public ArrayList<TemplateService> getTemplateServices() {
+        return mTemplateServices;
+    }
+
+    public void removeServices(ArrayList<TemplateService> services) {
+        mTemplateServices.removeAll(services);
         updatePreview();
     }
 }

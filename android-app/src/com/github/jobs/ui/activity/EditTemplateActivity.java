@@ -20,13 +20,15 @@ import com.github.jobs.bean.TemplateService;
 import com.github.jobs.templates.services.StackOverflowService;
 import com.github.jobs.templates.services.WebsiteService;
 import com.github.jobs.ui.dialog.DeleteTemplateDialog;
+import com.github.jobs.ui.dialog.RemoveServicesDialog;
 import com.github.jobs.ui.dialog.ServiceChooserDialog;
 import com.github.jobs.ui.fragment.EditTemplateFragment;
 import com.github.jobs.utils.AppUtils;
 import com.github.jobs.utils.TabListenerAdapter;
 
+import java.util.ArrayList;
+
 import static com.github.jobs.templates.TemplatesHelper.getTemplateFromResult;
-import static com.github.jobs.templates.TemplatesHelper.resolve;
 
 /**
  * @author cristian
@@ -46,8 +48,7 @@ public class EditTemplateActivity extends TrackActivity {
     public static final String EXTRA_TEMPLATE_ID = "com.github.jobs.extra.template_id";
 
     private int mCurrentTab;
-    private MenuItem mMenuEditOrSave;
-    private MenuItem mMenuAddService;
+    private MenuItem mMenuEditOrSave, mMenuAddService, mMenuRemoveService, mMenuDelete;
     private boolean mEditModeEnabled;
     private long mTemplateId;
 
@@ -86,12 +87,19 @@ public class EditTemplateActivity extends TrackActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getSupportMenuInflater().inflate(R.menu.edit_template_menu, menu);
+        // get menu actions instance
         mMenuEditOrSave = menu.findItem(R.id.menu_edit_or_save);
         mMenuAddService = menu.findItem(R.id.menu_add_service);
+        mMenuDelete = menu.findItem(R.id.menu_delete_template);
+        mMenuRemoveService = menu.findItem(R.id.menu_remove_service);
+
         if (mEditModeEnabled) {
             mMenuEditOrSave.setIcon(R.drawable.ic_action_save);
-            menu.findItem(R.id.menu_delete_template).setVisible(false);
+            mMenuDelete.setVisible(false);
             mMenuAddService.setVisible(true);
+
+            // if we are editing an existing template, let's see if it has services
+            showRemoveServiceBtnIfNecessary();
         }
         return super.onCreateOptionsMenu(menu);
     }
@@ -147,6 +155,28 @@ public class EditTemplateActivity extends TrackActivity {
                 Intent serviceChooser = new Intent(this, ServiceChooserDialog.class);
                 startActivityForResult(serviceChooser, ServiceChooserDialog.REQUEST_CODE);
                 return true;
+            case R.id.menu_remove_service:
+                EditTemplateFragment editTemplateFragment = findFragment(EditTemplateFragment.class);
+                if (editTemplateFragment != null) {
+                    // this should never happen but I don't trust anyone, nor even my grandmother
+                    if (editTemplateFragment.getTemplateServices().isEmpty()) {
+                        if (mMenuRemoveService != null) {
+                            mMenuRemoveService.setVisible(false);
+                        }
+                        return true;
+                    }
+
+                    // create an bundle with the current services
+                    ArrayList<TemplateService> templateServices = editTemplateFragment.getTemplateServices();
+                    Bundle args = new Bundle();
+                    args.putParcelableArrayList(RemoveServicesDialog.ARG_SERVICES, templateServices);
+
+                    // show a dialog to allow users to remove current services
+                    RemoveServicesDialog dialog = new RemoveServicesDialog();
+                    dialog.setArguments(args);
+                    getSupportFragmentManager().beginTransaction().add(dialog, RemoveServicesDialog.TAG).commitAllowingStateLoss();
+                }
+                break;
         }
         return super.onOptionsItemSelected(item);
     }
@@ -172,19 +202,14 @@ public class EditTemplateActivity extends TrackActivity {
                     soService.setData(soUser.getLink());
 
                     // push cover letter to the fragment holding template information
-                    EditTemplateFragment fragment = findFragment(EditTemplateFragment.class);
-                    if (fragment == null) {
-                        Log.wtf(TAG, "Fragment shall not be null here", new RuntimeException());
-                        return;
-                    }
-                    fragment.addTemplateService(soService);
+                    if (!addTemplateService(soService)) return;
 
                     // add the website service if possible
                     if (soUser.getWebsiteUrl() != null) {
                         TemplateService webService = new TemplateService();
                         webService.setType(WebsiteService.TYPE);
                         webService.setData(soUser.getWebsiteUrl());
-                        fragment.addTemplateService(webService);
+                        if (!addTemplateService(webService)) return;
                     }
                     Toast.makeText(this, getString(R.string.so_link_added), Toast.LENGTH_LONG).show();
                 }
@@ -194,24 +219,51 @@ public class EditTemplateActivity extends TrackActivity {
                 if (serviceId == -1) {
                     Parcelable[] templateServices = data.getParcelableArrayExtra(ServiceChooserDialog.RESULT_SERVICES);
                     if (templateServices != null) {
-                        EditTemplateFragment fragment = findFragment(EditTemplateFragment.class);
                         for (Parcelable templateService : templateServices) {
-                            fragment.addTemplateService((TemplateService) templateService);
+                            addTemplateService((TemplateService) templateService);
                         }
                     }
                 } else {
                     TemplateService templateService = getTemplateFromResult(serviceId, data);
                     if (templateService != null) {
-                        EditTemplateFragment fragment = findFragment(EditTemplateFragment.class);
-                        fragment.addTemplateService(templateService);
-                    } else {
-                        // we could not build a template from the result... let's try by using
-                        // resolve method that will launch a retrieval activity if necessary
-                        resolve(this, serviceId);
+                        addTemplateService(templateService);
+                    } else if (serviceId == R.id.service_so) {
+                        Intent intent = new Intent(this, SOUserPickerActivity.class);
+                        startActivityForResult(intent, SOUserPickerActivity.REQUEST_CODE);
                     }
                 }
                 break;
         }
+    }
+
+    public void removeServices(ArrayList<TemplateService> services) {
+        EditTemplateFragment editTemplateFragment = findFragment(EditTemplateFragment.class);
+        if (editTemplateFragment != null) {
+            editTemplateFragment.removeServices(services);
+            mMenuRemoveService.setVisible(!editTemplateFragment.getTemplateServices().isEmpty());
+        }
+    }
+
+    private void showRemoveServiceBtnIfNecessary() {
+        if (mTemplateId != -1) {
+            SqlAdapter adapter = Persistence.getAdapter(this);
+            int count = adapter.count(TemplateService.class, "template_id = ?", new String[]{String.valueOf(mTemplateId)});
+            if (count > 0) {
+                mMenuRemoveService.setVisible(true);
+            }
+        }
+    }
+
+    private boolean addTemplateService(TemplateService service) {
+        EditTemplateFragment fragment = findFragment(EditTemplateFragment.class);
+        if (fragment == null) {
+            Log.wtf(TAG, "Fragment shall not be null here", new RuntimeException());
+            return false;
+        }
+        fragment.addTemplateService(service);
+        // since we added a template service, show the remove action button
+        mMenuRemoveService.setVisible(true);
+        return true;
     }
 
     public void doDelete() {
@@ -263,6 +315,10 @@ public class EditTemplateActivity extends TrackActivity {
         if (mMenuAddService != null) {
             mMenuAddService.setVisible(true);
         }
+        if (mMenuDelete != null) {
+            mMenuDelete.setVisible(false);
+        }
+        showRemoveServiceBtnIfNecessary();
     }
 
     private void disableEditMode() {
@@ -279,6 +335,9 @@ public class EditTemplateActivity extends TrackActivity {
         mEditModeEnabled = false;
         if (mMenuAddService != null) {
             mMenuAddService.setVisible(false);
+        }
+        if (mMenuDelete != null) {
+            mMenuDelete.setVisible(true);
         }
     }
 

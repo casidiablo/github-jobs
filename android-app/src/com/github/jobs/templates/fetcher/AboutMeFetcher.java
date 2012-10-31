@@ -91,7 +91,14 @@ public class AboutMeFetcher {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 // make sure we don't allow importing services if none is selected
-                importServices.setEnabled(((ListView) parent).getCheckedItemCount() > 0);
+                importServices.setEnabled(false);
+                SparseBooleanArray checkedItemPositions = list.getCheckedItemPositions();
+                for (int i = 0; i < checkedItemPositions.size(); i++) {
+                    if (checkedItemPositions.valueAt(i)) {
+                        importServices.setEnabled(true);
+                        break;
+                    }
+                }
             }
         });
     }

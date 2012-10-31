@@ -1,6 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
+            android:id="@+id/menu_remove_service"
+            android:icon="@drawable/ic_action_remove_service"
+            android:title="@string/remove_service"
+            android:orderInCategory="100"
+            android:showAsAction="ifRoom"
+            android:visible="false"/>
+    <item
             android:id="@+id/menu_add_service"
             android:icon="@drawable/ic_action_add_service"
             android:title="@string/add_service"
@@ -11,7 +18,7 @@
             android:id="@+id/menu_delete_template"
             android:icon="@drawable/ic_action_delete"
             android:title="@string/delete_cover_letter"
-            android:orderInCategory="100"
+            android:orderInCategory="98"
             android:showAsAction="ifRoom"/>
     <item
             android:id="@+id/menu_edit_or_save"

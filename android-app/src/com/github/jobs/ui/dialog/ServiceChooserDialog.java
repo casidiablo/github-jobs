@@ -15,6 +15,7 @@ import com.github.jobs.bean.AboutMeUser;
 import com.github.jobs.bean.TemplateService;
 import com.github.jobs.resolver.AboutMeResolver;
 import com.github.jobs.templates.fetcher.AboutMeFetcher;
+import com.github.jobs.utils.AppUtils;
 
 import java.util.List;
 
@@ -67,7 +68,6 @@ public class ServiceChooserDialog extends TrackDialog implements AdapterView.OnI
         mState = (State) getLastNonConfigurationInstance();
         final boolean previousState = mState != null;
         if (previousState) {
-            // Start listening for SyncService updates again
             mState.receiver.setReceiver(this);
         } else {
             mState = new State();
@@ -192,6 +192,7 @@ public class ServiceChooserDialog extends TrackDialog implements AdapterView.OnI
                 Bundle extras = new Bundle();
                 extras.putString(AboutMeResolver.PARAM_USERNAME, data);
                 Groundy.execute(this, AboutMeResolver.class, mState.receiver, extras);
+                AppUtils.hideKeyboard(this, mServiceData.getWindowToken());
                 mServicesFlipper.setDisplayedChild(SERVICE_LOADING);
                 break;
         }
