@@ -17,13 +17,16 @@ import com.github.jobs.R;
 import com.github.jobs.bean.SOUser;
 import com.github.jobs.bean.Template;
 import com.github.jobs.bean.TemplateService;
+import com.github.jobs.templates.services.StackOverflowService;
+import com.github.jobs.templates.services.WebsiteService;
 import com.github.jobs.ui.dialog.DeleteTemplateDialog;
 import com.github.jobs.ui.dialog.ServiceChooserDialog;
 import com.github.jobs.ui.fragment.EditTemplateFragment;
 import com.github.jobs.utils.AppUtils;
 import com.github.jobs.utils.TabListenerAdapter;
 
-import static com.github.jobs.templates.TemplateServicesUtil.*;
+import static com.github.jobs.templates.TemplatesHelper.getTemplateFromResult;
+import static com.github.jobs.templates.TemplatesHelper.resolve;
 
 /**
  * @author cristian
@@ -165,7 +168,7 @@ public class EditTemplateActivity extends TrackActivity {
                     SOUser soUser = (SOUser) userParcel;
                     // create new cover letter service
                     TemplateService soService = new TemplateService();
-                    soService.setType(STACK_OVERFLOW);
+                    soService.setType(StackOverflowService.TYPE);
                     soService.setData(soUser.getLink());
 
                     // push cover letter to the fragment holding template information
@@ -179,7 +182,7 @@ public class EditTemplateActivity extends TrackActivity {
                     // add the website service if possible
                     if (soUser.getWebsiteUrl() != null) {
                         TemplateService webService = new TemplateService();
-                        webService.setType(WEBSITE);
+                        webService.setType(WebsiteService.TYPE);
                         webService.setData(soUser.getWebsiteUrl());
                         fragment.addTemplateService(webService);
                     }

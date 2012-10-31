@@ -17,7 +17,7 @@ import com.codeslap.persistence.SqlAdapter;
 import com.github.jobs.R;
 import com.github.jobs.bean.Template;
 import com.github.jobs.bean.TemplateService;
-import com.github.jobs.templates.TemplateServicesUtil;
+import com.github.jobs.templates.TemplatesHelper;
 import com.github.jobs.ui.activity.EditTemplateActivity;
 import com.github.jobs.utils.AppUtils;
 import com.github.jobs.utils.GithubJobsJavascriptInterface;
@@ -135,7 +135,7 @@ public class EditTemplateFragment extends SherlockFragment {
         if (mTemplateServices != null && !mTemplateServices.isEmpty()) {
             markdownContent += "\n\n---\n";
             for (TemplateService service : mTemplateServices) {
-                markdownContent += TemplateServicesUtil.getContent(getActivity(), service) + "\n\n";
+                markdownContent += TemplatesHelper.getContent(getActivity(), service) + "\n\n";
             }
 
         }

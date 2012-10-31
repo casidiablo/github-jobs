@@ -14,12 +14,11 @@ import com.github.jobs.bean.AboutMeService;
 import com.github.jobs.bean.AboutMeUser;
 import com.github.jobs.bean.TemplateService;
 import com.github.jobs.resolver.AboutMeResolver;
-import com.github.jobs.templates.TemplateServicesUtil;
 import com.github.jobs.templates.fetcher.AboutMeFetcher;
 
 import java.util.List;
 
-import static com.github.jobs.templates.TemplateServicesUtil.*;
+import static com.github.jobs.templates.TemplatesHelper.*;
 import static com.github.jobs.templates.fetcher.AboutMeFetcher.AboutMeServicesCallback;
 
 /**
@@ -89,7 +88,7 @@ public class ServiceChooserDialog extends TrackDialog implements AdapterView.OnI
 
         // prepare the services grid
         ServicesAdapter adapter = new ServicesAdapter(this);
-        adapter.updateItems(TemplateServicesUtil.getServices(this));
+        adapter.updateItems(getServices(this));
         grid.setAdapter(adapter);
         grid.setOnItemClickListener(this);
 
