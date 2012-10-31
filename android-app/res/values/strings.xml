@@ -110,7 +110,7 @@ Best regards, Foo Bar.
     <string name="service_chooser">Service chooser</string>
     <string name="lbl_github">Github</string>
     <string name="lbl_stack_overflow">StackOverflow</string>
-    <string name="lbl_twitter">Twitter</string>
+    <string name="lbl_linked_in">LinkedIn</string>
     <string name="lbl_skype">Skype</string>
     <string name="lbl_about_me">About me</string>
     <string name="lbl_website">Website</string>
@@ -119,10 +119,26 @@ Best regards, Foo Bar.
     <string name="choose_user_and_website">Import user and website</string>
     <string name="cover_letter_name_is_empty">Cover letter name shall not be empty</string>
     <string name="cover_letter_content_is_empty">Cover letter content shall not be empty</string>
-    <string name="basic_cover_letter_footer"><![CDATA[<strong>%1$s</strong>: %2$s]]></string>
+    <string name="cover_letter_footer"><![CDATA[<strong>%1$s</strong>: %2$s]]></string>
     <string name="lbl_editor">Editor</string>
     <string name="preview">Preview</string>
     <string name="edit_cover_letter">Edit cover letter</string>
     <string name="new_cover_letter">New cover letter</string>
     <string name="so_link_added">StackOverflow link added. See preview footer.</string>
+    <string name="your_about_me_username">your about.me username</string>
+    <string name="get_about_me_user_info">Get about.me user info</string>
+    <string name="your_linked_in_username">public profile suffix</string>
+    <string name="get_linked_in_user_info">Add LinkedIn to template</string>
+    <string name="your_github_username">your Github username</string>
+    <string name="get_github_user_info">Add Github link</string>
+    <string name="your_skype_username">your Skype username</string>
+    <string name="your_username">your username</string>
+    <string name="get_skype_user_info">Add Skype info</string>
+    <string name="fetch_service_info">Fetch service information</string>
+    <string name="get_user_info">Add info to template</string>
+    <string name="this_shall_not_be_empty">this shall not be empty</string>
+    <string name="nothing_found">Nothing found</string>
+    <string name="import_services">Import services</string>
+    <string name="lbl_facebook">Facebook</string>
+    <string name="no_services_checked">No services checked</string>
 </resources>

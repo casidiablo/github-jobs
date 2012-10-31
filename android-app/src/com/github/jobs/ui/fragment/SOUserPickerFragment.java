@@ -53,7 +53,7 @@ public class SOUserPickerFragment extends SherlockFragment implements AdapterVie
         mSOUserFetcherReceiver = (SOUserFetcherReceiver) fm.findFragmentByTag(ReceiverFragment.TAG);
         if (mSOUserFetcherReceiver == null) {
             mSOUserFetcherReceiver = new SOUserFetcherReceiver();
-            fm.beginTransaction().add(mSOUserFetcherReceiver, ReceiverFragment.TAG).commit();
+            fm.beginTransaction().add(mSOUserFetcherReceiver, ReceiverFragment.TAG).commitAllowingStateLoss();
         }
 
         mUserSearch = (EditText) getView().findViewById(R.id.edit_user_search);

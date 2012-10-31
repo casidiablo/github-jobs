@@ -1,4 +1,4 @@
-package com.github.jobs.utils;
+package com.github.jobs.templates.fetcher;
 
 import com.github.jobs.bean.SOUser;
 import com.github.util.HttpHandler;

@@ -17,12 +17,13 @@ import com.github.jobs.R;
 import com.github.jobs.bean.SOUser;
 import com.github.jobs.bean.Template;
 import com.github.jobs.bean.TemplateService;
-import com.github.jobs.templates.TemplateServicesUtil;
 import com.github.jobs.ui.dialog.DeleteTemplateDialog;
 import com.github.jobs.ui.dialog.ServiceChooserDialog;
 import com.github.jobs.ui.fragment.EditTemplateFragment;
 import com.github.jobs.utils.AppUtils;
 import com.github.jobs.utils.TabListenerAdapter;
+
+import static com.github.jobs.templates.TemplateServicesUtil.*;
 
 /**
  * @author cristian
@@ -31,10 +32,16 @@ import com.github.jobs.utils.TabListenerAdapter;
 public class EditTemplateActivity extends TrackActivity {
     private static final String TAG = "github:jobs:templates";
 
+    // used to start this activity with startActivityForResult
     public static final int REQUEST_CODE = 7874;
+
+    // used to save the state of this activity
     private static final String KEY_CURRENT_TAB = "com.github.jobs.key.current_tab";
     private static final String KEY_EDIT_MODE = "com.github.jobs.key.edit_mode";
+
+    // used to pass a template id to edit
     public static final String EXTRA_TEMPLATE_ID = "com.github.jobs.extra.template_id";
+
     private int mCurrentTab;
     private MenuItem mMenuEditOrSave;
     private MenuItem mMenuAddService;
@@ -77,11 +84,12 @@ public class EditTemplateActivity extends TrackActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         getSupportMenuInflater().inflate(R.menu.edit_template_menu, menu);
         mMenuEditOrSave = menu.findItem(R.id.menu_edit_or_save);
+        mMenuAddService = menu.findItem(R.id.menu_add_service);
         if (mEditModeEnabled) {
             mMenuEditOrSave.setIcon(R.drawable.ic_action_save);
             menu.findItem(R.id.menu_delete_template).setVisible(false);
+            mMenuAddService.setVisible(true);
         }
-        mMenuAddService = menu.findItem(R.id.menu_add_service);
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -110,7 +118,8 @@ public class EditTemplateActivity extends TrackActivity {
                 SqlAdapter adapter = Persistence.getAdapter(this);
                 if (template.getId() > 0) {
                     String[] args = {String.valueOf(template.getId())};
-                    adapter.delete(TemplateService.class, "template_id = ?", args);
+                    int deleted = adapter.delete(TemplateService.class, "template_id = ?", args);
+                    Log.d(TAG, "Deleted " + deleted + " templates");
 
                     Template where = new Template();
                     where.setId(template.getId());
@@ -156,7 +165,7 @@ public class EditTemplateActivity extends TrackActivity {
                     SOUser soUser = (SOUser) userParcel;
                     // create new cover letter service
                     TemplateService soService = new TemplateService();
-                    soService.setType(TemplateServicesUtil.STACK_OVERFLOW);
+                    soService.setType(STACK_OVERFLOW);
                     soService.setData(soUser.getLink());
 
                     // push cover letter to the fragment holding template information
@@ -170,7 +179,7 @@ public class EditTemplateActivity extends TrackActivity {
                     // add the website service if possible
                     if (soUser.getWebsiteUrl() != null) {
                         TemplateService webService = new TemplateService();
-                        webService.setType(TemplateServicesUtil.WEBSITE);
+                        webService.setType(WEBSITE);
                         webService.setData(soUser.getWebsiteUrl());
                         fragment.addTemplateService(webService);
                     }
@@ -178,9 +187,25 @@ public class EditTemplateActivity extends TrackActivity {
                 }
                 break;
             case ServiceChooserDialog.REQUEST_CODE:
-                int serviceId = data.getIntExtra(ServiceChooserDialog.EXTRA_SERVICE_ID, -1);
-                if (serviceId != 1) {
-                    TemplateServicesUtil.resolve(this, serviceId);
+                int serviceId = data.getIntExtra(ServiceChooserDialog.RESULT_SERVICE_ID, -1);
+                if (serviceId == -1) {
+                    Parcelable[] templateServices = data.getParcelableArrayExtra(ServiceChooserDialog.RESULT_SERVICES);
+                    if (templateServices != null) {
+                        EditTemplateFragment fragment = findFragment(EditTemplateFragment.class);
+                        for (Parcelable templateService : templateServices) {
+                            fragment.addTemplateService((TemplateService) templateService);
+                        }
+                    }
+                } else {
+                    TemplateService templateService = getTemplateFromResult(serviceId, data);
+                    if (templateService != null) {
+                        EditTemplateFragment fragment = findFragment(EditTemplateFragment.class);
+                        fragment.addTemplateService(templateService);
+                    } else {
+                        // we could not build a template from the result... let's try by using
+                        // resolve method that will launch a retrieval activity if necessary
+                        resolve(this, serviceId);
+                    }
                 }
                 break;
         }
@@ -232,7 +257,9 @@ public class EditTemplateActivity extends TrackActivity {
         }
         mEditModeEnabled = true;
         setTitle(mTemplateId != -1 ? R.string.edit_cover_letter : R.string.new_cover_letter);
-        mMenuAddService.setVisible(true);
+        if (mMenuAddService != null) {
+            mMenuAddService.setVisible(true);
+        }
     }
 
     private void disableEditMode() {
@@ -247,7 +274,15 @@ public class EditTemplateActivity extends TrackActivity {
             mMenuEditOrSave.setIcon(R.drawable.ic_action_edit);
         }
         mEditModeEnabled = false;
-        mMenuAddService.setVisible(false);
+        if (mMenuAddService != null) {
+            mMenuAddService.setVisible(false);
+        }
+    }
+
+    public void selectEditorTab() {
+        if (getSupportActionBar().getSelectedTab().getPosition() != 0) {
+            getSupportActionBar().getTabAt(0).select();
+        }
     }
 
     private void showEditor(boolean showEditor) {

@@ -1,4 +1,4 @@
-package com.github.jobs.templates;
+package com.github.jobs.templates.generator;
 
 import android.content.Context;
 import com.github.jobs.R;

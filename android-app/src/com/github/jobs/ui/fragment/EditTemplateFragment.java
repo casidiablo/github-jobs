@@ -18,6 +18,7 @@ import com.github.jobs.R;
 import com.github.jobs.bean.Template;
 import com.github.jobs.bean.TemplateService;
 import com.github.jobs.templates.TemplateServicesUtil;
+import com.github.jobs.ui.activity.EditTemplateActivity;
 import com.github.jobs.utils.AppUtils;
 import com.github.jobs.utils.GithubJobsJavascriptInterface;
 
@@ -157,16 +158,25 @@ public class EditTemplateFragment extends SherlockFragment {
 
     public boolean isTemplateValid() {
         if (TextUtils.isEmpty(mTemplateName.getText().toString().trim())) {
+            selectEditorTab();
             mTemplateName.setError(getString(R.string.cover_letter_name_is_empty));
             mTemplateName.requestFocus();
             return false;
         }
         if (TextUtils.isEmpty(mTemplateContent.getText().toString().trim())) {
+            selectEditorTab();
             mTemplateContent.setError(getString(R.string.cover_letter_content_is_empty));
             mTemplateContent.requestFocus();
             return false;
         }
         return true;
+    }
+
+    private void selectEditorTab() {
+        if (getActivity() instanceof EditTemplateActivity) {
+            EditTemplateActivity activity = (EditTemplateActivity) getActivity();
+            activity.selectEditorTab();
+        }
     }
 
     public void showEditor(boolean showEditor) {

@@ -1,4 +1,4 @@
-package com.github.jobs.templates;
+package com.github.jobs.templates.generator;
 
 import android.content.Context;
 import com.github.jobs.R;
@@ -7,7 +7,7 @@ import com.github.jobs.bean.TemplateService;
 /**
  * @author cristian
  */
-public abstract class ServiceGenerator extends TemplateGenerator {
+public abstract class ServiceGenerator {
 
     private final Context mContext;
 
@@ -27,8 +27,8 @@ public abstract class ServiceGenerator extends TemplateGenerator {
         return mContext.getString(resId, args);
     }
 
-    protected String generate(TemplateService templateService) {
-        return getString(R.string.basic_cover_letter_footer, getLabel(), templateService.getData());
+    public String generate(TemplateService templateService) {
+        return getString(R.string.cover_letter_footer, getLabel(), templateService.getData());
     }
 
     protected abstract String getLabel();

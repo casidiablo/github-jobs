@@ -4,7 +4,7 @@ import android.os.Bundle;
 import com.codeslap.groundy.CallResolver;
 import com.codeslap.groundy.Groundy;
 import com.github.jobs.bean.SOUser;
-import com.github.jobs.utils.StackOverflowUsersFetcher;
+import com.github.jobs.templates.fetcher.StackOverflowUsersFetcher;
 
 import java.util.ArrayList;
 import java.util.List;
