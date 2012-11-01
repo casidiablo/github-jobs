@@ -4,7 +4,7 @@
           android:icon="@drawable/ic_action_delete"
           android:title="@string/delete_search"
           android:orderInCategory="98"
-          android:showAsAction="always"/>
+          android:showAsAction="ifRoom"/>
     <item android:id="@+id/menu_subscribe"
           android:icon="@drawable/ic_action_subscribe"
           android:title="@string/subscribe"

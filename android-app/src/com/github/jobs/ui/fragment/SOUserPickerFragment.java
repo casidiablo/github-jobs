@@ -3,12 +3,14 @@ package com.github.jobs.ui.fragment;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.os.Parcelable;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ListView;
@@ -35,6 +37,8 @@ import static android.app.Activity.RESULT_OK;
  * @version 1.0
  */
 public class SOUserPickerFragment extends SherlockFragment implements AdapterView.OnItemClickListener {
+    private static final String KEY_USERS = "com.github.jobs.key.users";
+    private static final String KEY_SEARCH = "com.github.jobs.key.search";
 
     private SOUserFetcherReceiver mSOUserFetcherReceiver;
     private SOUsersAdapter mAdapter;
@@ -60,7 +64,7 @@ public class SOUserPickerFragment extends SherlockFragment implements AdapterVie
         mUserSearch.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                if (actionId == KeyEvent.KEYCODE_SEARCH) {
+                if (actionId == EditorInfo.IME_ACTION_SEARCH) {
                     executeSearch(mUserSearch.getText().toString().trim());
                     return true;
                 }
@@ -69,18 +73,42 @@ public class SOUserPickerFragment extends SherlockFragment implements AdapterVie
         });
         ListView userList = (ListView) getView().findViewById(R.id.users_list);
         mAdapter = new SOUsersAdapter(getActivity());
+        if (savedInstanceState != null && savedInstanceState.containsKey(KEY_USERS)) {
+            ArrayList<Parcelable> items = savedInstanceState.getParcelableArrayList(KEY_USERS);
+            ArrayList<SOUser> users = new ArrayList<SOUser>();
+            for (Parcelable item : items) {
+                users.add((SOUser) item);
+            }
+            mAdapter.updateItems(users);
+        }
         userList.setOnItemClickListener(this);
         userList.setAdapter(mAdapter);
 
         String search = getActivity().getIntent().getStringExtra(SOUserPickerActivity.EXTRA_SEARCH);
         if (search == null) {
-            search = "";
-        } else {
-            mUserSearch.setText(search);
-            mUserSearch.setSelection(search.length());
+            if (savedInstanceState != null && savedInstanceState.containsKey(KEY_SEARCH)) {
+                search = savedInstanceState.getString(KEY_SEARCH);
+                mUserSearch.setText(search);
+                mUserSearch.setSelection(search.length());
+            } else {
+                search = "";
+            }
         }
 
-        executeSearch(search);
+        mUserSearch.setText(search);
+        mUserSearch.setSelection(search.length());
+
+        if (savedInstanceState == null) {
+            // this will execute search only the first time the activity is open
+            executeSearch(search);
+        }
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putParcelableArrayList(KEY_USERS, new ArrayList<SOUser>(mAdapter.getItems()));
+        outState.putString(KEY_SEARCH, mUserSearch.getText().toString().trim());
     }
 
     @Override

@@ -19,7 +19,7 @@ public class EmailSubscriberResolver extends CallResolver {
     @Override
     protected void updateData() {
         Bundle parameters = getParameters();
-        SearchPack searchPack = (SearchPack) parameters.getSerializable(EXTRA_SEARCH);
+        SearchPack searchPack = (SearchPack) parameters.getParcelable(EXTRA_SEARCH);
         String email = parameters.getString(EXTRA_EMAIL);
         String description = searchPack.getSearch();
         String location = searchPack.getLocation();

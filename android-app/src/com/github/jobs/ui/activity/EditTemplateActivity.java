@@ -224,12 +224,14 @@ public class EditTemplateActivity extends TrackActivity {
                         }
                     }
                 } else {
-                    TemplateService templateService = getTemplateFromResult(serviceId, data);
-                    if (templateService != null) {
-                        addTemplateService(templateService);
-                    } else if (serviceId == R.id.service_so) {
+                    if (serviceId == R.id.service_so) {
                         Intent intent = new Intent(this, SOUserPickerActivity.class);
                         startActivityForResult(intent, SOUserPickerActivity.REQUEST_CODE);
+                    } else {
+                        TemplateService templateService = getTemplateFromResult(serviceId, data);
+                        if (templateService != null) {
+                            addTemplateService(templateService);
+                        }
                     }
                 }
                 break;

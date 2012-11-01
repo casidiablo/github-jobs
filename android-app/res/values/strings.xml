@@ -150,4 +150,8 @@ Best regards, Foo Bar.
     <string name="apply_for_job_with">Apply for this job with…</string>
     <string name="template_content_copied_to_clipboard">Template content copied to the clipboard</string>
     <string name="apply_for_this_job_via">Apply for this job via…</string>
+    <string name="invalid_email_address">Invalid email address</string>
+    <string name="you_must_have_network_connection">You must have a network connection</string>
+    <string name="error_fetching_search_result">Error fetching search result</string>
+    <string name="error_fetching_search_result_network">Error fetching search result. Check your network connection.</string>
 </resources>

@@ -18,14 +18,14 @@ public class SearchJobsResolver extends CallResolver {
 
     private ArrayList<Job> mJobs;
     public static final String EXTRA_SEARCH_PACK = "com.github.jobs.extra_search_pack";
-    public static final String DATA_JOBS = "com.github.jobs.data_jobs";
-    public static final String DATA_SEARCH_PACK = "com.github.jobs.data_search_pack";
+    public static final String DATA_JOBS = "com.github.jobs.data.jobs";
+    public static final String DATA_SEARCH_PACK = "com.github.jobs.data.search_pack";
 
     @Override
     protected void updateData() {
         // get parameters
         Bundle params = getParameters();
-        SearchPack searchPack = (SearchPack) params.getSerializable(EXTRA_SEARCH_PACK);
+        SearchPack searchPack = (SearchPack) params.getParcelable(EXTRA_SEARCH_PACK);
 
         // configure search
         Search.Builder builder = new Search.Builder();
@@ -72,14 +72,14 @@ public class SearchJobsResolver extends CallResolver {
 
     @Override
     protected void prepareResult() {
-        Bundle params = getParameters();
-        SearchPack searchPack = (SearchPack) params.getSerializable(EXTRA_SEARCH_PACK);
+        SearchPack searchPack = (SearchPack) getParameters().getParcelable(EXTRA_SEARCH_PACK);
         Bundle resultData = getResultData();
-        resultData.putSerializable(DATA_SEARCH_PACK, searchPack);
+        resultData.putParcelable(DATA_SEARCH_PACK, searchPack);
         if (mJobs == null) {
             return;
         }
-        resultData.putSerializable(DATA_JOBS, mJobs);
+
+        resultData.putParcelableArrayList(DATA_JOBS, mJobs);
         setResultCode(Groundy.STATUS_FINISHED);
     }
 

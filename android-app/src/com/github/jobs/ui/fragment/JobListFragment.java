@@ -3,6 +3,7 @@ package com.github.jobs.ui.fragment;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
@@ -32,7 +33,6 @@ import com.github.jobs.ui.dialog.HowToApplyDialog;
 import com.github.jobs.ui.dialog.SubscribeDialog;
 import com.github.jobs.utils.ShareHelper;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -51,7 +51,7 @@ public class JobListFragment extends SherlockFragment implements LoaderManager.L
     public static JobListFragment newInstance(SearchPack searchPack) {
         JobListFragment jobListFragment = new JobListFragment();
         Bundle args = new Bundle();
-        args.putSerializable(KEY_SEARCH, searchPack);
+        args.putParcelable(KEY_SEARCH, searchPack);
         jobListFragment.setArguments(args);
         return jobListFragment;
     }
@@ -72,11 +72,11 @@ public class JobListFragment extends SherlockFragment implements LoaderManager.L
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (savedInstanceState != null) {
-            mCurrentSearch = (SearchPack) savedInstanceState.getSerializable(KEY_SEARCH);
+            mCurrentSearch = (SearchPack) savedInstanceState.getParcelable(KEY_SEARCH);
             mLoading = savedInstanceState.getBoolean(KEY_LOADING);
             mLastTotalItemCount = savedInstanceState.getInt(KEY_LAST_TOTAL_ITEM_COUNT);
         } else {
-            mCurrentSearch = (SearchPack) getArguments().getSerializable(KEY_SEARCH);
+            mCurrentSearch = (SearchPack) getArguments().getParcelable(KEY_SEARCH);
         }
     }
 
@@ -242,7 +242,7 @@ public class JobListFragment extends SherlockFragment implements LoaderManager.L
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putSerializable(KEY_SEARCH, mCurrentSearch);
+        outState.putParcelable(KEY_SEARCH, mCurrentSearch);
         outState.putBoolean(KEY_LOADING, mLoading);
         outState.putInt(KEY_LAST_TOTAL_ITEM_COUNT, mLastTotalItemCount);
     }
@@ -294,7 +294,7 @@ public class JobListFragment extends SherlockFragment implements LoaderManager.L
 
     private void triggerJobSearch() {
         Bundle extras = new Bundle();
-        extras.putSerializable(SearchJobsResolver.EXTRA_SEARCH_PACK, mCurrentSearch);
+        extras.putParcelable(SearchJobsResolver.EXTRA_SEARCH_PACK, mCurrentSearch);
 
         mLoading = true;
         HomeActivity activity = (HomeActivity) getActivity();
@@ -307,11 +307,14 @@ public class JobListFragment extends SherlockFragment implements LoaderManager.L
     }
 
     public void onFinished(Bundle resultData) {
-        Serializable serializable = resultData.getSerializable(SearchJobsResolver.DATA_JOBS);
-        if (!(serializable instanceof ArrayList)) {
+        ArrayList<Parcelable> parcelableArrayList = resultData.getParcelableArrayList(SearchJobsResolver.DATA_JOBS);
+        if (parcelableArrayList == null) {
             return;
         }
-        ArrayList<Job> jobs = (ArrayList<Job>) serializable;
+        ArrayList<Job> jobs = new ArrayList<Job>();
+        for (Parcelable parcelable : parcelableArrayList) {
+            jobs.add((Job) parcelable);
+        }
         mAdapter.addItems(jobs);
         if (jobs.size() == 0) {
             removeFooterFromList();

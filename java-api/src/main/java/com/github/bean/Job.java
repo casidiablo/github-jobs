@@ -16,12 +16,14 @@
 
 package com.github.bean;
 
+import android.os.Parcel;
+import android.os.Parcelable;
 import com.google.gson.annotations.SerializedName;
 
 /**
  * @author cristian
  */
-public class Job {
+public class Job implements Parcelable {
     private String id;
     private String title;
     @SerializedName("company_logo")
@@ -126,10 +128,11 @@ public class Job {
         this.companyUrl = companyUrl;
     }
 
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (o == null || Job.class != o.getClass()) return false;
 
         Job job = (Job) o;
 
@@ -180,4 +183,49 @@ public class Job {
                 ", companyUrl='" + companyUrl + '\'' +
                 '}';
     }
+
+    @Override
+    public int describeContents() {
+        return hashCode();
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeValue(id);
+        dest.writeValue(title);
+        dest.writeValue(companyLogo);
+        dest.writeValue(location);
+        dest.writeValue(description);
+        dest.writeValue(company);
+        dest.writeValue(howToApply);
+        dest.writeValue(createdAt);
+        dest.writeValue(type);
+        dest.writeValue(url);
+        dest.writeValue(companyUrl);
+    }
+
+    @SuppressWarnings("UnusedDeclaration")
+    public static final Creator<Job> CREATOR = new Creator<Job>() {
+        @Override
+        public Job createFromParcel(Parcel source) {
+            Job job = new Job();
+            job.setId((String) source.readValue(null));
+            job.setTitle((String) source.readValue(null));
+            job.setCompanyLogo((String) source.readValue(null));
+            job.setLocation((String) source.readValue(null));
+            job.setDescription((String) source.readValue(null));
+            job.setCompany((String) source.readValue(null));
+            job.setHowToApply((String) source.readValue(null));
+            job.setCreatedAt((String) source.readValue(null));
+            job.setType((String) source.readValue(null));
+            job.setUrl((String) source.readValue(null));
+            job.setCompanyUrl((String) source.readValue(null));
+            return job;
+        }
+
+        @Override
+        public Job[] newArray(int size) {
+            return new Job[size];
+        }
+    };
 }

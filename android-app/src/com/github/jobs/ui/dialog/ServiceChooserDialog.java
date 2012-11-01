@@ -111,6 +111,10 @@ public class ServiceChooserDialog extends TrackDialog implements AdapterView.OnI
         // if it was stack overflow, finish this activity and pass info to the parent
         // activity so that it can launch the pick stackoverflow user activity
         if (mState.lastService == R.id.service_so) {
+            if (!AppUtils.isOnline(this)) {
+                Toast.makeText(this, R.string.you_must_have_network_connection, Toast.LENGTH_SHORT).show();
+                return;
+            }
             setResultAndFinish();
             return;
         }

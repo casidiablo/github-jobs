@@ -1,11 +1,11 @@
 package com.github.jobs.bean;
 
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.text.TextUtils;
 import com.github.jobs.utils.StringUtils;
 
-import java.io.Serializable;
-
-public class SearchPack implements Serializable {
+public class SearchPack implements Parcelable {
     private String search;
     private String location;
     private boolean fullTime = true;
@@ -86,4 +86,35 @@ public class SearchPack implements Serializable {
     public boolean isDefault() {
         return search == null && location == null && fullTime;
     }
+
+    @Override
+    public int describeContents() {
+        return hashCode();
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeValue(search);
+        dest.writeValue(location);
+        dest.writeValue(fullTime);
+        dest.writeValue(page);
+    }
+
+    @SuppressWarnings("UnusedDeclaration")
+    public static final Creator<SearchPack> CREATOR = new Creator<SearchPack>() {
+        @Override
+        public SearchPack createFromParcel(Parcel source) {
+            SearchPack searchPack = new SearchPack();
+            searchPack.setSearch((String) source.readValue(null));
+            searchPack.setLocation((String) source.readValue(null));
+            searchPack.setFullTime((Boolean) source.readValue(null));
+            searchPack.setPage((Integer) source.readValue(null));
+            return searchPack;
+        }
+
+        @Override
+        public SearchPack[] newArray(int size) {
+            return new SearchPack[size];
+        }
+    };
 }
