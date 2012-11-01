@@ -16,6 +16,7 @@ import com.github.jobs.adapter.TemplatesAdapter;
 import com.github.jobs.bean.Template;
 import com.github.jobs.loader.TemplatesLoader;
 import com.github.jobs.ui.activity.EditTemplateActivity;
+import com.github.jobs.ui.activity.LoginActivity;
 import com.github.jobs.ui.activity.TemplatesActivity;
 
 import java.util.List;
@@ -71,6 +72,10 @@ public class TemplatesListFragment extends SherlockListFragment implements Loade
                 getTracker(getActivity()).trackPageView(NAME_EDIT_TEMPLATES);
                 Intent editTemplate = new Intent(getActivity(), EditTemplateActivity.class);
                 startActivityForResult(editTemplate, REQUEST_CODE);
+                break;
+            case R.id.menu_cloud:
+                Intent loginIntent = new Intent(getActivity(), LoginActivity.class);
+                startActivity(loginIntent);
                 break;
         }
         return super.onOptionsItemSelected(item);

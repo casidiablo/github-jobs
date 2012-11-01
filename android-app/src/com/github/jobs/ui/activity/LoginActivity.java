@@ -18,7 +18,7 @@ import java.util.List;
 /**
  * @author cristian
  */
-public class LoginActivity extends TrackActivity {
+public class LoginActivity extends TrackActivity implements View.OnClickListener {
     private AccountManager accountManager;
     private TextWatcher watcher = validationTextWatcher();
 
@@ -45,6 +45,8 @@ public class LoginActivity extends TrackActivity {
                 android.R.layout.simple_dropdown_item_1line, userEmailAccounts()));
 
         mSignInButton = (Button) findViewById(R.id.btn_signin);
+        mSignInButton.setOnClickListener(this);
+
         mPasswordText = (EditText) findViewById(R.id.et_password);
         mPasswordText.setOnKeyListener(new View.OnKeyListener() {
 
@@ -97,6 +99,15 @@ public class LoginActivity extends TrackActivity {
         updateUIWithValidation();
     }
 
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.btn_signin:
+                handleLogin();
+                break;
+        }
+    }
+
     private void updateUIWithValidation() {
         boolean populated = populated(mEmailText) && populated(mPasswordText);
         mSignInButton.setEnabled(populated);
@@ -109,8 +120,6 @@ public class LoginActivity extends TrackActivity {
     /**
      * Handles onClick event on the Submit button. Sends username/password to
      * the server for authentication.
-     * <p/>
-     * Specified by android:onClick="handleLogin" in the layout xml
      */
     public void handleLogin() {
     }
