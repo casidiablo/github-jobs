@@ -154,5 +154,4 @@ Best regards, Foo Bar.
     <string name="you_must_have_network_connection">You must have a network connection</string>
     <string name="error_fetching_search_result">Error fetching search result</string>
     <string name="error_fetching_search_result_network">Error fetching search result. Check your network connection.</string>
-    <string name="sync_with_cloud">Sync with cloud</string>
 </resources>

@@ -28,7 +28,6 @@
                   android:label="@string/about_this_app"/>
         <activity android:name=".ui.dialog.ServiceChooserDialog" android:theme="@style/Theme.GithubJobs.Dialog"
                   android:label="@string/service_chooser"/>
-        <activity android:name=".ui.activity.LoginActivity" android:label="@string/authenticate"/>
         <activity android:name=".ui.activity.JobDetailsActivity" android:label="@string/job_details"/>
         <activity android:name=".ui.activity.TemplatesActivity" android:label="@string/cover_letters_list"/>
         <activity android:name=".ui.activity.EditTemplateActivity" android:label="@string/edit_cover_letter"/>

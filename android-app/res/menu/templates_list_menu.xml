@@ -1,12 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
-            android:id="@+id/menu_cloud"
-            android:icon="@drawable/ic_action_cloud"
-            android:title="@string/sync_with_cloud"
-            android:orderInCategory="99"
-            android:showAsAction="ifRoom"/>
-    <item
             android:id="@+id/menu_add_template"
             android:icon="@drawable/ic_action_add_template"
             android:title="@string/add_cover_letter"
