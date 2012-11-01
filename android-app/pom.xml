@@ -277,21 +277,11 @@
                                 <inputApk>${project.build.directory}/${project.artifactId}.apk</inputApk>
                                 <outputApk>${project.build.directory}/${project.artifactId}-release.apk</outputApk>
                             </zipalign>
-                            <manifest>
-                                <debuggable>false</debuggable>
-                            </manifest>
                             <proguard>
                                 <skip>true</skip>
                             </proguard>
                         </configuration>
                         <executions>
-                            <execution>
-                                <id>manifestUpdate</id>
-                                <phase>process-resources</phase>
-                                <goals>
-                                    <goal>manifest-update</goal>
-                                </goals>
-                            </execution>
                             <execution>
                                 <id>alignApk</id>
                                 <phase>package</phase>
@@ -303,12 +293,13 @@
                     </plugin>
                     <plugin>
                         <groupId>org.codehaus.mojo</groupId>
+                        <version>1.7</version>
                         <artifactId>build-helper-maven-plugin</artifactId>
                         <configuration>
                             <artifacts>
                                 <artifact>
                                     <file>
-                                        ${project.build.directory}/${project.artifactId}-${project.version}-release.apk
+                                        ${project.build.directory}/target/${project.artifactId}-${project.version}-release.apk
                                     </file>
                                     <type>apk</type>
                                     <classifier>signed-aligned</classifier>
