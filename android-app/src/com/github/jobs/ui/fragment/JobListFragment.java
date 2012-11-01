@@ -140,6 +140,7 @@ public class JobListFragment extends SherlockFragment implements LoaderManager.L
                 return true;
             case HOW_TO_APPLY:
                 Intent howToApplyIntent = new Intent(activity, HowToApplyDialog.class);
+                howToApplyIntent.putExtra(HowToApplyDialog.EXTRA_TITLE, job.getTitle());
                 howToApplyIntent.putExtra(HowToApplyDialog.EXTRA_HOW_TO_APPLY, job.getHowToApply());
                 startActivity(howToApplyIntent);
                 getTracker(activity).trackEvent(CATEGORY_JOBS, ACTION_FOLLOW_CONTEXT, LABEL_APPLY);

@@ -145,4 +145,9 @@ Best regards, Foo Bar.
     <string name="title_remove_services">Remove services</string>
     <string name="remove_selected_services">Remove selected services</string>
     <string name="service_list_item">%1$s (%2$s)</string>
+    <string name="btn_apply">Apply</string>
+    <string name="btn_apply_with_template">Apply with template</string>
+    <string name="apply_for_job_with">Apply for this job with…</string>
+    <string name="template_content_copied_to_clipboard">Template content copied to the clipboard</string>
+    <string name="apply_for_this_job_via">Apply for this job via…</string>
 </resources>

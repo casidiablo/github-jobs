@@ -74,6 +74,7 @@ public class JobDetailsActivity extends TrackActivity implements ViewPager.OnPag
                 Job job = findCurrentJob();
                 // start a new activity with the application details
                 Intent howToApplyDialog = new Intent(this, HowToApplyDialog.class);
+                howToApplyDialog.putExtra(HowToApplyDialog.EXTRA_TITLE, job.getTitle());
                 howToApplyDialog.putExtra(HowToApplyDialog.EXTRA_HOW_TO_APPLY, job.getHowToApply());
                 startActivity(howToApplyDialog);
                 getTracker(this).trackEvent(CATEGORY_JOBS, ACTION_APPLY, job.getTitle() + "," + job.getUrl());

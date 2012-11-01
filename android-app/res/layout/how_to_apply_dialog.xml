@@ -1,8 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.github.jobs.widget.JellyBeanSpanFixTextView
+<LinearLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
-        android:id="@+id/lbl_how_to_apply"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="5dip"
-        android:textAppearance="?android:attr/textAppearanceMedium"/>
+        android:orientation="vertical">
+
+    <com.github.jobs.widget.JellyBeanSpanFixTextView
+            android:id="@+id/lbl_how_to_apply"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="5dip"
+            android:textAppearance="?android:attr/textAppearanceMedium"/>
+
+    <Button
+            android:id="@+id/btn_apply"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/btn_apply_with_template"
+            android:visibility="gone"/>
+
+</LinearLayout>

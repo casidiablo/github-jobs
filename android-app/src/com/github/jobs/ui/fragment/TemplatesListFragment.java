@@ -16,6 +16,7 @@ import com.github.jobs.adapter.TemplatesAdapter;
 import com.github.jobs.bean.Template;
 import com.github.jobs.loader.TemplatesLoader;
 import com.github.jobs.ui.activity.EditTemplateActivity;
+import com.github.jobs.ui.activity.TemplatesActivity;
 
 import java.util.List;
 
@@ -43,9 +44,18 @@ public class TemplatesListFragment extends SherlockListFragment implements Loade
 
     @Override
     public void onListItemClick(ListView l, View v, int position, long id) {
-        Intent templateDetails = new Intent(getActivity(), EditTemplateActivity.class);
-        templateDetails.putExtra(EditTemplateActivity.EXTRA_TEMPLATE_ID, id);
-        startActivityForResult(templateDetails, EditTemplateActivity.REQUEST_CODE);
+        FragmentActivity activity = getActivity();
+        if (!(activity instanceof TemplatesActivity)) {
+            return;
+        }
+        if (isPickMode()) {
+            TemplatesActivity templatesActivity = (TemplatesActivity) activity;
+            templatesActivity.setTemplateResultAndFinish(id);
+        } else {
+            Intent templateDetails = new Intent(activity, EditTemplateActivity.class);
+            templateDetails.putExtra(EditTemplateActivity.EXTRA_TEMPLATE_ID, id);
+            startActivityForResult(templateDetails, EditTemplateActivity.REQUEST_CODE);
+        }
     }
 
     @Override
@@ -115,5 +125,9 @@ public class TemplatesListFragment extends SherlockListFragment implements Loade
             // happens when activity is closed. We can't use isResumed since it will be false when the activity is
             // not being shown, thus it will cause problems if user loads another screen while this is still loading
         }
+    }
+
+    private boolean isPickMode() {
+        return getActivity().getIntent().getBooleanExtra(TemplatesActivity.EXTRA_PICK, false);
     }
 }
