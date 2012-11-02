@@ -132,8 +132,10 @@ Best regards, Foo Bar.
     <string name="your_github_username">your Github username</string>
     <string name="get_github_user_info">Add Github link</string>
     <string name="your_skype_username">your Skype username</string>
+    <string name="your_custom_username">your custom service data</string>
     <string name="your_username">your username</string>
     <string name="get_skype_user_info">Add Skype info</string>
+    <string name="add_custom_info">Add to template</string>
     <string name="fetch_service_info">Fetch service information</string>
     <string name="get_user_info">Add info to template</string>
     <string name="this_shall_not_be_empty">this shall not be empty</string>
@@ -154,4 +156,6 @@ Best regards, Foo Bar.
     <string name="you_must_have_network_connection">You must have a network connection</string>
     <string name="error_fetching_search_result">Error fetching search result</string>
     <string name="error_fetching_search_result_network">Error fetching search result. Check your network connection.</string>
+    <string name="custom_service">Custom service</string>
+    <string name="hint_service_name">service name</string>
 </resources>

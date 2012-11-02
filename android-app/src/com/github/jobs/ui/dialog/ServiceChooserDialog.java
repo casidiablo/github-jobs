@@ -29,6 +29,7 @@ import static com.github.jobs.templates.fetcher.AboutMeFetcher.AboutMeServicesCa
 public class ServiceChooserDialog extends TrackDialog implements AdapterView.OnItemClickListener, View.OnClickListener,
         DetachableResultReceiver.Receiver {
     public static final String RESULT_SERVICE_ID = "com.github.jobs.result.service_id";
+    public static final String RESULT_SERVICE_TYPE = "com.github.jobs.result.service_type";
     public static final String RESULT_SERVICE_DATA = "com.github.jobs.result.service_data";
     public static final String RESULT_SERVICES = "com.github.jobs.result.services";
 
@@ -42,6 +43,7 @@ public class ServiceChooserDialog extends TrackDialog implements AdapterView.OnI
     private ViewFlipper mServicesFlipper;
     private ImageView mServiceImage;
     private EditText mServiceData;
+    private EditText mServiceType;
     private Button mFetchServiceInfo;
     private FrameLayout mConfirmationContainer;
 
@@ -60,6 +62,7 @@ public class ServiceChooserDialog extends TrackDialog implements AdapterView.OnI
         mServicesFlipper = (ViewFlipper) findViewById(R.id.flipper_choose_service);
         mServiceImage = (ImageView) findViewById(R.id.img_current_service);
         mServiceData = (EditText) findViewById(R.id.edit_service_data);
+        mServiceType = (EditText) findViewById(R.id.edit_service_type);
         mFetchServiceInfo = (Button) findViewById(R.id.btn_fetch_service_info);
         mConfirmationContainer = (FrameLayout) findViewById(R.id.service_confirmation_container);
         GridView grid = (GridView) findViewById(R.id.grid_services);
@@ -174,6 +177,7 @@ public class ServiceChooserDialog extends TrackDialog implements AdapterView.OnI
      */
     private void showServiceDataRetrieval() {
         mFetchServiceInfo.setText(getAddServiceButtonLabel(mState.lastService));
+        mServiceType.setVisibility(mState.lastService == R.id.service_custom ? View.VISIBLE : View.GONE);
         mServiceData.setHint(getHint(mState.lastService));
         mServiceImage.setImageResource(getServiceDrawable(mState.lastService));
         mServicesFlipper.setDisplayedChild(SERVICE_DATA_RETRIEVAL);
@@ -186,9 +190,15 @@ public class ServiceChooserDialog extends TrackDialog implements AdapterView.OnI
      */
     private void fetchServicePayload(String data) {
         switch (mState.lastService) {
+            case R.id.service_custom:
+                mState.serviceType = mServiceType.getText().toString().trim();
+                mState.servicePayload = data;
+                setResultAndFinish();
+                return;
             case R.id.service_github:
             case R.id.service_skype:
             case R.id.service_linked_in:
+                mState.serviceType = null;
                 mState.servicePayload = data;
                 setResultAndFinish();
                 return;
@@ -238,6 +248,11 @@ public class ServiceChooserDialog extends TrackDialog implements AdapterView.OnI
      * @return true if data is correct
      */
     private boolean isServiceDataValid() {
+        if (mState.lastService == R.id.service_custom && TextUtils.isEmpty(mServiceType.getText().toString().trim())) {
+            mServiceType.setError(getString(R.string.this_shall_not_be_empty));
+            mServiceType.requestFocus();
+            return false;
+        }
         if (TextUtils.isEmpty(mServiceData.getText().toString().trim())) {
             mServiceData.setError(getString(R.string.this_shall_not_be_empty));
             mServiceData.requestFocus();
@@ -261,6 +276,7 @@ public class ServiceChooserDialog extends TrackDialog implements AdapterView.OnI
         // it will contain the service payload information that is used
         // later in the confirmation screen.
         Object servicePayload;
+        String serviceType;
 
         private State() {
             receiver = new DetachableResultReceiver(new Handler());
@@ -274,6 +290,7 @@ public class ServiceChooserDialog extends TrackDialog implements AdapterView.OnI
     private void setResultAndFinish() {
         Intent data = new Intent();
         data.putExtra(ServiceChooserDialog.RESULT_SERVICE_ID, mState.lastService);
+        data.putExtra(ServiceChooserDialog.RESULT_SERVICE_TYPE, String.valueOf(mState.serviceType));
         data.putExtra(ServiceChooserDialog.RESULT_SERVICE_DATA, String.valueOf(mState.servicePayload));
         setResult(RESULT_OK, data);
         finish();

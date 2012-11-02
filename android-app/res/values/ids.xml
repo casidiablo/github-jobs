@@ -5,4 +5,5 @@
     <item type="id" name="service_linked_in"/>
     <item type="id" name="service_skype"/>
     <item type="id" name="service_about_me"/>
+    <item type="id" name="service_custom"/>
 </resources>

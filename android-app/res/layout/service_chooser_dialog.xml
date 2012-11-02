@@ -43,6 +43,16 @@
                     android:layout_height="wrap_content"/>
 
             <EditText
+                    android:id="@+id/edit_service_type"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="#ffffff"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:inputType="text|textCapWords"
+                    android:hint="@string/hint_service_name"
+                    android:visibility="gone"/>
+
+            <EditText
                     android:id="@+id/edit_service_data"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"

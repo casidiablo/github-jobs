@@ -26,6 +26,7 @@ public class TemplatesHelper {
         SERVICES.add(new StackOverflowService());
         SERVICES.add(new LinkedInService());
         SERVICES.add(new SkypeService());
+        SERVICES.add(new CustomService());
     }
 
     private static List<Service> sServices;
@@ -96,7 +97,11 @@ public class TemplatesHelper {
 
     public static TemplateService getTemplateFromResult(int serviceId, Intent result) {
         TemplateService templateService = new TemplateService();
-        templateService.setType(findService(serviceId).getType());
+        if (serviceId == R.id.service_custom) {
+            templateService.setType(result.getStringExtra(ServiceChooserDialog.RESULT_SERVICE_TYPE));
+        } else {
+            templateService.setType(findService(serviceId).getType());
+        }
         templateService.setData(result.getStringExtra(ServiceChooserDialog.RESULT_SERVICE_DATA));
         return templateService;
     }
