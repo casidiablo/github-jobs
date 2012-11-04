@@ -24,7 +24,7 @@ import static com.github.jobs.utils.AnalyticsHelper.*;
  */
 public class AppUtils {
 
-    public static final boolean IN_DEVELOPMENT = true;
+    public static final boolean IN_DEVELOPMENT = false;
 
     public static void goHome(Activity activity) {
         Intent intent = new Intent(activity, HomeActivity.class);
