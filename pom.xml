@@ -25,7 +25,7 @@
 
     <groupId>com.codeslap</groupId>
     <artifactId>github-jobs</artifactId>
-    <version>1.1</version>
+    <version>1.2-SNAPSHOT</version>
     <packaging>pom</packaging>
     <name>GitHub Jobs Project</name>
     <description>GitHub Jobs Project</description>
