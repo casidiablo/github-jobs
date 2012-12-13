@@ -19,12 +19,12 @@
 	<parent>
 	        <groupId>com.codeslap</groupId>
 	        <artifactId>github-jobs</artifactId>
-	        <version>1.2-SNAPSHOT</version>
+	        <version>1.2</version>
     </parent>
 
     <groupId>com.codeslap</groupId>
     <artifactId>github-jobs-java-api</artifactId>
-    <version>1.2-SNAPSHOT</version>
+    <version>1.2</version>
     <packaging>jar</packaging>
     <name>GitHub Jobs Java Api</name>
     <description>Minimalist GitHub Jobs Api Wrapper for Java</description>
