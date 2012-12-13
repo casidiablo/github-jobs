@@ -158,4 +158,5 @@ Best regards, Foo Bar.
     <string name="error_fetching_search_result_network">Error fetching search result. Check your network connection.</string>
     <string name="custom_service">Custom service</string>
     <string name="hint_service_name">service name</string>
+    <string name="error_getting_job_info">Error getting job information</string>
 </resources>
