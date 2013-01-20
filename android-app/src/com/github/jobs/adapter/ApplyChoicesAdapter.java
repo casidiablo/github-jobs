@@ -36,11 +36,6 @@ public class ApplyChoicesAdapter extends ListBaseAdapter<HowToApplyDialog.ApplyO
     }
 
     @Override
-    public long getItemId(int position) {
-        return getItem(position).hashCode();
-    }
-
-    @Override
     public void populateHolder(int position, View view, ViewGroup parent, HowToApplyDialog.ApplyOption item, ViewHolder holder) {
         if (item.type == HowToApplyDialog.TYPE_EMAIL) {
             holder.label.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_email, 0, 0, 0);

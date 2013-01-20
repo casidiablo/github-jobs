@@ -39,11 +39,6 @@ public class AboutMeServiceAdapter extends ListBaseAdapter<AboutMeService, About
     }
 
     @Override
-    public long getItemId(int position) {
-        return getItem(position).hashCode();
-    }
-
-    @Override
     public void populateHolder(int position, View view, ViewGroup parent, AboutMeService item, ViewHolder holder) {
         holder.label.setCheckMarkDrawable(R.drawable.btn_check_holo_light);
         if (FACEBOOK.equals(item.getPlatform())) {

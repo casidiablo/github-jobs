@@ -48,11 +48,6 @@ public class JobsAdapter extends ListBaseAdapter<Job, JobsAdapter.ViewHolder> {
     }
 
     @Override
-    public long getItemId(int position) {
-        return getItem(position).getId().hashCode();
-    }
-
-    @Override
     public void populateHolder(int position, View view, ViewGroup parent, Job job, ViewHolder holder) {
         holder.title.setText(StringUtils.trim(job.getTitle()));
         holder.location.setText(StringUtils.trim(job.getLocation()));

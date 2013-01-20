@@ -46,11 +46,6 @@ public class SOUsersAdapter extends ListBaseAdapter<SOUser, SOUsersAdapter.SOUse
     }
 
     @Override
-    public long getItemId(int position) {
-        return getItem(position).getId();
-    }
-
-    @Override
     public void populateHolder(int position, View view, ViewGroup parent, SOUser item, SOUserViewHolder holder) {
         BitmapHelper bitmapHelper = BitmapHelper.getInstance();
         String avatarUrl = item.getProfileImage();
