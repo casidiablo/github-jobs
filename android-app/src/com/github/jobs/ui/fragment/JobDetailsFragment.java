@@ -93,8 +93,11 @@ public class JobDetailsFragment extends SherlockFragment implements View.OnClick
         title.setText(StringUtils.trim(mJob.getTitle()));
 
         TextView description = (TextView) getView().findViewById(R.id.description);
-        description.setText(Html.fromHtml(mJob.getDescription()));
-        description.setMovementMethod(LinkMovementMethod.getInstance());
+        String jobDescription = mJob.getDescription();
+        if (jobDescription != null) {
+            description.setText(Html.fromHtml(jobDescription));
+            description.setMovementMethod(LinkMovementMethod.getInstance());
+        }
 
         TextView company = (TextView) getView().findViewById(R.id.company);
         company.setText(mJob.getCompany());
