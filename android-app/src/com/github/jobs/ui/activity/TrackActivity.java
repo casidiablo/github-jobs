@@ -17,7 +17,6 @@
 package com.github.jobs.ui.activity;
 
 import com.actionbarsherlock.view.MenuItem;
-import com.codeslap.groundy.activity.BaseActivity;
 import com.github.jobs.utils.AnalyticsHelper;
 import com.github.jobs.utils.AppUtils;
 
@@ -31,14 +30,6 @@ public class TrackActivity extends BaseActivity {
     protected void onStart() {
         super.onStart();
         AnalyticsHelper.getTracker(this).onActivityStarted(this);
-    }
-
-    @Override
-    public Object onRetainCustomNonConfigurationInstance() {
-        // This is deprecated on Honeycomb+ but Analytics implementation requires it
-        Object obj = super.onRetainCustomNonConfigurationInstance();
-        AnalyticsHelper.getTracker(this).onActivityRetainNonConfigurationInstance();
-        return obj;
     }
 
     @Override

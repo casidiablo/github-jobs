@@ -18,7 +18,7 @@ package com.github.jobs.loader;
 
 import android.content.Context;
 import android.util.Log;
-import com.codeslap.groundy.ListLoader;
+import com.codeslap.groundy.loader.SupportListLoader;
 import com.codeslap.persistence.Persistence;
 import com.codeslap.persistence.SqlAdapter;
 import com.github.bean.Job;
@@ -27,12 +27,15 @@ import com.github.jobs.bean.SearchPack;
 import com.github.jobs.bean.SearchesAndJobs;
 import org.joda.time.DateTime;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 
 /**
  * @author cristian
  */
-public class JobListLoader extends ListLoader<Job> {
+public class JobListLoader extends SupportListLoader<Job> {
 
     private final SearchPack mCurrentSearch;
 

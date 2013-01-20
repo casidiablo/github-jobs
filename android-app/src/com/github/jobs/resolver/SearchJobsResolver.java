@@ -17,28 +17,27 @@
 package com.github.jobs.resolver;
 
 import android.os.Bundle;
-import com.github.jobs.api.GithubJobsApi;
-import com.github.bean.Job;
-import com.github.bean.Search;
-import com.codeslap.groundy.CallResolver;
 import com.codeslap.groundy.Groundy;
+import com.codeslap.groundy.GroundyTask;
 import com.codeslap.persistence.Persistence;
 import com.codeslap.persistence.SqlAdapter;
+import com.github.bean.Job;
+import com.github.bean.Search;
+import com.github.jobs.api.GithubJobsApi;
 import com.github.jobs.bean.SearchPack;
 import com.github.jobs.bean.SearchesAndJobs;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class SearchJobsResolver extends CallResolver {
+public class SearchJobsResolver extends GroundyTask {
 
-    private ArrayList<Job> mJobs;
     public static final String EXTRA_SEARCH_PACK = "com.github.jobs.extra_search_pack";
     public static final String DATA_JOBS = "com.github.jobs.data.jobs";
     public static final String DATA_SEARCH_PACK = "com.github.jobs.data.search_pack";
 
     @Override
-    protected void updateData() {
+    protected void doInBackground() {
         // get parameters
         Bundle params = getParameters();
         SearchPack searchPack = (SearchPack) params.getParcelable(EXTRA_SEARCH_PACK);
@@ -59,10 +58,10 @@ public class SearchJobsResolver extends CallResolver {
             return;
         }
 
-        mJobs = new ArrayList<Job>(jobsList);
+        ArrayList<Job> jobs = new ArrayList<Job>(jobsList);
         SqlAdapter sqlAdapter = Persistence.getAdapter(getContext());
         // delete old content
-        if (searchPack.getPage() == 0 && mJobs.size() > 0) {
+        if (searchPack.getPage() == 0 && jobs.size() > 0) {
             if (searchPack.isDefault()) {
                 sqlAdapter.delete(Job.class, null, null);
             } else {
@@ -74,7 +73,7 @@ public class SearchJobsResolver extends CallResolver {
         // if the search is not the default one, references to cache table too
         if (!searchPack.isDefault()) {
             List<SearchesAndJobs> searchCaches = new ArrayList<SearchesAndJobs>();
-            for (Job job : mJobs) {
+            for (Job job : jobs) {
                 SearchesAndJobs searchesAndJobs = new SearchesAndJobs();
                 searchesAndJobs.setSearchHashCode(searchPack.hashCode());
                 searchesAndJobs.setJobId(job.getId());
@@ -83,19 +82,12 @@ public class SearchJobsResolver extends CallResolver {
             sqlAdapter.storeCollection(searchCaches, null);
         }
         // persist all data to be able to use it later
-        sqlAdapter.storeCollection(mJobs, null);
-    }
+        sqlAdapter.storeCollection(jobs, null);
 
-    @Override
-    protected void prepareResult() {
-        SearchPack searchPack = (SearchPack) getParameters().getParcelable(EXTRA_SEARCH_PACK);
+        // prepare result
         Bundle resultData = getResultData();
         resultData.putParcelable(DATA_SEARCH_PACK, searchPack);
-        if (mJobs == null) {
-            return;
-        }
-
-        resultData.putParcelableArrayList(DATA_JOBS, mJobs);
+        resultData.putParcelableArrayList(DATA_JOBS, jobs);
         setResultCode(Groundy.STATUS_FINISHED);
     }
 

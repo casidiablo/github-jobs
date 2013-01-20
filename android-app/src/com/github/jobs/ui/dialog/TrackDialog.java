@@ -32,14 +32,6 @@ public class TrackDialog extends SherlockActivity {
     }
 
     @Override
-    public Object onRetainNonConfigurationInstance() {
-        // This is deprecated on Honeycomb+ but Analytics implementation requires it
-        Object obj = super.onRetainNonConfigurationInstance();
-        AnalyticsHelper.getTracker(this).onActivityRetainNonConfigurationInstance();
-        return obj;
-    }
-
-    @Override
     protected void onStop() {
         super.onStop();
         AnalyticsHelper.getTracker(this).onActivityStopped(this);
