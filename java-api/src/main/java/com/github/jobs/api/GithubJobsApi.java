@@ -18,7 +18,7 @@ package com.github.jobs.api;
 
 import com.github.bean.Job;
 import com.github.bean.Search;
-import com.github.util.HttpHandler;
+import com.github.kevinsawicki.http.HttpRequest;
 import com.google.gson.Gson;
 import org.apache.commons.httpclient.HttpMethod;
 import org.apache.commons.httpclient.NameValuePair;
@@ -62,7 +62,7 @@ public class GithubJobsApi {
         }
         try {
             String url = createUrl(ApiConstants.POSITIONS_URL, pairs);
-            String response = HttpHandler.getInstance().getRequest(url);
+            String response = HttpRequest.get(url).acceptGzipEncoding().acceptJson().body();
             if (response == null) {
                 throw new RuntimeException("Error calling API; it returned null.");
             }
@@ -92,7 +92,7 @@ public class GithubJobsApi {
         }
         try {
             String url = createUrl(baseUrl, pairs);
-            String response = HttpHandler.getInstance().getRequest(url);
+            String response = HttpRequest.get(url).body();
 
             // convert json to object
             Gson gson = new Gson();
@@ -109,7 +109,12 @@ public class GithubJobsApi {
         parameters.put(SUBSCRIPTION_DESCRIPTION_PARAM, description);
         parameters.put(SUBSCRIPTION_LOCATION_PARAM, location);
         parameters.put(SUBSCRIPTION_FULL_TIME_PARAM, String.valueOf(fullTime));
-        String response = HttpHandler.getInstance().postRequest(ApiConstants.EMAIL_SUBSCRIPTION_URL, parameters);
+        String response = HttpRequest.post(ApiConstants.EMAIL_SUBSCRIPTION_URL)
+                .part(SUBSCRIPTION_EMAIL_PARAM, email)
+                .part(SUBSCRIPTION_DESCRIPTION_PARAM, description)
+                .part(SUBSCRIPTION_LOCATION_PARAM, location)
+                .part(SUBSCRIPTION_FULL_TIME_PARAM, String.valueOf(fullTime))
+                .body();
         return SUBSCRIPTION_OK_PARAM.equals(response);
     }
 

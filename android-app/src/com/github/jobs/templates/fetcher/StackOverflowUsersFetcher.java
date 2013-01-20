@@ -17,7 +17,7 @@
 package com.github.jobs.templates.fetcher;
 
 import com.github.jobs.bean.SOUser;
-import com.github.util.HttpHandler;
+import com.github.kevinsawicki.http.HttpRequest;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import org.json.JSONArray;
@@ -35,7 +35,7 @@ public class StackOverflowUsersFetcher {
     public List<SOUser> findUser(String username) {
         String url = String.format(URL, username);
         try {
-            String response = HttpHandler.getInstance().getRequest(url);
+            String response = HttpRequest.get(url).body();
             // convert json to object
             Gson gson = new Gson();
             TypeToken<List<SOUser>> typeToken = new TypeToken<List<SOUser>>() {
