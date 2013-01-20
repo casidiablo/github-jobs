@@ -33,6 +33,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 import com.actionbarsherlock.app.SherlockFragment;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
@@ -82,6 +83,10 @@ public class JobDetailsFragment extends SherlockFragment implements View.OnClick
         mJob = new Job();
         mJob.setId(jobId);
         mJob = Persistence.getAdapter(getActivity()).findFirst(mJob);
+        if (mJob == null) {
+            mJob = new Job();
+            Toast.makeText(getActivity(), R.string.error_getting_job_info, Toast.LENGTH_LONG).show();
+        }
         setHasOptionsMenu(true);
 
         TextView title = (TextView) getView().findViewById(R.id.title);

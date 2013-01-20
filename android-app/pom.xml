@@ -4,12 +4,12 @@
     <parent>
         <groupId>com.codeslap</groupId>
         <artifactId>github-jobs</artifactId>
-        <version>1.1-SNAPSHOT</version>
+        <version>1.3-SNAPSHOT</version>
     </parent>
 
     <groupId>com.codeslap</groupId>
     <artifactId>github-jobs-android-app</artifactId>
-    <version>1.1-SNAPSHOT</version>
+    <version>1.3-SNAPSHOT</version>
     <packaging>apk</packaging>
     <name>GitHub Jobs Android App</name>
 
@@ -34,7 +34,7 @@
         <dependency>
             <groupId>com.codeslap</groupId>
             <artifactId>github-jobs-java-api</artifactId>
-            <version>1.1-SNAPSHOT</version>
+            <version>1.3-SNAPSHOT</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
@@ -52,7 +52,7 @@
         <dependency>
             <groupId>com.codeslap</groupId>
             <artifactId>persistence</artifactId>
-            <version>0.9.20</version>
+            <version>0.9.21</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
@@ -275,11 +275,21 @@
                                 <inputApk>${project.build.directory}/${project.artifactId}.apk</inputApk>
                                 <outputApk>${project.build.directory}/${project.artifactId}-release.apk</outputApk>
                             </zipalign>
+                            <manifest>
+                                <versionCodeAutoIncrement>true</versionCodeAutoIncrement>
+                            </manifest>
                             <proguard>
                                 <skip>true</skip>
                             </proguard>
                         </configuration>
                         <executions>
+                            <execution>
+                                <id>manifestUpdate</id>
+                                <phase>process-resources</phase>
+                                <goals>
+                                    <goal>manifest-update</goal>
+                                </goals>
+                            </execution>
                             <execution>
                                 <id>alignApk</id>
                                 <phase>package</phase>
