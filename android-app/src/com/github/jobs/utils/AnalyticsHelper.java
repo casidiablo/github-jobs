@@ -18,7 +18,7 @@ package com.github.jobs.utils;
 
 import android.app.Activity;
 import android.content.Context;
-import com.google.android.apps.analytics.easytracking.EasyTracker;
+import com.google.analytics.tracking.android.EasyTracker;
 
 /**
  * @author Evelio Tarazona Cáceres <evelio@evelio.info>
@@ -79,7 +79,7 @@ public final class AnalyticsHelper {
         if (context != null && mContext == null) {
             mContext = context.getApplicationContext();
             try {
-                EasyTracker.getTracker().setContext(context);
+                EasyTracker.getInstance().setContext(context);
             } catch (Exception ignored) {
             }
         }
@@ -95,7 +95,7 @@ public final class AnalyticsHelper {
         // based on the setting of ga_auto_activity_tracking parameter.  It will
         // also ensure that startNewSession is called appropriately.
         try {
-            EasyTracker.getTracker().trackActivityStart(activity);
+            EasyTracker.getInstance().activityStart(activity);
         } catch (Exception ignored) {
         }
     }
@@ -109,23 +109,7 @@ public final class AnalyticsHelper {
         // This call is needed to ensure time spent in an Activity and an
         // Application are measured accurately.
         try {
-            EasyTracker.getTracker().trackActivityStop(activity);
-        } catch (Exception ignored) {
-        }
-    }
-
-    /**
-     * Must be called by the activity previously used in any onActivity* method
-     * in its onRetainNonConfigurationInstance method
-     *
-     */
-    public void onActivityRetainNonConfigurationInstance() {
-
-        // This call is needed to ensure that configuration changes (like
-        // orientation) don't result in new sessions.  Remove this line if you want
-        // configuration changes to for a new session in Google Analytics.
-        try {
-            EasyTracker.getTracker().trackActivityRetainNonConfigurationInstance();
+            EasyTracker.getInstance().activityStop(activity);
         } catch (Exception ignored) {
         }
     }
@@ -139,7 +123,7 @@ public final class AnalyticsHelper {
      */
     public void trackEvent(String category, String action, String label) {
         try {
-            EasyTracker.getTracker().trackEvent(category, action, label, 0);
+            EasyTracker.getTracker().trackEvent(category, action, label, 0L);
         } catch (Exception ignored) {
         }
     }
@@ -152,7 +136,7 @@ public final class AnalyticsHelper {
      */
     public void trackPageView(String name) {
         try {
-            EasyTracker.getTracker().trackPageView(name);
+            EasyTracker.getTracker().trackView(name);
         } catch (Throwable ignored) {
         }
     }

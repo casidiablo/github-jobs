@@ -17,8 +17,8 @@
 package com.github.jobs.resolver;
 
 import android.os.Bundle;
-import com.codeslap.groundy.CallResolver;
 import com.codeslap.groundy.Groundy;
+import com.codeslap.groundy.GroundyTask;
 import com.github.jobs.bean.SOUser;
 import com.github.jobs.templates.fetcher.StackOverflowUsersFetcher;
 
@@ -29,31 +29,26 @@ import java.util.List;
  * @author cristian
  * @version 1.0
  */
-public class StackOverflowUserResolver extends CallResolver {
+public class StackOverflowUserResolver extends GroundyTask {
     public static final String EXTRA_SEARCH = "com.github.jobs.extra.search";
     public static final String RESULT_USERS = "com.github.jobs.result.users";
 
-    private List<SOUser> mUsers;
-
     @Override
-    protected void updateData() {
+    protected void doInBackground() {
         Bundle parameters = getParameters();
         String search = parameters.getString(EXTRA_SEARCH);
 
         StackOverflowUsersFetcher stackOverflowUsersFetcher = new StackOverflowUsersFetcher();
-        mUsers = stackOverflowUsersFetcher.findUser(search);
-    }
+        List<SOUser> users = stackOverflowUsersFetcher.findUser(search);
 
-    @Override
-    protected void prepareResult() {
-        if (mUsers == null) {
+        if (users == null) {
             setResultCode(Groundy.STATUS_ERROR);
             return;
         }
 
         // pack the result in an parcelable array list
         Bundle resultData = getResultData();
-        ArrayList<SOUser> SOUsers = new ArrayList<SOUser>(mUsers);
+        ArrayList<SOUser> SOUsers = new ArrayList<SOUser>(users);
         resultData.putParcelableArrayList(RESULT_USERS, SOUsers);
 
         // everything went fine :)

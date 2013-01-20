@@ -17,35 +17,28 @@
 package com.github.jobs.resolver;
 
 import android.os.Bundle;
-import com.github.jobs.api.GithubJobsApi;
-import com.codeslap.groundy.CallResolver;
 import com.codeslap.groundy.Groundy;
+import com.codeslap.groundy.GroundyTask;
+import com.github.jobs.api.GithubJobsApi;
 import com.github.jobs.bean.SearchPack;
 
 /**
  * @author cristian
  */
-public class EmailSubscriberResolver extends CallResolver {
+public class EmailSubscriberResolver extends GroundyTask {
 
     public static final String EXTRA_EMAIL = "com.github.jobs.extra.email";
     public static final String EXTRA_SEARCH = "com.github.jobs.extra.search";
 
-    private boolean mResult;
-
     @Override
-    protected void updateData() {
+    protected void doInBackground() {
         Bundle parameters = getParameters();
         SearchPack searchPack = (SearchPack) parameters.getParcelable(EXTRA_SEARCH);
         String email = parameters.getString(EXTRA_EMAIL);
         String description = searchPack.getSearch();
         String location = searchPack.getLocation();
         boolean fullTime = searchPack.isFullTime();
-        mResult = GithubJobsApi.subscribe(email, description, location, fullTime);
-    }
-
-    @Override
-    protected void prepareResult() {
-        if (mResult) {
+        if (GithubJobsApi.subscribe(email, description, location, fullTime)) {
             setResultCode(Groundy.STATUS_FINISHED);
         }
     }

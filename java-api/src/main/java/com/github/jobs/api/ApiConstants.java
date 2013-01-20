@@ -20,9 +20,9 @@ package com.github.jobs.api;
  * @author cristian
  */
 public class ApiConstants {
-    static final String POSITIONS_URL = "http://jobs.github.com/positions.json";
+    static final String POSITIONS_URL = "https://jobs.github.com/positions.json";
     static final String EMAIL_SUBSCRIPTION_URL = "https://jobs.github.com/subscribe";
-    static final String JOB_URL = "http://jobs.github.com/positions/%s.json";
+    static final String JOB_URL = "https://jobs.github.com/positions/%s.json";
     static final String SEARCH = "search";
     static final String LOCATION ="location";
     static final String LATITUDE = "lat";

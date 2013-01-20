@@ -18,7 +18,7 @@ package com.github.jobs.loader;
 
 import android.content.Context;
 import android.util.Log;
-import com.codeslap.groundy.ListLoader;
+import com.codeslap.groundy.loader.SupportListLoader;
 import com.codeslap.persistence.Persistence;
 import com.codeslap.persistence.PreferencesAdapter;
 import com.codeslap.persistence.SqlAdapter;
@@ -34,7 +34,7 @@ import java.util.List;
 /**
  * @author cristian
  */
-public class TemplatesLoader extends ListLoader<Template> {
+public class TemplatesLoader extends SupportListLoader<Template> {
 
     public TemplatesLoader(Context context) {
         super(context);

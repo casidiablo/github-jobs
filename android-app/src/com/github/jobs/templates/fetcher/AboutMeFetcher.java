@@ -26,7 +26,7 @@ import com.github.jobs.R;
 import com.github.jobs.adapter.AboutMeServiceAdapter;
 import com.github.jobs.bean.AboutMeService;
 import com.github.jobs.bean.AboutMeUser;
-import com.github.util.HttpHandler;
+import com.github.kevinsawicki.http.HttpRequest;
 import com.google.gson.Gson;
 
 import java.util.ArrayList;
@@ -42,7 +42,7 @@ public class AboutMeFetcher {
 
     public AboutMeUser getAboutMeUser(String user) {
         String url = String.format(USER_LINK, user);
-        String response = HttpHandler.getInstance().getRequest(url);
+        String response = HttpRequest.get(url).body();
         Gson gson = new Gson();
         AboutMeUser aboutMeUser = gson.fromJson(response, AboutMeUser.class);
         if (aboutMeUser == null) {
