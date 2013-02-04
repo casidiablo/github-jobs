@@ -69,7 +69,11 @@ public class HowToApplyDialog extends TrackDialog implements View.OnClickListene
         getTracker(this).trackPageView(NAME_HOW_TO_APPLY);
         setContentView(R.layout.how_to_apply_dialog);
 
-        Spanned html = Html.fromHtml(getIntent().getStringExtra(EXTRA_HOW_TO_APPLY));
+        Intent intent = getIntent();
+        if (intent == null) {
+            return;
+        }
+        Spanned html = Html.fromHtml(intent.getStringExtra(EXTRA_HOW_TO_APPLY));
         SpannableString application = new SpannableString(html);
         Linkify.addLinks(application, Linkify.ALL);
 
