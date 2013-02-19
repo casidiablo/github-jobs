@@ -41,8 +41,8 @@ import com.github.jobs.R;
 import com.github.jobs.adapter.JobsAdapter;
 import com.github.jobs.bean.SearchPack;
 import com.github.jobs.loader.JobListLoader;
-import com.github.jobs.resolver.EmailSubscriberResolver;
-import com.github.jobs.resolver.SearchJobsResolver;
+import com.github.jobs.resolver.EmailSubscriberTask;
+import com.github.jobs.resolver.SearchJobsTask;
 import com.github.jobs.ui.activity.HomeActivity;
 import com.github.jobs.ui.activity.JobDetailsActivity;
 import com.github.jobs.ui.dialog.HowToApplyDialog;
@@ -178,7 +178,7 @@ public class JobListFragment extends SherlockFragment implements LoaderManager.L
         switch (item.getItemId()) {
             case R.id.menu_subscribe:
                 Intent subscribeIntent = new Intent(activity, SubscribeDialog.class);
-                subscribeIntent.putExtra(EmailSubscriberResolver.EXTRA_SEARCH, mCurrentSearch);
+                subscribeIntent.putExtra(EmailSubscriberTask.EXTRA_SEARCH, mCurrentSearch);
                 startActivity(subscribeIntent);
                 getTracker(activity).trackEvent(CATEGORY_SUBSCRIBE, ACTION_OPEN, LABEL_DIALOG);
                 break;
@@ -310,7 +310,7 @@ public class JobListFragment extends SherlockFragment implements LoaderManager.L
 
     private void triggerJobSearch() {
         Bundle extras = new Bundle();
-        extras.putParcelable(SearchJobsResolver.EXTRA_SEARCH_PACK, mCurrentSearch);
+        extras.putParcelable(SearchJobsTask.EXTRA_SEARCH_PACK, mCurrentSearch);
 
         mLoading = true;
         HomeActivity activity = (HomeActivity) getActivity();
@@ -318,12 +318,15 @@ public class JobListFragment extends SherlockFragment implements LoaderManager.L
             return;
         }
         SearchReceiverFragment receiver = activity.getSearchReceiver();
-        Groundy.execute(getActivity(), SearchJobsResolver.class, receiver.getReceiver(), extras);
+        Groundy.create(getActivity(), SearchJobsTask.class)
+                .receiver(receiver.getReceiver())
+                .params(extras)
+                .execute();
         ((SherlockFragmentActivity) getActivity()).setSupportProgressBarIndeterminateVisibility(true);
     }
 
     public void onFinished(Bundle resultData) {
-        ArrayList<Parcelable> parcelableArrayList = resultData.getParcelableArrayList(SearchJobsResolver.DATA_JOBS);
+        ArrayList<Parcelable> parcelableArrayList = resultData.getParcelableArrayList(SearchJobsTask.DATA_JOBS);
         if (parcelableArrayList == null) {
             return;
         }

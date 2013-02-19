@@ -159,4 +159,5 @@ Best regards, Foo Bar.
     <string name="custom_service">Custom service</string>
     <string name="hint_service_name">service name</string>
     <string name="error_getting_job_info">Error getting job information</string>
+    <string name="could_not_find_apply_info">Could not find application info</string>
 </resources>

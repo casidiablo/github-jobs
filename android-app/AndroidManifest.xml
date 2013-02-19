@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
           package="com.github.jobs"
-          android:versionCode="2"
-          android:versionName="1.0">
+          android:versionCode="7"
+          android:versionName="1.4">
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.WAKE_LOCK"/>
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
@@ -35,6 +35,8 @@
         <activity android:name=".ui.dialog.SOUserDialog" android:theme="@style/Theme.GithubJobs.Dialog"
                   android:label="@string/about_this_app"/>
         <activity android:name="com.crittercism.NotificationActivity"/>
-        <service android:name="com.codeslap.groundy.GroundyService"/>
+        <service android:name="com.codeslap.groundy.GroundyService">
+            <meta-data android:name="groundy:mode" android:value="async"/>
+        </service>
     </application>
 </manifest>

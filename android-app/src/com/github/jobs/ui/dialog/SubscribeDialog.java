@@ -28,7 +28,7 @@ import android.widget.ViewSwitcher;
 import com.codeslap.groundy.Groundy;
 import com.codeslap.groundy.ReceiverFragment;
 import com.github.jobs.R;
-import com.github.jobs.resolver.EmailSubscriberResolver;
+import com.github.jobs.resolver.EmailSubscriberTask;
 import com.github.jobs.ui.fragment.EmailSubscriberReceiver;
 
 import java.util.regex.Matcher;
@@ -81,8 +81,11 @@ public class SubscribeDialog extends TrackFragmentDialog implements View.OnClick
                 if (getIntent().getExtras() != null) {
                     extras.putAll(getIntent().getExtras());
                 }
-                extras.putString(EmailSubscriberResolver.EXTRA_EMAIL, emailAddress);
-                Groundy.queue(this, EmailSubscriberResolver.class, mEmailSubscriberReceiver.getReceiver(), extras);
+                extras.putString(EmailSubscriberTask.EXTRA_EMAIL, emailAddress);
+                Groundy.create(this, EmailSubscriberTask.class)
+                        .receiver(mEmailSubscriberReceiver.getReceiver())
+                        .params(extras)
+                        .queue();
                 break;
         }
     }

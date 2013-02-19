@@ -28,7 +28,7 @@ import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.codeslap.groundy.ReceiverFragment;
 import com.github.jobs.R;
 import com.github.jobs.bean.SOUser;
-import com.github.jobs.resolver.StackOverflowUserResolver;
+import com.github.jobs.resolver.StackOverflowUserTask;
 import com.github.jobs.utils.AppUtils;
 
 import java.util.ArrayList;
@@ -56,7 +56,7 @@ public class SOUserFetcherReceiver extends ReceiverFragment {
         Fragment fragment = fragmentManager.findFragmentById(R.id.base_container);
         if (fragment instanceof SOUserPickerFragment) {
             SOUserPickerFragment soUserPickerFragment = (SOUserPickerFragment) fragment;
-            ArrayList<SOUser> users = resultData.getParcelableArrayList(StackOverflowUserResolver.RESULT_USERS);
+            ArrayList<SOUser> users = resultData.getParcelableArrayList(StackOverflowUserTask.RESULT_USERS);
             soUserPickerFragment.updateItems(users);
         } else {
             Log.wtf("FragmentReceiver", "The fragment isn't an instance of SOUserFetcherReceiver");

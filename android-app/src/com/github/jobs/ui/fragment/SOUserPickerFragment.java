@@ -40,7 +40,7 @@ import com.codeslap.groundy.ReceiverFragment;
 import com.github.jobs.R;
 import com.github.jobs.adapter.SOUsersAdapter;
 import com.github.jobs.bean.SOUser;
-import com.github.jobs.resolver.StackOverflowUserResolver;
+import com.github.jobs.resolver.StackOverflowUserTask;
 import com.github.jobs.ui.activity.SOUserPickerActivity;
 import com.github.jobs.ui.dialog.SOUserDialog;
 
@@ -166,8 +166,11 @@ public class SOUserPickerFragment extends SherlockFragment implements AdapterVie
 
     private void executeSearch(String search) {
         Bundle extras = new Bundle();
-        extras.putString(StackOverflowUserResolver.EXTRA_SEARCH, search);
-        Groundy.execute(getActivity(), StackOverflowUserResolver.class, mSOUserFetcherReceiver.getReceiver(), extras);
+        extras.putString(StackOverflowUserTask.EXTRA_SEARCH, search);
+        Groundy.create(getActivity(), StackOverflowUserTask.class)
+                .params(extras)
+                .receiver(mSOUserFetcherReceiver.getReceiver())
+                .execute();
     }
 
     public IBinder getWindowToken() {

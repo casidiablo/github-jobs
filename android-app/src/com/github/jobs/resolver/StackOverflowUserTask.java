@@ -17,7 +17,6 @@
 package com.github.jobs.resolver;
 
 import android.os.Bundle;
-import com.codeslap.groundy.Groundy;
 import com.codeslap.groundy.GroundyTask;
 import com.github.jobs.bean.SOUser;
 import com.github.jobs.templates.fetcher.StackOverflowUsersFetcher;
@@ -29,12 +28,12 @@ import java.util.List;
  * @author cristian
  * @version 1.0
  */
-public class StackOverflowUserResolver extends GroundyTask {
+public class StackOverflowUserTask extends GroundyTask {
     public static final String EXTRA_SEARCH = "com.github.jobs.extra.search";
     public static final String RESULT_USERS = "com.github.jobs.result.users";
 
     @Override
-    protected void doInBackground() {
+    protected boolean doInBackground() {
         Bundle parameters = getParameters();
         String search = parameters.getString(EXTRA_SEARCH);
 
@@ -42,8 +41,7 @@ public class StackOverflowUserResolver extends GroundyTask {
         List<SOUser> users = stackOverflowUsersFetcher.findUser(search);
 
         if (users == null) {
-            setResultCode(Groundy.STATUS_ERROR);
-            return;
+            return false; // something went wrong :-/
         }
 
         // pack the result in an parcelable array list
@@ -51,7 +49,6 @@ public class StackOverflowUserResolver extends GroundyTask {
         ArrayList<SOUser> SOUsers = new ArrayList<SOUser>(users);
         resultData.putParcelableArrayList(RESULT_USERS, SOUsers);
 
-        // everything went fine :)
-        setResultCode(Groundy.STATUS_FINISHED);
+        return true; // everything went fine :)
     }
 }
