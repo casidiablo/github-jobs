@@ -73,9 +73,17 @@ public class HowToApplyDialog extends TrackDialog implements View.OnClickListene
         if (intent == null) {
             return;
         }
-        Spanned html = Html.fromHtml(intent.getStringExtra(EXTRA_HOW_TO_APPLY));
-        SpannableString application = new SpannableString(html);
-        Linkify.addLinks(application, Linkify.ALL);
+        String howToApplyStr = intent.getStringExtra(EXTRA_HOW_TO_APPLY);
+        SpannableString application;
+        Spanned html;
+        if (howToApplyStr == null) {
+            application = new SpannableString("");
+            html = new SpannableString("");
+        } else {
+            html = Html.fromHtml(howToApplyStr);
+            application = new SpannableString(html);
+            Linkify.addLinks(application, Linkify.ALL);
+        }
 
         TextView howToApply = (TextView) findViewById(R.id.lbl_how_to_apply);
         howToApply.setText(application);
