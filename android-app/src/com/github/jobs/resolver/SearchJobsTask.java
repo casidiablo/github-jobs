@@ -17,7 +17,6 @@
 package com.github.jobs.resolver;
 
 import android.os.Bundle;
-import com.codeslap.groundy.Groundy;
 import com.codeslap.groundy.GroundyTask;
 import com.codeslap.persistence.Persistence;
 import com.codeslap.persistence.SqlAdapter;
@@ -30,14 +29,14 @@ import com.github.jobs.bean.SearchesAndJobs;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SearchJobsResolver extends GroundyTask {
+public class SearchJobsTask extends GroundyTask {
 
     public static final String EXTRA_SEARCH_PACK = "com.github.jobs.extra_search_pack";
     public static final String DATA_JOBS = "com.github.jobs.data.jobs";
     public static final String DATA_SEARCH_PACK = "com.github.jobs.data.search_pack";
 
     @Override
-    protected void doInBackground() {
+    protected boolean doInBackground() {
         // get parameters
         Bundle params = getParameters();
         SearchPack searchPack = (SearchPack) params.getParcelable(EXTRA_SEARCH_PACK);
@@ -55,7 +54,7 @@ public class SearchJobsResolver extends GroundyTask {
         Search search = builder.createSearch();
         List<Job> jobsList = GithubJobsApi.search(search);
         if (jobsList == null) {
-            return;
+            return false;
         }
 
         ArrayList<Job> jobs = new ArrayList<Job>(jobsList);
@@ -88,7 +87,7 @@ public class SearchJobsResolver extends GroundyTask {
         Bundle resultData = getResultData();
         resultData.putParcelable(DATA_SEARCH_PACK, searchPack);
         resultData.putParcelableArrayList(DATA_JOBS, jobs);
-        setResultCode(Groundy.STATUS_FINISHED);
+        return true;
     }
 
     @Override

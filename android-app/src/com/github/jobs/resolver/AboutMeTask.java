@@ -26,12 +26,12 @@ import com.github.jobs.templates.fetcher.AboutMeFetcher;
  * @author cristian
  * @version 1.0
  */
-public class AboutMeResolver extends GroundyTask {
+public class AboutMeTask extends GroundyTask {
     public static final String PARAM_USERNAME = "com.github.jobs.param.username";
     public static final String RESULT_USER = "com.github.jobs.result.user";
 
     @Override
-    protected void doInBackground() {
+    protected boolean doInBackground() {
         Bundle parameters = getParameters();
         String username = parameters.getString(PARAM_USERNAME);
 
@@ -40,11 +40,11 @@ public class AboutMeResolver extends GroundyTask {
 
         if (aboutMeUser == null || aboutMeUser.getServices() == null || aboutMeUser.getServices().length == 0) {
             setResultCode(Groundy.STATUS_ERROR);
-            return;
+            return false;
         }
         // pack the result in an parcelable
         Bundle resultData = getResultData();
         resultData.putParcelable(RESULT_USER, aboutMeUser);
-        setResultCode(Groundy.STATUS_FINISHED);
+        return true;
     }
 }

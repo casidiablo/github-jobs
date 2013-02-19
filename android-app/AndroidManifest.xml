@@ -35,6 +35,8 @@
         <activity android:name=".ui.dialog.SOUserDialog" android:theme="@style/Theme.GithubJobs.Dialog"
                   android:label="@string/about_this_app"/>
         <activity android:name="com.crittercism.NotificationActivity"/>
-        <service android:name="com.codeslap.groundy.GroundyService"/>
+        <service android:name="com.codeslap.groundy.GroundyService">
+            <meta-data android:name="groundy:mode" android:value="async"/>
+        </service>
     </application>
 </manifest>

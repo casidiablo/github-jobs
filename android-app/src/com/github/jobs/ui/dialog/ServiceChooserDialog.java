@@ -29,7 +29,7 @@ import com.github.jobs.adapter.ServicesAdapter;
 import com.github.jobs.bean.AboutMeService;
 import com.github.jobs.bean.AboutMeUser;
 import com.github.jobs.bean.TemplateService;
-import com.github.jobs.resolver.AboutMeResolver;
+import com.github.jobs.resolver.AboutMeTask;
 import com.github.jobs.templates.fetcher.AboutMeFetcher;
 import com.github.jobs.utils.AppUtils;
 
@@ -220,8 +220,11 @@ public class ServiceChooserDialog extends TrackDialog implements AdapterView.OnI
                 return;
             case R.id.service_about_me:
                 Bundle extras = new Bundle();
-                extras.putString(AboutMeResolver.PARAM_USERNAME, data);
-                Groundy.execute(this, AboutMeResolver.class, mState.receiver, extras);
+                extras.putString(AboutMeTask.PARAM_USERNAME, data);
+                Groundy.create(this, AboutMeTask.class)
+                        .receiver(mState.receiver)
+                        .params(extras)
+                        .execute();
                 AppUtils.hideKeyboard(this, mServiceData.getWindowToken());
                 mServicesFlipper.setDisplayedChild(SERVICE_LOADING);
                 break;
@@ -236,7 +239,7 @@ public class ServiceChooserDialog extends TrackDialog implements AdapterView.OnI
     private void setupPayload(Bundle resultData) {
         switch (mState.lastService) {
             case R.id.service_about_me:
-                mState.servicePayload = resultData.getParcelable(AboutMeResolver.RESULT_USER);
+                mState.servicePayload = resultData.getParcelable(AboutMeTask.RESULT_USER);
                 setupConfirmationView();
                 break;
         }
