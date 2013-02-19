@@ -20,6 +20,7 @@ import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
+import android.widget.Toast;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
 import com.codeslap.persistence.Persistence;
@@ -88,6 +89,11 @@ public class JobDetailsActivity extends TrackActivity implements ViewPager.OnPag
         switch (itemId) {
             case HOW_TO_APPLY:
                 Job job = findCurrentJob();
+                if (job == null) {
+                    Toast.makeText(this, R.string.could_not_find_apply_info, Toast.LENGTH_LONG).show();
+                    finish();
+                    return true;
+                }
                 // start a new activity with the application details
                 Intent howToApplyDialog = new Intent(this, HowToApplyDialog.class);
                 howToApplyDialog.putExtra(HowToApplyDialog.EXTRA_TITLE, job.getTitle());
