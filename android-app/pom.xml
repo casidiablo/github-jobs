@@ -311,15 +311,10 @@
                             <artifacts>
                                 <artifact>
                                     <file>
-                                        ${project.build.directory}/target/${project.artifactId}-${project.version}-release.apk
+                                        ${project.build.directory}/${project.artifactId}-release.apk
                                     </file>
                                     <type>apk</type>
                                     <classifier>signed-aligned</classifier>
-                                </artifact>
-                                <artifact>
-                                    <file>${project.build.directory}/proguard/mapping.txt</file>
-                                    <type>map</type>
-                                    <classifier>release</classifier>
                                 </artifact>
                             </artifacts>
                         </configuration>
