@@ -18,7 +18,7 @@ package com.github.jobs.bean;
 
 import android.os.Parcel;
 import android.os.Parcelable;
-import com.google.gson.annotations.SerializedName;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.Arrays;
 
@@ -27,15 +27,18 @@ import java.util.Arrays;
  * @version 1.0
  */
 public class AboutMeUser implements Parcelable {
-  @SerializedName("first_name")
+  @JsonProperty("first_name")
   private String firstName;
-  @SerializedName("last_name")
+  @JsonProperty("last_name")
   private String lastName;
   private String header;
   private String profile;
   private String bio;
-  @SerializedName("websites")
+  @JsonProperty("websites")
   private AboutMeService[] services;
+
+  public AboutMeUser() {
+  }
 
   public AboutMeUser(Parcel in) {
     firstName = (String) in.readValue(null);

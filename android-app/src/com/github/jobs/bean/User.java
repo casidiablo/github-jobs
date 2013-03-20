@@ -16,30 +16,30 @@
 
 package com.github.jobs.bean;
 
-import com.google.gson.annotations.SerializedName;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
  * @author cristian
  * @version 1.0
  */
 public class User {
-  @SerializedName("created_at")
+  @JsonProperty("created_at")
   private String createdAt;
   private String blog;
   private String email;
   private int following;
-  @SerializedName("public_repos")
+  @JsonProperty("public_repos")
   private int publicRepos;
   private String location;
   private String bio;
-  @SerializedName("html_url")
+  @JsonProperty("html_url")
   private String htmlUrl;
   private String name;
-  @SerializedName("avatar_url")
+  @JsonProperty("avatar_url")
   private String avatarUrl;
   private int followers;
   private long id;
-  @SerializedName("login")
+  @JsonProperty("login")
   private String username;
   private String company;
 

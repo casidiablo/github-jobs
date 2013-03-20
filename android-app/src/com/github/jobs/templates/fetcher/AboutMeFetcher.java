@@ -26,9 +26,10 @@ import com.github.jobs.R;
 import com.github.jobs.adapter.AboutMeServiceAdapter;
 import com.github.jobs.bean.AboutMeService;
 import com.github.jobs.bean.AboutMeUser;
+import com.github.jobs.utils.JsonMapper;
 import com.github.kevinsawicki.http.HttpRequest;
-import com.google.gson.Gson;
 
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -42,9 +43,8 @@ public class AboutMeFetcher {
 
   public AboutMeUser getAboutMeUser(String user) {
     String url = String.format(USER_LINK, user);
-    String response = HttpRequest.get(url).body();
-    Gson gson = new Gson();
-    AboutMeUser aboutMeUser = gson.fromJson(response, AboutMeUser.class);
+    InputStream response = HttpRequest.get(url).stream();
+    AboutMeUser aboutMeUser = JsonMapper.getObject(response, AboutMeUser.class);
     if (aboutMeUser == null) {
       return null;
     }

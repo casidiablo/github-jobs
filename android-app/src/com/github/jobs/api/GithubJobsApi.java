@@ -16,18 +16,17 @@
 
 package com.github.jobs.api;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.github.jobs.bean.Job;
 import com.github.jobs.bean.Search;
+import com.github.jobs.utils.JsonMapper;
 import com.github.kevinsawicki.http.HttpRequest;
-import com.google.gson.Gson;
 import org.apache.commons.httpclient.HttpMethod;
 import org.apache.commons.httpclient.NameValuePair;
 import org.apache.commons.httpclient.URIException;
 import org.apache.commons.httpclient.methods.GetMethod;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -62,23 +61,13 @@ public class GithubJobsApi {
     }
     try {
       String url = createUrl(ApiConstants.POSITIONS_URL, pairs);
-      String response = HttpRequest.get(url).acceptGzipEncoding().acceptJson().body();
-      if (response == null) {
+      InputStream responseStream = HttpRequest.get(url).acceptGzipEncoding().acceptJson().stream();
+      if (responseStream == null) {
         throw new RuntimeException("Error calling API; it returned null.");
       }
-
-      // convert json to object
-      Gson gson = new Gson();
-      JSONArray jsonArray = new JSONArray(response);
-      List<Job> jobs = new ArrayList<Job>();
-      for (int i = 0; i < jsonArray.length(); i++) {
-        JSONObject object = jsonArray.getJSONObject(i);
-        jobs.add(gson.fromJson(object.toString(), Job.class));
-      }
-      return jobs;
+      return JsonMapper.getList(responseStream, new TypeReference<List<Job>>() {
+      });
     } catch (URIException e) {
-      e.printStackTrace();
-    } catch (JSONException e) {
       e.printStackTrace();
     }
     return null;

@@ -18,7 +18,7 @@ package com.github.jobs.bean;
 
 import android.os.Parcel;
 import android.os.Parcelable;
-import com.google.gson.annotations.SerializedName;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
  * @author cristian
@@ -26,18 +26,18 @@ import com.google.gson.annotations.SerializedName;
 public class Job implements Parcelable {
   private String id;
   private String title;
-  @SerializedName("company_logo")
+  @JsonProperty("company_logo")
   private String companyLogo;
   private String location;
   private String description;
   private String company;
-  @SerializedName("how_to_apply")
+  @JsonProperty("how_to_apply")
   private String howToApply;
-  @SerializedName("created_at")
+  @JsonProperty("created_at")
   private String createdAt;
   private String type;
   private String url;
-  @SerializedName("company_url")
+  @JsonProperty("company_url")
   private String companyUrl;
 
   public String getId() {

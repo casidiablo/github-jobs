@@ -28,6 +28,9 @@ public class BadgeCount implements Parcelable {
   private int silver;
   private int bronze;
 
+  public BadgeCount() {
+  }
+
   public BadgeCount(Parcel in) {
     gold = (Integer) in.readValue(null);
     silver = (Integer) in.readValue(null);
