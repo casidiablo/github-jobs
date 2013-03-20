@@ -17,7 +17,7 @@
 package com.github.jobs.utils;
 
 import android.content.Intent;
-import com.github.bean.Job;
+import com.github.jobs.bean.Job;
 
 /**
  * @author cristian

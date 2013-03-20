@@ -106,8 +106,6 @@ public class JellyBeanSpanFixTextView extends TextView {
      * unneeded spaces
      */
     private void fixSpannedWithSpaces(SpannableStringBuilder builder, int widthMeasureSpec, int heightMeasureSpec) {
-        long startFix = System.currentTimeMillis();
-
         FixingResult result = addSpacesAroundSpansUntilFixed(builder, widthMeasureSpec, heightMeasureSpec);
 
         if (result.fixed) {

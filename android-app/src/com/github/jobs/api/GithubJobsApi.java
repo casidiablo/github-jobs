@@ -16,8 +16,8 @@
 
 package com.github.jobs.api;
 
-import com.github.bean.Job;
-import com.github.bean.Search;
+import com.github.jobs.bean.Job;
+import com.github.jobs.bean.Search;
 import com.github.kevinsawicki.http.HttpRequest;
 import com.google.gson.Gson;
 import org.apache.commons.httpclient.HttpMethod;
@@ -79,25 +79,6 @@ public class GithubJobsApi {
         } catch (URIException e) {
             e.printStackTrace();
         } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-
-    public static Job getJob(String id, boolean markdown) {
-        String baseUrl = String.format(ApiConstants.JOB_URL, id);
-        ArrayList<NameValuePair> pairs = new ArrayList<NameValuePair>();
-        if (markdown) {
-            pairs.add(new NameValuePair(ApiConstants.MARKDOWN, String.valueOf(markdown)));
-        }
-        try {
-            String url = createUrl(baseUrl, pairs);
-            String response = HttpRequest.get(url).body();
-
-            // convert json to object
-            Gson gson = new Gson();
-            return gson.fromJson(response, Job.class);
-        } catch (URIException e) {
             e.printStackTrace();
         }
         return null;

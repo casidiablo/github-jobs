@@ -17,7 +17,7 @@
 package com.github.jobs.resolver;
 
 import android.os.Bundle;
-import com.codeslap.groundy.GroundyTask;
+import com.telly.groundy.GroundyTask;
 import com.github.jobs.api.GithubJobsApi;
 import com.github.jobs.bean.SearchPack;
 

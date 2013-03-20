@@ -40,7 +40,7 @@ import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
 import com.actionbarsherlock.widget.ShareActionProvider;
 import com.codeslap.persistence.Persistence;
-import com.github.bean.Job;
+import com.github.jobs.bean.Job;
 import com.github.jobs.R;
 import com.github.jobs.ui.activity.JobDetailsActivity;
 import com.github.jobs.utils.ShareHelper;

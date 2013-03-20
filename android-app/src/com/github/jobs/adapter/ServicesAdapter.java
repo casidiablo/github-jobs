@@ -20,8 +20,8 @@ import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import com.codeslap.groundy.adapter.Layout;
-import com.codeslap.groundy.adapter.ListBaseAdapter;
+import com.telly.groundy.adapter.Layout;
+import com.telly.groundy.adapter.ListBaseAdapter;
 import com.github.jobs.R;
 import com.github.jobs.bean.Service;
 

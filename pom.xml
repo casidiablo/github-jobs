@@ -72,7 +72,6 @@
     </build>
 
     <modules>
-        <module>java-api</module>
         <module>android-app</module>
     </modules>
 </project>

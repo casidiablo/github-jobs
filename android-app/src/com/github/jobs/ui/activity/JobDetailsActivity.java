@@ -24,7 +24,7 @@ import android.widget.Toast;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
 import com.codeslap.persistence.Persistence;
-import com.github.bean.Job;
+import com.github.jobs.bean.Job;
 import com.github.jobs.R;
 import com.github.jobs.adapter.JobsDetailsAdapter;
 import com.github.jobs.ui.dialog.HowToApplyDialog;

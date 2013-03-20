@@ -17,11 +17,11 @@
 package com.github.jobs.resolver;
 
 import android.os.Bundle;
-import com.codeslap.groundy.GroundyTask;
+import com.telly.groundy.GroundyTask;
 import com.codeslap.persistence.Persistence;
 import com.codeslap.persistence.SqlAdapter;
-import com.github.bean.Job;
-import com.github.bean.Search;
+import com.github.jobs.bean.Job;
+import com.github.jobs.bean.Search;
 import com.github.jobs.api.GithubJobsApi;
 import com.github.jobs.bean.SearchPack;
 import com.github.jobs.bean.SearchesAndJobs;

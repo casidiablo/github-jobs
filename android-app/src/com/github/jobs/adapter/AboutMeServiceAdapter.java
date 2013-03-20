@@ -20,9 +20,9 @@ import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckedTextView;
-import com.codeslap.groundy.adapter.Layout;
-import com.codeslap.groundy.adapter.ListBaseAdapter;
-import com.codeslap.groundy.adapter.ResourceId;
+import com.telly.groundy.adapter.Layout;
+import com.telly.groundy.adapter.ListBaseAdapter;
+import com.telly.groundy.adapter.ResourceId;
 import com.github.jobs.R;
 import com.github.jobs.bean.AboutMeService;
 

@@ -22,7 +22,7 @@ import com.codeslap.persistence.HasMany;
 import com.codeslap.persistence.PersistenceConfig;
 import com.codeslap.persistence.PersistenceLogManager;
 import com.crittercism.app.Crittercism;
-import com.github.bean.Job;
+import com.github.jobs.bean.Job;
 import com.github.jobs.bean.GeneralSettings;
 import com.github.jobs.bean.SearchesAndJobs;
 import com.github.jobs.bean.Template;

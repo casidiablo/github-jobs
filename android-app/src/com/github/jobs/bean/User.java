@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.github.bean;
+package com.github.jobs.bean;
 
 import com.google.gson.annotations.SerializedName;
 

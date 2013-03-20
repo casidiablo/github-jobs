@@ -25,7 +25,7 @@ import android.util.Log;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
 import com.actionbarsherlock.app.SherlockFragmentActivity;
-import com.codeslap.groundy.ReceiverFragment;
+import com.telly.groundy.ReceiverFragment;
 import com.github.jobs.R;
 import com.github.jobs.bean.SOUser;
 import com.github.jobs.resolver.StackOverflowUserTask;

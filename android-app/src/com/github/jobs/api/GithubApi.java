@@ -14,13 +14,27 @@
  * limitations under the License.
  */
 
-package com.github.api;
+package com.github.jobs.api;
+
+import com.github.jobs.bean.User;
+import com.github.kevinsawicki.http.HttpRequest;
+import com.google.gson.Gson;
 
 /**
  * @author cristian
  * @version 1.0
  */
-public class ApiConstants {
-    public static final String API_URL = "https://api.github.com/%s";
-    public static final String GET_USER = "users/%s";
+public class GithubApi {
+    public User getUser(String username) {
+        String url = String.format(ApiConstants.API_URL, String.format(ApiConstants.GET_USER, username));
+        try {
+            String response = HttpRequest.get(url).body();
+            // convert json to object
+            Gson gson = new Gson();
+            return gson.fromJson(response, User.class);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 }

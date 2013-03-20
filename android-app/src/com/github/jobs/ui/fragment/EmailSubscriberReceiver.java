@@ -19,7 +19,7 @@ package com.github.jobs.ui.fragment;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.widget.Toast;
-import com.codeslap.groundy.ReceiverFragment;
+import com.telly.groundy.ReceiverFragment;
 import com.github.jobs.R;
 import com.github.jobs.ui.dialog.SubscribeDialog;
 

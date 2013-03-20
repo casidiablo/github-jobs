@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *   http://www.apache.org/licenses/LICENSE-2.0
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -15,7 +15,6 @@
  */
 package com.github.jobs.ui.activity;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.View;
@@ -83,14 +82,4 @@ public abstract class BaseActivity extends SherlockFragmentActivity {
         return mDelegate.findFragment(fragmentClass);
     }
 
-    /**
-     * Takes a given intent and either starts a new ui to handle it (the default behavior),
-     * or creates/updates a fragment (in the case of a multi-pane ui) that can handle the
-     * intent.
-     * <p/>
-     * Must be called from the main (UI) thread.
-     */
-    public void openActivityOrFragment(Intent intent) {
-        mDelegate.openActivityOrFragment(intent);
-    }
 }

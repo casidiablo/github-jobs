@@ -21,14 +21,13 @@ import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import com.codeslap.groundy.adapter.Layout;
-import com.codeslap.groundy.adapter.ListBaseAdapter;
-import com.codeslap.groundy.adapter.ResourceId;
-import com.github.bean.Job;
 import com.github.jobs.R;
+import com.github.jobs.bean.Job;
 import com.github.jobs.ui.activity.JobDetailsActivity;
 import com.github.jobs.utils.RelativeDate;
 import com.github.jobs.utils.StringUtils;
+import com.telly.groundy.adapter.Layout;
+import com.telly.groundy.adapter.ListBaseAdapter;
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
@@ -81,7 +80,5 @@ public class JobsAdapter extends ListBaseAdapter<Job, JobsAdapter.ViewHolder> {
         TextView company;
         TextView type;
         TextView date;
-        @ResourceId(ignore = true)
-        TextView tales;
     }
 }

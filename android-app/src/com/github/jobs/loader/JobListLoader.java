@@ -18,10 +18,10 @@ package com.github.jobs.loader;
 
 import android.content.Context;
 import android.util.Log;
-import com.codeslap.groundy.loader.SupportListLoader;
+import com.telly.groundy.loader.SupportListLoader;
 import com.codeslap.persistence.Persistence;
 import com.codeslap.persistence.SqlAdapter;
-import com.github.bean.Job;
+import com.github.jobs.bean.Job;
 import com.github.jobs.adapter.JobsAdapter;
 import com.github.jobs.bean.SearchPack;
 import com.github.jobs.bean.SearchesAndJobs;

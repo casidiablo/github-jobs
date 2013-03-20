@@ -17,8 +17,8 @@
 package com.github.jobs.resolver;
 
 import android.os.Bundle;
-import com.codeslap.groundy.Groundy;
-import com.codeslap.groundy.GroundyTask;
+import com.telly.groundy.Groundy;
+import com.telly.groundy.GroundyTask;
 import com.github.jobs.bean.AboutMeUser;
 import com.github.jobs.templates.fetcher.AboutMeFetcher;
 
