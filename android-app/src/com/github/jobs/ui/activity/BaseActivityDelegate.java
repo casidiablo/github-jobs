@@ -33,90 +33,90 @@ import com.actionbarsherlock.view.Window;
  */
 class BaseActivityDelegate {
 
-    private boolean mSetContentViewAlreadyCalled;
-    private final SherlockFragmentActivity mActivity;
+  private boolean mSetContentViewAlreadyCalled;
+  private final SherlockFragmentActivity mActivity;
 
-    BaseActivityDelegate(SherlockFragmentActivity activity) {
-        mActivity = activity;
+  BaseActivityDelegate(SherlockFragmentActivity activity) {
+    mActivity = activity;
+  }
+
+  void onCreate() {
+    mActivity.requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
+  }
+
+  void setContentView() {
+    mActivity.setSupportProgressBarIndeterminateVisibility(false);
+    mSetContentViewAlreadyCalled = true;
+  }
+
+  /**
+   * Helper method that allows to initialize and add a fragment to activities that usually have
+   * just one single fragment. Fragment is added using its class.getName() as tag.
+   *
+   * @param containerId   resource id of the fragment container (must be created through android resources)
+   * @param fragmentClass the class of the fragment to setup
+   */
+  void setupBaseFragment(int containerId, Class<? extends Fragment> fragmentClass) {
+    setupBaseFragment(containerId, fragmentClass, null);
+  }
+
+  /**
+   * Helper method that allows to initialize and add a fragment to activities that usually have
+   * just one single fragment. Fragment is added using its class.getName() as tag.
+   *
+   * @param containerId   resource id of the fragment container (must be created through android resources)
+   * @param fragmentClass the class of the fragment to setup
+   * @param args          bundle with the arguments to pass to the fragment
+   */
+  void setupBaseFragment(int containerId, Class<? extends Fragment> fragmentClass, Bundle args) {
+    if (mSetContentViewAlreadyCalled) {
+      View view = mActivity.findViewById(containerId);
+      if (!(view instanceof ViewGroup)) {
+        throw new IllegalStateException("Since you already called setContentView, it must has a ViewGroup whose id is 'containerId'");
+      }
+    } else {
+      FrameLayout container = new FrameLayout(mActivity);
+      container.setId(containerId);
+      mActivity.setContentView(container);
     }
 
-    void onCreate() {
-        mActivity.requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
+    // let's check whether fragment is already added
+    Fragment fragment = findFragment(fragmentClass);
+    if (fragment == null) {
+      // if not, let's create it and add it
+      fragment = Fragment.instantiate(mActivity, fragmentClass.getName(), args);
+
+      FragmentTransaction ft = mActivity.getSupportFragmentManager().beginTransaction();
+      ft.add(containerId, fragment, fragmentClass.getSimpleName());
+      ft.commit();
     }
+  }
 
-    void setContentView() {
-        mActivity.setSupportProgressBarIndeterminateVisibility(false);
-        mSetContentViewAlreadyCalled = true;
+  /**
+   * Allows to retrieve the instance of a previously added fragment. We
+   * use fragmentClass.getName() to find by tag.
+   *
+   * @param fragmentClass the fragment class
+   * @return the fragment or null if it was has not been added
+   */
+  <T> T findFragment(Class<? extends T> fragmentClass) {
+    FragmentManager fm = mActivity.getSupportFragmentManager();
+    Fragment fragment = fm.findFragmentByTag(fragmentClass.getSimpleName());
+    if (!fragmentClass.isInstance(fragment)) {
+      return null;
     }
+    return (T) fragment;
+  }
 
-    /**
-     * Helper method that allows to initialize and add a fragment to activities that usually have
-     * just one single fragment. Fragment is added using its class.getName() as tag.
-     *
-     * @param containerId   resource id of the fragment container (must be created through android resources)
-     * @param fragmentClass the class of the fragment to setup
-     */
-    void setupBaseFragment(int containerId, Class<? extends Fragment> fragmentClass) {
-        setupBaseFragment(containerId, fragmentClass, null);
-    }
-
-    /**
-     * Helper method that allows to initialize and add a fragment to activities that usually have
-     * just one single fragment. Fragment is added using its class.getName() as tag.
-     *
-     * @param containerId   resource id of the fragment container (must be created through android resources)
-     * @param fragmentClass the class of the fragment to setup
-     * @param args          bundle with the arguments to pass to the fragment
-     */
-    void setupBaseFragment(int containerId, Class<? extends Fragment> fragmentClass, Bundle args) {
-        if (mSetContentViewAlreadyCalled) {
-            View view = mActivity.findViewById(containerId);
-            if (!(view instanceof ViewGroup)) {
-                throw new IllegalStateException("Since you already called setContentView, it must has a ViewGroup whose id is 'containerId'");
-            }
-        } else {
-            FrameLayout container = new FrameLayout(mActivity);
-            container.setId(containerId);
-            mActivity.setContentView(container);
-        }
-
-        // let's check whether fragment is already added
-        Fragment fragment = findFragment(fragmentClass);
-        if (fragment == null) {
-            // if not, let's create it and add it
-            fragment = Fragment.instantiate(mActivity, fragmentClass.getName(), args);
-
-            FragmentTransaction ft = mActivity.getSupportFragmentManager().beginTransaction();
-            ft.add(containerId, fragment, fragmentClass.getSimpleName());
-            ft.commit();
-        }
-    }
-
-    /**
-     * Allows to retrieve the instance of a previously added fragment. We
-     * use fragmentClass.getName() to find by tag.
-     *
-     * @param fragmentClass the fragment class
-     * @return the fragment or null if it was has not been added
-     */
-    <T> T findFragment(Class<? extends T> fragmentClass) {
-        FragmentManager fm = mActivity.getSupportFragmentManager();
-        Fragment fragment = fm.findFragmentByTag(fragmentClass.getSimpleName());
-        if (!fragmentClass.isInstance(fragment)) {
-            return null;
-        }
-        return (T) fragment;
-    }
-
-    /**
-     * Takes a given intent and either starts a new ui to handle it (the default behavior),
-     * or creates/updates a fragment (in the case of a multi-pane ui) that can handle the
-     * intent.
-     * <p/>
-     * Must be called from the main (UI) thread.
-     */
-    void openActivityOrFragment(Intent intent) {
-        // Default implementation simply calls startActivity
-        mActivity.startActivity(intent);
-    }
+  /**
+   * Takes a given intent and either starts a new ui to handle it (the default behavior),
+   * or creates/updates a fragment (in the case of a multi-pane ui) that can handle the
+   * intent.
+   * <p/>
+   * Must be called from the main (UI) thread.
+   */
+  void openActivityOrFragment(Intent intent) {
+    // Default implementation simply calls startActivity
+    mActivity.startActivity(intent);
+  }
 }

@@ -17,31 +17,31 @@
 package com.github.jobs.resolver;
 
 import android.os.Bundle;
-import com.telly.groundy.GroundyTask;
 import com.github.jobs.api.GithubJobsApi;
 import com.github.jobs.bean.SearchPack;
+import com.telly.groundy.GroundyTask;
 
 /**
  * @author cristian
  */
 public class EmailSubscriberTask extends GroundyTask {
 
-    public static final String EXTRA_EMAIL = "com.github.jobs.extra.email";
-    public static final String EXTRA_SEARCH = "com.github.jobs.extra.search";
+  public static final String EXTRA_EMAIL = "com.github.jobs.extra.email";
+  public static final String EXTRA_SEARCH = "com.github.jobs.extra.search";
 
-    @Override
-    protected boolean doInBackground() {
-        Bundle parameters = getParameters();
-        SearchPack searchPack = (SearchPack) parameters.getParcelable(EXTRA_SEARCH);
-        String email = parameters.getString(EXTRA_EMAIL);
-        String description = searchPack.getSearch();
-        String location = searchPack.getLocation();
-        boolean fullTime = searchPack.isFullTime();
-        return GithubJobsApi.subscribe(email, description, location, fullTime);
-    }
+  @Override
+  protected boolean doInBackground() {
+    Bundle parameters = getParameters();
+    SearchPack searchPack = (SearchPack) parameters.getParcelable(EXTRA_SEARCH);
+    String email = parameters.getString(EXTRA_EMAIL);
+    String description = searchPack.getSearch();
+    String location = searchPack.getLocation();
+    boolean fullTime = searchPack.isFullTime();
+    return GithubJobsApi.subscribe(email, description, location, fullTime);
+  }
 
-    @Override
-    protected boolean keepWifiOn() {
-        return true;
-    }
+  @Override
+  protected boolean keepWifiOn() {
+    return true;
+  }
 }

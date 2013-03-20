@@ -18,13 +18,13 @@ package com.github.jobs.loader;
 
 import android.content.Context;
 import android.util.Log;
-import com.telly.groundy.loader.SupportListLoader;
 import com.codeslap.persistence.Persistence;
 import com.codeslap.persistence.SqlAdapter;
-import com.github.jobs.bean.Job;
 import com.github.jobs.adapter.JobsAdapter;
+import com.github.jobs.bean.Job;
 import com.github.jobs.bean.SearchPack;
 import com.github.jobs.bean.SearchesAndJobs;
+import com.telly.groundy.loader.SupportListLoader;
 import org.joda.time.DateTime;
 
 import java.util.ArrayList;
@@ -37,70 +37,70 @@ import java.util.List;
  */
 public class JobListLoader extends SupportListLoader<Job> {
 
-    private final SearchPack mCurrentSearch;
+  private final SearchPack mCurrentSearch;
 
-    public JobListLoader(Context context, SearchPack currentSearch) {
-        super(context);
-        mCurrentSearch = currentSearch;
+  public JobListLoader(Context context, SearchPack currentSearch) {
+    super(context);
+    mCurrentSearch = currentSearch;
+  }
+
+  @Override
+  protected List<Job> getData() {
+    SqlAdapter sqlAdapter = Persistence.getAdapter(getContext());
+    if (mCurrentSearch.isDefault()) {
+      return sort(sqlAdapter.findAll(Job.class));
     }
+    SearchesAndJobs sample = new SearchesAndJobs();
+    sample.setSearchHashCode(mCurrentSearch.hashCode());
+    List<SearchesAndJobs> searchesAndJobs = sqlAdapter.findAll(sample);
+    if (searchesAndJobs.size() == 0) {
+      return new ArrayList<Job>();
+    }
+    // create IN statement with all the jobs that should be retrieved
+    StringBuilder in = new StringBuilder();
+    String glue = "";
+    for (SearchesAndJobs searchesAndJob : searchesAndJobs) {
+      in.append(glue).append('\'').append(searchesAndJob.getJobId()).append('\'');
+      glue = ", ";
+    }
+    String inStatement = in.toString();
+    return sort(sqlAdapter.findAll(Job.class, "_id IN (" + inStatement + ")", null));
+  }
 
+  private List<Job> sort(List<Job> jobs) {
+    if (jobs == null) {
+      return null;
+    }
+    try {
+      Collections.sort(jobs, JOB_COMPARATOR);
+    } catch (Exception e) {
+      Log.wtf("jobs:listLoader", "General contract should not be wrong :-/", e);
+    }
+    return jobs;
+  }
+
+  private static final Comparator<Job> JOB_COMPARATOR = new Comparator<Job>() {
     @Override
-    protected List<Job> getData() {
-        SqlAdapter sqlAdapter = Persistence.getAdapter(getContext());
-        if (mCurrentSearch.isDefault()) {
-            return sort(sqlAdapter.findAll(Job.class));
-        }
-        SearchesAndJobs sample = new SearchesAndJobs();
-        sample.setSearchHashCode(mCurrentSearch.hashCode());
-        List<SearchesAndJobs> searchesAndJobs = sqlAdapter.findAll(sample);
-        if (searchesAndJobs.size() == 0) {
-            return new ArrayList<Job>();
-        }
-        // create IN statement with all the jobs that should be retrieved
-        StringBuilder in = new StringBuilder();
-        String glue = "";
-        for (SearchesAndJobs searchesAndJob : searchesAndJobs) {
-            in.append(glue).append('\'').append(searchesAndJob.getJobId()).append('\'');
-            glue = ", ";
-        }
-        String inStatement = in.toString();
-        return sort(sqlAdapter.findAll(Job.class, "_id IN (" + inStatement + ")", null));
+    public int compare(Job jobA, Job jobB) {
+      if (jobA == null) {
+        return -1;
+      }
+      if (jobB == null) {
+        return 1;
+      }
+      DateTime dateA;
+      try {
+        dateA = JobsAdapter.DATE_PARSER.withZoneUTC().parseDateTime(jobA.getCreatedAt());
+      } catch (Exception e) {
+        return 1;
+      }
+      DateTime dateB;
+      try {
+        dateB = JobsAdapter.DATE_PARSER.withZoneUTC().parseDateTime(jobB.getCreatedAt());
+      } catch (Exception e) {
+        return -1;
+      }
+      return dateB.compareTo(dateA);
     }
-
-    private List<Job> sort(List<Job> jobs) {
-        if (jobs == null) {
-            return null;
-        }
-        try {
-            Collections.sort(jobs, JOB_COMPARATOR);
-        } catch (Exception e) {
-            Log.wtf("jobs:listLoader", "General contract should not be wrong :-/", e);
-        }
-        return jobs;
-    }
-
-    private static final Comparator<Job> JOB_COMPARATOR = new Comparator<Job>() {
-        @Override
-        public int compare(Job jobA, Job jobB) {
-            if (jobA == null) {
-                return -1;
-            }
-            if (jobB == null) {
-                return 1;
-            }
-            DateTime dateA;
-            try {
-                dateA = JobsAdapter.DATE_PARSER.withZoneUTC().parseDateTime(jobA.getCreatedAt());
-            } catch (Exception e) {
-                return 1;
-            }
-            DateTime dateB;
-            try {
-                dateB = JobsAdapter.DATE_PARSER.withZoneUTC().parseDateTime(jobB.getCreatedAt());
-            } catch (Exception e) {
-                return -1;
-            }
-            return dateB.compareTo(dateA);
-        }
-    };
+  };
 }

@@ -23,17 +23,17 @@ import android.content.Context;
  * @version 1.0
  */
 public interface ServiceContract {
-    int getId();
+  int getId();
 
-    int getServiceLabel();
+  int getServiceLabel();
 
-    int getDrawable();
+  int getDrawable();
 
-    int getHint();
+  int getHint();
 
-    int getAddServiceLabel();
+  int getAddServiceLabel();
 
-    String getType();
+  String getType();
 
-    ServiceGenerator getGenerator(Context context);
+  ServiceGenerator getGenerator(Context context);
 }

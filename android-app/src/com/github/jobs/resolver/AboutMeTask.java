@@ -17,34 +17,34 @@
 package com.github.jobs.resolver;
 
 import android.os.Bundle;
-import com.telly.groundy.Groundy;
-import com.telly.groundy.GroundyTask;
 import com.github.jobs.bean.AboutMeUser;
 import com.github.jobs.templates.fetcher.AboutMeFetcher;
+import com.telly.groundy.Groundy;
+import com.telly.groundy.GroundyTask;
 
 /**
  * @author cristian
  * @version 1.0
  */
 public class AboutMeTask extends GroundyTask {
-    public static final String PARAM_USERNAME = "com.github.jobs.param.username";
-    public static final String RESULT_USER = "com.github.jobs.result.user";
+  public static final String PARAM_USERNAME = "com.github.jobs.param.username";
+  public static final String RESULT_USER = "com.github.jobs.result.user";
 
-    @Override
-    protected boolean doInBackground() {
-        Bundle parameters = getParameters();
-        String username = parameters.getString(PARAM_USERNAME);
+  @Override
+  protected boolean doInBackground() {
+    Bundle parameters = getParameters();
+    String username = parameters.getString(PARAM_USERNAME);
 
-        AboutMeFetcher aboutMeFetcher = new AboutMeFetcher();
-        AboutMeUser aboutMeUser = aboutMeFetcher.getAboutMeUser(username);
+    AboutMeFetcher aboutMeFetcher = new AboutMeFetcher();
+    AboutMeUser aboutMeUser = aboutMeFetcher.getAboutMeUser(username);
 
-        if (aboutMeUser == null || aboutMeUser.getServices() == null || aboutMeUser.getServices().length == 0) {
-            setResultCode(Groundy.STATUS_ERROR);
-            return false;
-        }
-        // pack the result in an parcelable
-        Bundle resultData = getResultData();
-        resultData.putParcelable(RESULT_USER, aboutMeUser);
-        return true;
+    if (aboutMeUser == null || aboutMeUser.getServices() == null || aboutMeUser.getServices().length == 0) {
+      setResultCode(Groundy.STATUS_ERROR);
+      return false;
     }
+    // pack the result in an parcelable
+    Bundle resultData = getResultData();
+    resultData.putParcelable(RESULT_USER, aboutMeUser);
+    return true;
+  }
 }

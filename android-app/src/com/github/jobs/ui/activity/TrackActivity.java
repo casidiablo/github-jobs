@@ -26,26 +26,26 @@ import com.github.jobs.utils.AppUtils;
  */
 public class TrackActivity extends BaseActivity {
 
-    @Override
-    protected void onStart() {
-        super.onStart();
-        AnalyticsHelper.getTracker(this).onActivityStarted(this);
-    }
+  @Override
+  protected void onStart() {
+    super.onStart();
+    AnalyticsHelper.getTracker(this).onActivityStarted(this);
+  }
 
-    @Override
-    protected void onStop() {
-        super.onStop();
-        AnalyticsHelper.getTracker(this).onActivityStopped(this);
-    }
+  @Override
+  protected void onStop() {
+    super.onStop();
+    AnalyticsHelper.getTracker(this).onActivityStopped(this);
+  }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int itemId = item.getItemId();
-        switch (itemId) {
-            case android.R.id.home:
-                AppUtils.goHome(this);
-                return true;
-        }
-        return super.onOptionsItemSelected(item);
+  @Override
+  public boolean onOptionsItemSelected(MenuItem item) {
+    int itemId = item.getItemId();
+    switch (itemId) {
+      case android.R.id.home:
+        AppUtils.goHome(this);
+        return true;
     }
+    return super.onOptionsItemSelected(item);
+  }
 }

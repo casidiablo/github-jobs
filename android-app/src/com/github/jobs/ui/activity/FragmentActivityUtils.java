@@ -25,47 +25,47 @@ import android.os.Bundle;
  * @version 1.0
  */
 public class FragmentActivityUtils {
-    public static final String URI_KEY = "_uri";
+  public static final String URI_KEY = "_uri";
 
-    /**
-     * Converts an intent into a {@link android.os.Bundle} suitable for use as fragment
-     * arguments.
-     */
-    public static Bundle intentToFragmentArguments(Intent intent) {
-        Bundle arguments = new Bundle();
-        if (intent == null) {
-            return arguments;
-        }
-
-        final Uri data = intent.getData();
-        if (data != null) {
-            arguments.putParcelable(URI_KEY, data);
-        }
-
-        final Bundle extras = intent.getExtras();
-        if (extras != null) {
-            arguments.putAll(intent.getExtras());
-        }
-
-        return arguments;
+  /**
+   * Converts an intent into a {@link android.os.Bundle} suitable for use as fragment
+   * arguments.
+   */
+  public static Bundle intentToFragmentArguments(Intent intent) {
+    Bundle arguments = new Bundle();
+    if (intent == null) {
+      return arguments;
     }
 
-    /**
-     * Converts a fragment arguments bundle into an intent.
-     */
-    public static Intent fragmentArgumentsToIntent(Bundle arguments) {
-        Intent intent = new Intent();
-        if (arguments == null) {
-            return intent;
-        }
-
-        final Uri data = arguments.getParcelable(URI_KEY);
-        if (data != null) {
-            intent.setData(data);
-        }
-
-        intent.putExtras(arguments);
-        intent.removeExtra(URI_KEY);
-        return intent;
+    final Uri data = intent.getData();
+    if (data != null) {
+      arguments.putParcelable(URI_KEY, data);
     }
+
+    final Bundle extras = intent.getExtras();
+    if (extras != null) {
+      arguments.putAll(intent.getExtras());
+    }
+
+    return arguments;
+  }
+
+  /**
+   * Converts a fragment arguments bundle into an intent.
+   */
+  public static Intent fragmentArgumentsToIntent(Bundle arguments) {
+    Intent intent = new Intent();
+    if (arguments == null) {
+      return intent;
+    }
+
+    final Uri data = arguments.getParcelable(URI_KEY);
+    if (data != null) {
+      intent.setData(data);
+    }
+
+    intent.putExtras(arguments);
+    intent.removeExtra(URI_KEY);
+    return intent;
+  }
 }

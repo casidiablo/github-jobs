@@ -37,72 +37,72 @@ import java.util.List;
  */
 public class GithubJobsApi {
 
-    public static final String SUBSCRIPTION_EMAIL_PARAM = "email";
-    public static final String SUBSCRIPTION_DESCRIPTION_PARAM = "description";
-    public static final String SUBSCRIPTION_LOCATION_PARAM = "location";
-    public static final String SUBSCRIPTION_FULL_TIME_PARAM = "full_time";
-    public static final String SUBSCRIPTION_OK_PARAM = "ok";
+  public static final String SUBSCRIPTION_EMAIL_PARAM = "email";
+  public static final String SUBSCRIPTION_DESCRIPTION_PARAM = "description";
+  public static final String SUBSCRIPTION_LOCATION_PARAM = "location";
+  public static final String SUBSCRIPTION_FULL_TIME_PARAM = "full_time";
+  public static final String SUBSCRIPTION_OK_PARAM = "ok";
 
-    public static List<Job> search(Search search) {
-        ArrayList<NameValuePair> pairs = new ArrayList<NameValuePair>();
-        if (search.getSearch() != null) {
-            pairs.add(new NameValuePair(ApiConstants.SEARCH, search.getSearch()));
-        }
-        if (search.getLocation() != null) {
-            pairs.add(new NameValuePair(ApiConstants.LOCATION, search.getLocation()));
-        } else if (search.getLatitude() != 0 && search.getLongitude() != 0) {
-            pairs.add(new NameValuePair(ApiConstants.LATITUDE, String.valueOf(search.getLatitude())));
-            pairs.add(new NameValuePair(ApiConstants.LONGITUDE, String.valueOf(search.getLongitude())));
-        }
-        if (search.getPage() > 0) {
-            pairs.add(new NameValuePair(ApiConstants.PAGE, String.valueOf(search.getPage())));
-        }
-        if (search.isFullTime()) {
-            pairs.add(new NameValuePair(ApiConstants.FULL_TIME, String.valueOf(search.isFullTime())));
-        }
-        try {
-            String url = createUrl(ApiConstants.POSITIONS_URL, pairs);
-            String response = HttpRequest.get(url).acceptGzipEncoding().acceptJson().body();
-            if (response == null) {
-                throw new RuntimeException("Error calling API; it returned null.");
-            }
-
-            // convert json to object
-            Gson gson = new Gson();
-            JSONArray jsonArray = new JSONArray(response);
-            List<Job> jobs = new ArrayList<Job>();
-            for (int i = 0; i < jsonArray.length(); i++) {
-                JSONObject object = jsonArray.getJSONObject(i);
-                jobs.add(gson.fromJson(object.toString(), Job.class));
-            }
-            return jobs;
-        } catch (URIException e) {
-            e.printStackTrace();
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        return null;
+  public static List<Job> search(Search search) {
+    ArrayList<NameValuePair> pairs = new ArrayList<NameValuePair>();
+    if (search.getSearch() != null) {
+      pairs.add(new NameValuePair(ApiConstants.SEARCH, search.getSearch()));
     }
-
-    public static boolean subscribe(String email, String description, String location, boolean fullTime) {
-        HashMap<String, String> parameters = new HashMap<String, String>();
-        parameters.put(SUBSCRIPTION_EMAIL_PARAM, email);
-        parameters.put(SUBSCRIPTION_DESCRIPTION_PARAM, description);
-        parameters.put(SUBSCRIPTION_LOCATION_PARAM, location);
-        parameters.put(SUBSCRIPTION_FULL_TIME_PARAM, String.valueOf(fullTime));
-        String response = HttpRequest.post(ApiConstants.EMAIL_SUBSCRIPTION_URL)
-                .part(SUBSCRIPTION_EMAIL_PARAM, email)
-                .part(SUBSCRIPTION_DESCRIPTION_PARAM, description)
-                .part(SUBSCRIPTION_LOCATION_PARAM, location)
-                .part(SUBSCRIPTION_FULL_TIME_PARAM, String.valueOf(fullTime))
-                .body();
-        return SUBSCRIPTION_OK_PARAM.equals(response);
+    if (search.getLocation() != null) {
+      pairs.add(new NameValuePair(ApiConstants.LOCATION, search.getLocation()));
+    } else if (search.getLatitude() != 0 && search.getLongitude() != 0) {
+      pairs.add(new NameValuePair(ApiConstants.LATITUDE, String.valueOf(search.getLatitude())));
+      pairs.add(new NameValuePair(ApiConstants.LONGITUDE, String.valueOf(search.getLongitude())));
     }
-
-    private static String createUrl(String url, List<NameValuePair> pairs) throws URIException {
-        HttpMethod method = new GetMethod(url);
-        NameValuePair[] nameValuePairs = pairs.toArray(new NameValuePair[pairs.size()]);
-        method.setQueryString(nameValuePairs);
-        return method.getURI().getEscapedURI();
+    if (search.getPage() > 0) {
+      pairs.add(new NameValuePair(ApiConstants.PAGE, String.valueOf(search.getPage())));
     }
+    if (search.isFullTime()) {
+      pairs.add(new NameValuePair(ApiConstants.FULL_TIME, String.valueOf(search.isFullTime())));
+    }
+    try {
+      String url = createUrl(ApiConstants.POSITIONS_URL, pairs);
+      String response = HttpRequest.get(url).acceptGzipEncoding().acceptJson().body();
+      if (response == null) {
+        throw new RuntimeException("Error calling API; it returned null.");
+      }
+
+      // convert json to object
+      Gson gson = new Gson();
+      JSONArray jsonArray = new JSONArray(response);
+      List<Job> jobs = new ArrayList<Job>();
+      for (int i = 0; i < jsonArray.length(); i++) {
+        JSONObject object = jsonArray.getJSONObject(i);
+        jobs.add(gson.fromJson(object.toString(), Job.class));
+      }
+      return jobs;
+    } catch (URIException e) {
+      e.printStackTrace();
+    } catch (JSONException e) {
+      e.printStackTrace();
+    }
+    return null;
+  }
+
+  public static boolean subscribe(String email, String description, String location, boolean fullTime) {
+    HashMap<String, String> parameters = new HashMap<String, String>();
+    parameters.put(SUBSCRIPTION_EMAIL_PARAM, email);
+    parameters.put(SUBSCRIPTION_DESCRIPTION_PARAM, description);
+    parameters.put(SUBSCRIPTION_LOCATION_PARAM, location);
+    parameters.put(SUBSCRIPTION_FULL_TIME_PARAM, String.valueOf(fullTime));
+    String response = HttpRequest.post(ApiConstants.EMAIL_SUBSCRIPTION_URL)
+        .part(SUBSCRIPTION_EMAIL_PARAM, email)
+        .part(SUBSCRIPTION_DESCRIPTION_PARAM, description)
+        .part(SUBSCRIPTION_LOCATION_PARAM, location)
+        .part(SUBSCRIPTION_FULL_TIME_PARAM, String.valueOf(fullTime))
+        .body();
+    return SUBSCRIPTION_OK_PARAM.equals(response);
+  }
+
+  private static String createUrl(String url, List<NameValuePair> pairs) throws URIException {
+    HttpMethod method = new GetMethod(url);
+    NameValuePair[] nameValuePairs = pairs.toArray(new NameValuePair[pairs.size()]);
+    method.setQueryString(nameValuePairs);
+    return method.getURI().getEscapedURI();
+  }
 }

@@ -25,16 +25,16 @@ import com.google.gson.Gson;
  * @version 1.0
  */
 public class GithubApi {
-    public User getUser(String username) {
-        String url = String.format(ApiConstants.API_URL, String.format(ApiConstants.GET_USER, username));
-        try {
-            String response = HttpRequest.get(url).body();
-            // convert json to object
-            Gson gson = new Gson();
-            return gson.fromJson(response, User.class);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return null;
+  public User getUser(String username) {
+    String url = String.format(ApiConstants.API_URL, String.format(ApiConstants.GET_USER, username));
+    try {
+      String response = HttpRequest.get(url).body();
+      // convert json to object
+      Gson gson = new Gson();
+      return gson.fromJson(response, User.class);
+    } catch (Exception e) {
+      e.printStackTrace();
     }
+    return null;
+  }
 }

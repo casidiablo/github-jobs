@@ -25,14 +25,14 @@ import com.github.jobs.ui.fragment.SOUserPickerFragment;
  * @version 1.0
  */
 public class SOUserPickerActivity extends TrackActivity {
-    public static final String EXTRA_SEARCH = "com.github.jobs.extra.search";
-    public static final int REQUEST_CODE = 123;
-    public static final String EXTRA_USER = "com.github.jobs.extra.user";
+  public static final String EXTRA_SEARCH = "com.github.jobs.extra.search";
+  public static final int REQUEST_CODE = 123;
+  public static final String EXTRA_USER = "com.github.jobs.extra.user";
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        setupBaseFragment(R.id.base_container, SOUserPickerFragment.class);
-    }
+  @Override
+  protected void onCreate(Bundle savedInstanceState) {
+    super.onCreate(savedInstanceState);
+    getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+    setupBaseFragment(R.id.base_container, SOUserPickerFragment.class);
+  }
 }

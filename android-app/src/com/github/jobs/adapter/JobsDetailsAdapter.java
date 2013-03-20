@@ -26,20 +26,20 @@ import java.util.List;
  * @author cristian
  */
 public class JobsDetailsAdapter extends FragmentStatePagerAdapter {
-    private final List<String> mIds;
+  private final List<String> mIds;
 
-    public JobsDetailsAdapter(FragmentManager fm, List<String> ids) {
-        super(fm);
-        mIds = ids;
-    }
+  public JobsDetailsAdapter(FragmentManager fm, List<String> ids) {
+    super(fm);
+    mIds = ids;
+  }
 
-    @Override
-    protected Fragment getItem(int position) {
-        return JobDetailsFragment.newInstance(mIds.get(position));
-    }
+  @Override
+  protected Fragment getItem(int position) {
+    return JobDetailsFragment.newInstance(mIds.get(position));
+  }
 
-    @Override
-    public int getCount() {
-        return mIds.size();
-    }
+  @Override
+  public int getCount() {
+    return mIds.size();
+  }
 }

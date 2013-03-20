@@ -22,64 +22,64 @@ import android.view.ViewGroup;
 import com.actionbarsherlock.app.SherlockFragmentActivity;
 
 public abstract class BaseActivity extends SherlockFragmentActivity {
-    private final BaseActivityDelegate mDelegate = new BaseActivityDelegate(this);
+  private final BaseActivityDelegate mDelegate = new BaseActivityDelegate(this);
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        mDelegate.onCreate();
-        super.onCreate(savedInstanceState);
-    }
+  @Override
+  protected void onCreate(Bundle savedInstanceState) {
+    mDelegate.onCreate();
+    super.onCreate(savedInstanceState);
+  }
 
-    @Override
-    public void setContentView(int layoutResId) {
-        super.setContentView(layoutResId);
-        mDelegate.setContentView();
-    }
+  @Override
+  public void setContentView(int layoutResId) {
+    super.setContentView(layoutResId);
+    mDelegate.setContentView();
+  }
 
-    @Override
-    public void setContentView(View view) {
-        super.setContentView(view);
-        mDelegate.setContentView();
-    }
+  @Override
+  public void setContentView(View view) {
+    super.setContentView(view);
+    mDelegate.setContentView();
+  }
 
-    @Override
-    public void setContentView(View view, ViewGroup.LayoutParams params) {
-        super.setContentView(view, params);
-        mDelegate.setContentView();
-    }
+  @Override
+  public void setContentView(View view, ViewGroup.LayoutParams params) {
+    super.setContentView(view, params);
+    mDelegate.setContentView();
+  }
 
-    /**
-     * Helper method that allows to initialize and add a fragment to activities that usually have
-     * just one single fragment. Fragment is added using its class.getName() as tag.
-     *
-     * @param containerId   resource id of the fragment container (must be created through android resources)
-     * @param fragmentClass the class of the fragment to setup
-     */
-    protected void setupBaseFragment(int containerId, Class<? extends Fragment> fragmentClass) {
-        mDelegate.setupBaseFragment(containerId, fragmentClass);
-    }
+  /**
+   * Helper method that allows to initialize and add a fragment to activities that usually have
+   * just one single fragment. Fragment is added using its class.getName() as tag.
+   *
+   * @param containerId   resource id of the fragment container (must be created through android resources)
+   * @param fragmentClass the class of the fragment to setup
+   */
+  protected void setupBaseFragment(int containerId, Class<? extends Fragment> fragmentClass) {
+    mDelegate.setupBaseFragment(containerId, fragmentClass);
+  }
 
-    /**
-     * Helper method that allows to initialize and add a fragment to activities that usually have
-     * just one single fragment. Fragment is added using its class.getName() as tag.
-     *
-     * @param containerId   resource id of the fragment container (must be created through android resources)
-     * @param fragmentClass the class of the fragment to setup
-     * @param args          bundle with the arguments to pass to the fragment
-     */
-    protected void setupBaseFragment(int containerId, Class<? extends Fragment> fragmentClass, Bundle args) {
-        mDelegate.setupBaseFragment(containerId, fragmentClass, args);
-    }
+  /**
+   * Helper method that allows to initialize and add a fragment to activities that usually have
+   * just one single fragment. Fragment is added using its class.getName() as tag.
+   *
+   * @param containerId   resource id of the fragment container (must be created through android resources)
+   * @param fragmentClass the class of the fragment to setup
+   * @param args          bundle with the arguments to pass to the fragment
+   */
+  protected void setupBaseFragment(int containerId, Class<? extends Fragment> fragmentClass, Bundle args) {
+    mDelegate.setupBaseFragment(containerId, fragmentClass, args);
+  }
 
-    /**
-     * Allows to retrieve the instance of a previously added fragment. We
-     * use fragmentClass.getName() to find by tag.
-     *
-     * @param fragmentClass the fragment class
-     * @return the fragment or null if it was has not been added
-     */
-    public <T> T findFragment(Class<? extends T> fragmentClass) {
-        return mDelegate.findFragment(fragmentClass);
-    }
+  /**
+   * Allows to retrieve the instance of a previously added fragment. We
+   * use fragmentClass.getName() to find by tag.
+   *
+   * @param fragmentClass the fragment class
+   * @return the fragment or null if it was has not been added
+   */
+  public <T> T findFragment(Class<? extends T> fragmentClass) {
+    return mDelegate.findFragment(fragmentClass);
+  }
 
 }

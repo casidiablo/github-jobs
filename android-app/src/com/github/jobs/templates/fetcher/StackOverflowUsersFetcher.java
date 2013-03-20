@@ -30,22 +30,22 @@ import java.util.List;
  * @version 1.0
  */
 public class StackOverflowUsersFetcher {
-    public static final String URL = "https://api.stackexchange.com/2.1/users?order=desc&sort=reputation&inname=%s&site=stackoverflow&key=pi7fgVg11VspVuG0kdB2PA((";
+  public static final String URL = "https://api.stackexchange.com/2.1/users?order=desc&sort=reputation&inname=%s&site=stackoverflow&key=pi7fgVg11VspVuG0kdB2PA((";
 
-    public List<SOUser> findUser(String username) {
-        String url = String.format(URL, username);
-        try {
-            String response = HttpRequest.get(url).body();
-            // convert json to object
-            Gson gson = new Gson();
-            TypeToken<List<SOUser>> typeToken = new TypeToken<List<SOUser>>() {
-            };
-            JSONObject jsonObject = new JSONObject(response);
-            JSONArray jsonArray = jsonObject.getJSONArray("items");
-            return gson.fromJson(jsonArray.toString(), typeToken.getType());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return null;
+  public List<SOUser> findUser(String username) {
+    String url = String.format(URL, username);
+    try {
+      String response = HttpRequest.get(url).body();
+      // convert json to object
+      Gson gson = new Gson();
+      TypeToken<List<SOUser>> typeToken = new TypeToken<List<SOUser>>() {
+      };
+      JSONObject jsonObject = new JSONObject(response);
+      JSONArray jsonArray = jsonObject.getJSONArray("items");
+      return gson.fromJson(jsonArray.toString(), typeToken.getType());
+    } catch (Exception e) {
+      e.printStackTrace();
     }
+    return null;
+  }
 }

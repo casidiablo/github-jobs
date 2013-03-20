@@ -40,76 +40,76 @@ import static com.github.jobs.utils.AnalyticsHelper.*;
  */
 public class AppUtils {
 
-    public static final boolean IN_DEVELOPMENT = false;
+  public static final boolean IN_DEVELOPMENT = false;
 
-    public static void goHome(Activity activity) {
-        Intent intent = new Intent(activity, HomeActivity.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        activity.startActivity(intent);
-        activity.overridePendingTransition(R.anim.home_enter, R.anim.home_exit);
-        getTracker(activity).trackEvent(CATEGORY_JOBS, ACTION_BACK, LABEL_FROM_DETAILS);
+  public static void goHome(Activity activity) {
+    Intent intent = new Intent(activity, HomeActivity.class);
+    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+    activity.startActivity(intent);
+    activity.overridePendingTransition(R.anim.home_enter, R.anim.home_exit);
+    getTracker(activity).trackEvent(CATEGORY_JOBS, ACTION_BACK, LABEL_FROM_DETAILS);
+  }
+
+  public static void goTemplatesList(Activity activity) {
+    Intent intent = new Intent(activity, TemplatesActivity.class);
+    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+    activity.startActivity(intent);
+    activity.overridePendingTransition(R.anim.home_enter, R.anim.home_exit);
+    getTracker(activity).trackEvent(CATEGORY_JOBS, ACTION_BACK, LABEL_FROM_DETAILS);
+  }
+
+  public static Template getDefaultTemplate(Context context) {
+    Template defaultTemplate = new Template();
+    defaultTemplate.setName(context.getString(R.string.default_cover_letter_name));
+    defaultTemplate.setContent(context.getString(R.string.default_cover_letter_content));
+    defaultTemplate.setLastUpdate(System.currentTimeMillis());
+    return defaultTemplate;
+  }
+
+  public static void setupWebView(WebView webView) {
+    if (webView == null) {
+      return;
     }
+    webView.setHorizontalScrollBarEnabled(false);
+    webView.setScrollBarStyle(View.SCROLLBARS_INSIDE_OVERLAY);
 
-    public static void goTemplatesList(Activity activity) {
-        Intent intent = new Intent(activity, TemplatesActivity.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        activity.startActivity(intent);
-        activity.overridePendingTransition(R.anim.home_enter, R.anim.home_exit);
-        getTracker(activity).trackEvent(CATEGORY_JOBS, ACTION_BACK, LABEL_FROM_DETAILS);
+    WebSettings settings = webView.getSettings();
+    settings.setPluginsEnabled(false);
+    settings.setJavaScriptEnabled(true);
+    settings.setBuiltInZoomControls(false);
+    settings.setJavaScriptCanOpenWindowsAutomatically(false);
+    settings.setSupportMultipleWindows(false);
+    settings.setAppCacheEnabled(true);
+    settings.setCacheMode(WebSettings.LOAD_NORMAL);
+    if (AppUtils.isHoneycombPlus()) {
+      settings.enableSmoothTransition();
     }
+    settings.setLoadsImagesAutomatically(true);
+    settings.setGeolocationEnabled(true);
+    settings.setDomStorageEnabled(true);
+    settings.setSupportZoom(false);
+    settings.setSaveFormData(false);
+    settings.setSavePassword(false);
+    settings.setLightTouchEnabled(false);
+    settings.setDatabaseEnabled(true);
+    settings.setAllowFileAccess(true);
+  }
 
-    public static Template getDefaultTemplate(Context context) {
-        Template defaultTemplate = new Template();
-        defaultTemplate.setName(context.getString(R.string.default_cover_letter_name));
-        defaultTemplate.setContent(context.getString(R.string.default_cover_letter_content));
-        defaultTemplate.setLastUpdate(System.currentTimeMillis());
-        return defaultTemplate;
+  public static boolean isHoneycombPlus() {
+    return Build.VERSION.SDK_INT >= 11;
+  }
+
+  public static void hideKeyboard(Context context, IBinder token) {
+    InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
+    imm.hideSoftInputFromWindow(token, 0);
+  }
+
+  public static boolean isOnline(Context context) {
+    ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+    if (cm == null) {
+      return false;
     }
-
-    public static void setupWebView(WebView webView) {
-        if (webView == null) {
-            return;
-        }
-        webView.setHorizontalScrollBarEnabled(false);
-        webView.setScrollBarStyle(View.SCROLLBARS_INSIDE_OVERLAY);
-
-        WebSettings settings = webView.getSettings();
-        settings.setPluginsEnabled(false);
-        settings.setJavaScriptEnabled(true);
-        settings.setBuiltInZoomControls(false);
-        settings.setJavaScriptCanOpenWindowsAutomatically(false);
-        settings.setSupportMultipleWindows(false);
-        settings.setAppCacheEnabled(true);
-        settings.setCacheMode(WebSettings.LOAD_NORMAL);
-        if (AppUtils.isHoneycombPlus()) {
-            settings.enableSmoothTransition();
-        }
-        settings.setLoadsImagesAutomatically(true);
-        settings.setGeolocationEnabled(true);
-        settings.setDomStorageEnabled(true);
-        settings.setSupportZoom(false);
-        settings.setSaveFormData(false);
-        settings.setSavePassword(false);
-        settings.setLightTouchEnabled(false);
-        settings.setDatabaseEnabled(true);
-        settings.setAllowFileAccess(true);
-    }
-
-    public static boolean isHoneycombPlus() {
-        return Build.VERSION.SDK_INT >= 11;
-    }
-
-    public static void hideKeyboard(Context context, IBinder token) {
-        InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
-        imm.hideSoftInputFromWindow(token, 0);
-    }
-
-    public static boolean isOnline(Context context) {
-        ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
-        if( cm == null ){
-            return false;
-        }
-        NetworkInfo info = cm.getActiveNetworkInfo();
-        return info != null && info.isConnectedOrConnecting();
-    }
+    NetworkInfo info = cm.getActiveNetworkInfo();
+    return info != null && info.isConnectedOrConnecting();
+  }
 }

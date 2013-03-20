@@ -25,15 +25,15 @@ import com.github.jobs.utils.AnalyticsHelper;
  */
 public class TrackFragmentDialog extends SherlockFragmentActivity {
 
-    @Override
-    protected void onStart() {
-        super.onStart();
-        AnalyticsHelper.getTracker(this).onActivityStarted(this);
-    }
+  @Override
+  protected void onStart() {
+    super.onStart();
+    AnalyticsHelper.getTracker(this).onActivityStarted(this);
+  }
 
-    @Override
-    protected void onStop() {
-        super.onStop();
-        AnalyticsHelper.getTracker(this).onActivityStopped(this);
-    }
+  @Override
+  protected void onStop() {
+    super.onStop();
+    AnalyticsHelper.getTracker(this).onActivityStopped(this);
+  }
 }
