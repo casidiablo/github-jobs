@@ -17,35 +17,44 @@ package com.github.jobs.ui.activity;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import com.actionbarsherlock.app.SherlockFragmentActivity;
+import com.actionbarsherlock.view.Window;
 
 public abstract class BaseActivity extends SherlockFragmentActivity {
-  private final BaseActivityDelegate mDelegate = new BaseActivityDelegate(this);
+  private boolean mSetContentViewAlreadyCalled;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
-    mDelegate.onCreate();
+    requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
     super.onCreate(savedInstanceState);
   }
 
   @Override
   public void setContentView(int layoutResId) {
     super.setContentView(layoutResId);
-    mDelegate.setContentView();
+    onSetContentView();
   }
 
   @Override
   public void setContentView(View view) {
     super.setContentView(view);
-    mDelegate.setContentView();
+    onSetContentView();
   }
 
   @Override
   public void setContentView(View view, ViewGroup.LayoutParams params) {
     super.setContentView(view, params);
-    mDelegate.setContentView();
+    onSetContentView();
+  }
+
+  private void onSetContentView() {
+    setSupportProgressBarIndeterminateVisibility(false);
+    mSetContentViewAlreadyCalled = true;
   }
 
   /**
@@ -55,8 +64,8 @@ public abstract class BaseActivity extends SherlockFragmentActivity {
    * @param containerId   resource id of the fragment container (must be created through android resources)
    * @param fragmentClass the class of the fragment to setup
    */
-  protected void setupBaseFragment(int containerId, Class<? extends Fragment> fragmentClass) {
-    mDelegate.setupBaseFragment(containerId, fragmentClass);
+  void setupBaseFragment(int containerId, Class<? extends Fragment> fragmentClass) {
+    setupBaseFragment(containerId, fragmentClass, null);
   }
 
   /**
@@ -67,8 +76,28 @@ public abstract class BaseActivity extends SherlockFragmentActivity {
    * @param fragmentClass the class of the fragment to setup
    * @param args          bundle with the arguments to pass to the fragment
    */
-  protected void setupBaseFragment(int containerId, Class<? extends Fragment> fragmentClass, Bundle args) {
-    mDelegate.setupBaseFragment(containerId, fragmentClass, args);
+  void setupBaseFragment(int containerId, Class<? extends Fragment> fragmentClass, Bundle args) {
+    if (mSetContentViewAlreadyCalled) {
+      View view = findViewById(containerId);
+      if (!(view instanceof ViewGroup)) {
+        throw new IllegalStateException("Since you already called setContentView, it must has a ViewGroup whose id is 'containerId'");
+      }
+    } else {
+      FrameLayout container = new FrameLayout(this);
+      container.setId(containerId);
+      setContentView(container);
+    }
+
+    // let's check whether fragment is already added
+    Fragment fragment = findFragment(fragmentClass);
+    if (fragment == null) {
+      // if not, let's create it and add it
+      fragment = Fragment.instantiate(this, fragmentClass.getName(), args);
+
+      FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+      ft.add(containerId, fragment, fragmentClass.getSimpleName());
+      ft.commit();
+    }
   }
 
   /**
@@ -78,8 +107,14 @@ public abstract class BaseActivity extends SherlockFragmentActivity {
    * @param fragmentClass the fragment class
    * @return the fragment or null if it was has not been added
    */
-  public <T> T findFragment(Class<? extends T> fragmentClass) {
-    return mDelegate.findFragment(fragmentClass);
+  <T> T findFragment(Class<? extends T> fragmentClass) {
+    FragmentManager fm = getSupportFragmentManager();
+    Fragment fragment = fm.findFragmentByTag(fragmentClass.getSimpleName());
+    if (!fragmentClass.isInstance(fragment)) {
+      return null;
+    }
+    //noinspection unchecked
+    return (T) fragment;
   }
 
 }
