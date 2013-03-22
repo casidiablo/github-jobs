@@ -39,7 +39,7 @@ import com.github.jobs.bean.TemplateService;
 import com.github.jobs.templates.TemplatesHelper;
 import com.github.jobs.ui.activity.TemplatesActivity;
 import com.github.jobs.utils.WebsiteHelper;
-import com.petebevin.markdown.MarkdownProcessor;
+import in.uncod.android.bypass.Bypass;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -182,21 +182,19 @@ public class HowToApplyDialog extends TrackDialog implements View.OnClickListene
   private void applyForThisJob(ApplyOption applyOption, Template template) {
     // build full markdown content
     String markdownContent = template.getContent();
-
-    // build HTML email content
-    MarkdownProcessor markdown = new MarkdownProcessor();
-    String emailContent = markdown.markdown(markdownContent);
-
     // add footer if necessary
     List<TemplateService> templateServices = template.getTemplateServices();
     if (templateServices != null && !templateServices.isEmpty()) {
-      emailContent += "<p/>--<p/>";
+      markdownContent += "\n--------\n";
       String separator = "";
       for (TemplateService service : templateServices) {
-        emailContent += separator + TemplatesHelper.getContent(this, service);
-        separator = "<br/>";
+        markdownContent += separator + TemplatesHelper.getContent(this, service);
+        separator = "\n\n";
       }
     }
+
+    // build HTML email content
+    CharSequence emailContent = new Bypass().markdownToSpannable(markdownContent);
 
     switch (applyOption.type) {
       case TYPE_EMAIL:
@@ -204,7 +202,7 @@ public class HowToApplyDialog extends TrackDialog implements View.OnClickListene
         intent.setType("text/html");
         intent.putExtra(Intent.EXTRA_EMAIL, new String[]{applyOption.data});
         intent.putExtra(Intent.EXTRA_SUBJECT, getIntent().getStringExtra(EXTRA_TITLE));
-        intent.putExtra(Intent.EXTRA_TEXT, Html.fromHtml(emailContent));
+        intent.putExtra(Intent.EXTRA_TEXT, emailContent);
 
         try {
           startActivity(Intent.createChooser(intent, getString(R.string.apply_for_job_with)));
@@ -215,7 +213,7 @@ public class HowToApplyDialog extends TrackDialog implements View.OnClickListene
       case TYPE_WEBSITE:
         if (WebsiteHelper.launchWebsite(this, applyOption.data)) {
           // when applying via website, we will send plain content
-          String templateContent = Html.fromHtml(emailContent).toString();
+          String templateContent = /*Html.fromHtml(*/emailContent/*)*/.toString();
 
           int sdk = android.os.Build.VERSION.SDK_INT;
           if (sdk < android.os.Build.VERSION_CODES.HONEYCOMB) {

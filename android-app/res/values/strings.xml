@@ -119,7 +119,7 @@ Best regards, Foo Bar.
     <string name="choose_user_and_website">Import user and website</string>
     <string name="cover_letter_name_is_empty">Cover letter name shall not be empty</string>
     <string name="cover_letter_content_is_empty">Cover letter content shall not be empty</string>
-    <string name="cover_letter_footer"><![CDATA[<strong>%1$s</strong>: %2$s]]></string>
+    <string name="cover_letter_footer">**%1$s**: %2$s</string>
     <string name="lbl_editor">Editor</string>
     <string name="preview">Preview</string>
     <string name="edit_cover_letter">Edit cover letter</string>

@@ -17,7 +17,6 @@
 package com.github.jobs.adapter;
 
 import android.content.Context;
-import android.text.Html;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -25,9 +24,9 @@ import com.github.jobs.R;
 import com.github.jobs.bean.Template;
 import com.github.jobs.utils.RelativeDate;
 import com.github.jobs.utils.StringUtils;
-import com.petebevin.markdown.MarkdownProcessor;
 import com.telly.groundy.adapter.Layout;
 import com.telly.groundy.adapter.ListBaseAdapter;
+import in.uncod.android.bypass.Bypass;
 
 /**
  * @author cristian
@@ -35,7 +34,7 @@ import com.telly.groundy.adapter.ListBaseAdapter;
  */
 public class TemplatesAdapter extends ListBaseAdapter<Template, TemplatesAdapter.ViewHolder> {
 
-  private static final MarkdownProcessor MARKDOWN = new MarkdownProcessor();
+  private static final Bypass BYPASS = new Bypass();
 
   public TemplatesAdapter(Context context) {
     super(context, ViewHolder.class);
@@ -57,9 +56,7 @@ public class TemplatesAdapter extends ListBaseAdapter<Template, TemplatesAdapter
       if (content.length() > 150) {
         content = content.substring(0, 150);
       }
-      String html = Html.fromHtml(MARKDOWN.markdown(content)).toString();
-      html = html.replace("\n\n", " ").replace("\n", " ");
-      holder.content.setText(StringUtils.trim(html));
+      holder.content.setText(BYPASS.markdownToSpannable(content));
     } else {
       holder.content.setText("");
     }

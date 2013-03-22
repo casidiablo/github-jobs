@@ -64,7 +64,7 @@ public class LinkedInService implements ServiceContract {
     return new ServiceGenerator(context) {
       @Override
       protected String getLabel() {
-        return getString(getAddServiceLabel());
+        return getString(getServiceLabel());
       }
 
       @Override
