@@ -48,8 +48,7 @@ public class JobDetailsActivity extends TrackActivity implements ViewPager.OnPag
   private List<String> mJobsIds;
   private int mCurrentJobPosition;
 
-  @Override
-  protected void onCreate(Bundle savedInstanceState) {
+  @Override protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.job_details_activity);
     getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -76,15 +75,13 @@ public class JobDetailsActivity extends TrackActivity implements ViewPager.OnPag
     getTracker(this).trackPageView(NAME_DETAILS + "?id=" + jobId);
   }
 
-  @Override
-  public boolean onCreateOptionsMenu(Menu menu) {
+  @Override public boolean onCreateOptionsMenu(Menu menu) {
     menu.add(1, HOW_TO_APPLY, 0, getString(R.string.apply))
         .setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS | MenuItem.SHOW_AS_ACTION_WITH_TEXT);
     return super.onCreateOptionsMenu(menu);
   }
 
-  @Override
-  public boolean onOptionsItemSelected(MenuItem item) {
+  @Override public boolean onOptionsItemSelected(MenuItem item) {
     int itemId = item.getItemId();
     switch (itemId) {
       case HOW_TO_APPLY:
@@ -105,6 +102,21 @@ public class JobDetailsActivity extends TrackActivity implements ViewPager.OnPag
     return super.onOptionsItemSelected(item);
   }
 
+  @Override public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+  }
+
+  @Override public void onPageSelected(int position) {
+    if (position > mCurrentJobPosition) {
+      getTracker(this).trackEvent(CATEGORY_JOBS, ACTION_SWIPE, LABEL_LEFT);
+    } else if (position < mCurrentJobPosition) {
+      getTracker(this).trackEvent(CATEGORY_JOBS, ACTION_SWIPE, LABEL_RIGHT);
+    }
+    mCurrentJobPosition = position;
+  }
+
+  @Override public void onPageScrollStateChanged(int state) {
+  }
+
   private Job findCurrentJob() {
     // find current job id
     int currentItem = mJobsPager.getCurrentItem();
@@ -115,23 +127,5 @@ public class JobDetailsActivity extends TrackActivity implements ViewPager.OnPag
     job.setId(jobId);
     job = Persistence.getAdapter(this).findFirst(job);
     return job;
-  }
-
-  @Override
-  public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-  }
-
-  @Override
-  public void onPageSelected(int position) {
-    if (position > mCurrentJobPosition) {
-      getTracker(this).trackEvent(CATEGORY_JOBS, ACTION_SWIPE, LABEL_LEFT);
-    } else if (position < mCurrentJobPosition) {
-      getTracker(this).trackEvent(CATEGORY_JOBS, ACTION_SWIPE, LABEL_RIGHT);
-    }
-    mCurrentJobPosition = position;
-  }
-
-  @Override
-  public void onPageScrollStateChanged(int state) {
   }
 }

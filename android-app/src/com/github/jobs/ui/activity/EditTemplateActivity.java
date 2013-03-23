@@ -43,7 +43,6 @@ import com.github.jobs.utils.AppUtils;
 import com.github.jobs.utils.TabListenerAdapter;
 import com.github.jobs.utils.ViewUtils;
 import com.squareup.otto.Subscribe;
-
 import javax.inject.Inject;
 
 import static com.github.jobs.templates.TemplatesHelper.getTemplateFromResult;
@@ -70,10 +69,9 @@ public class EditTemplateActivity extends TrackActivity {
   private boolean mEditModeEnabled;
   private long mTemplateId;
 
-  @Inject ViewUtils viewUtils;
+  @Inject ViewUtils viewUtils;// TODO is this OK?
 
-  @Override
-  protected void onCreate(Bundle savedInstanceState) {
+  @Override protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     if (savedInstanceState != null) {
@@ -93,8 +91,7 @@ public class EditTemplateActivity extends TrackActivity {
     setupBaseFragment(R.id.base_container, EditTemplateFragment.class, args);
   }
 
-  @Override
-  protected void onSaveInstanceState(Bundle outState) {
+  @Override protected void onSaveInstanceState(Bundle outState) {
     super.onSaveInstanceState(outState);
     ActionBar.Tab selectedTab = getSupportActionBar().getSelectedTab();
     if (selectedTab != null) {
@@ -104,8 +101,7 @@ public class EditTemplateActivity extends TrackActivity {
     }
   }
 
-  @Override
-  public boolean onCreateOptionsMenu(Menu menu) {
+  @Override public boolean onCreateOptionsMenu(Menu menu) {
     getSupportMenuInflater().inflate(R.menu.edit_template_menu, menu);
     // get menu actions instance
     mMenuEditOrSave = menu.findItem(R.id.menu_edit_or_save);
@@ -124,8 +120,7 @@ public class EditTemplateActivity extends TrackActivity {
     return super.onCreateOptionsMenu(menu);
   }
 
-  @Override
-  public boolean onOptionsItemSelected(MenuItem item) {
+  @Override public boolean onOptionsItemSelected(MenuItem item) {
     int itemId = item.getItemId();
     switch (itemId) {
       case android.R.id.home:
@@ -159,8 +154,7 @@ public class EditTemplateActivity extends TrackActivity {
     return super.onOptionsItemSelected(item);
   }
 
-  @Override
-  public void onActivityResult(int requestCode, int resultCode, Intent data) {
+  @Override public void onActivityResult(int requestCode, int resultCode, Intent data) {
     super.onActivityResult(requestCode, resultCode, data);
     if (resultCode != Activity.RESULT_OK) {
       return;
@@ -180,14 +174,14 @@ public class EditTemplateActivity extends TrackActivity {
           soService.setData(soUser.getLink());
 
           // push cover letter to the fragment holding template information
-          if (!addTemplateService(soService)) return;
+          addTemplateService(soService);
 
           // add the website service if possible
           if (soUser.getWebsiteUrl() != null) {
             TemplateService webService = new TemplateService();
             webService.setType(WebsiteService.TYPE);
             webService.setData(soUser.getWebsiteUrl());
-            if (!addTemplateService(webService)) return;
+            addTemplateService(webService);
           }
           Toast.makeText(this, getString(R.string.so_link_added), Toast.LENGTH_LONG).show();
         }
@@ -253,16 +247,15 @@ public class EditTemplateActivity extends TrackActivity {
     }
   }
 
-  private boolean addTemplateService(TemplateService service) {
+  private void addTemplateService(TemplateService service) {
     EditTemplateFragment fragment = findFragment(EditTemplateFragment.class);
     if (fragment == null) {
       Log.wtf(TAG, "Fragment shall not be null here", new RuntimeException());
-      return false;
+      return;
     }
     fragment.addTemplateService(service);
     // since we added a template service, show the remove action button
     mMenuRemoveService.setVisible(true);
-    return true;
   }
 
   private void enableEditMode() {

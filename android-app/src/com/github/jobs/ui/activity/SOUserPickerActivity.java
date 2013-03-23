@@ -29,8 +29,7 @@ public class SOUserPickerActivity extends TrackActivity {
   public static final int REQUEST_CODE = 123;
   public static final String EXTRA_USER = "com.github.jobs.extra.user";
 
-  @Override
-  protected void onCreate(Bundle savedInstanceState) {
+  @Override protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     setupBaseFragment(R.id.base_container, SOUserPickerFragment.class);

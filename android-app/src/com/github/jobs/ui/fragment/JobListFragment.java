@@ -38,10 +38,7 @@ import com.github.jobs.R;
 import com.github.jobs.adapter.JobsAdapter;
 import com.github.jobs.bean.Job;
 import com.github.jobs.bean.SearchPack;
-import com.github.jobs.events.SearchError;
-import com.github.jobs.events.SearchEvent;
-import com.github.jobs.events.SearchFinished;
-import com.github.jobs.events.SearchProgressChanged;
+import com.github.jobs.events.*;
 import com.github.jobs.loader.JobListLoader;
 import com.github.jobs.receivers.SearchReceiver;
 import com.github.jobs.resolver.EmailSubscriberTask;
@@ -188,7 +185,7 @@ public class JobListFragment extends BusFragment implements LoaderManager.Loader
         getTracker(activity).trackEvent(CATEGORY_SUBSCRIBE, ACTION_OPEN, LABEL_DIALOG);
         break;
       case R.id.menu_delete:
-        ((HomeActivity) activity).removeSearch(mCurrentSearch);
+        bus.post(new RemoveSearch(mCurrentSearch));
         getTracker(activity).trackEvent(CATEGORY_SEARCH, ACTION_REMOVE, mCurrentSearch.getSearch());
         break;
     }

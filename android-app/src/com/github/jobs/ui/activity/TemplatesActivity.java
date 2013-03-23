@@ -30,8 +30,7 @@ public class TemplatesActivity extends TrackActivity {
   public static final String EXTRA_PICK = "com.github.jobs.extra.pick";
   public static final String EXTRA_TEMPLATE_ID = "com.github.jobs.extra.template_id";
 
-  @Override
-  protected void onCreate(Bundle savedInstanceState) {
+  @Override protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     setupBaseFragment(R.id.base_container, TemplatesListFragment.class);

@@ -29,6 +29,7 @@ import com.github.jobs.R;
 import com.github.jobs.adapter.SearchJobFragmentAdapter;
 import com.github.jobs.bean.SearchPack;
 import com.github.jobs.events.ProgressWheel;
+import com.github.jobs.events.RemoveSearch;
 import com.github.jobs.receivers.SearchReceiver;
 import com.github.jobs.ui.dialog.AboutDialog;
 import com.github.jobs.ui.dialog.SearchDialog;
@@ -48,8 +49,7 @@ public class HomeActivity extends TrackActivity {
   private ViewPager mViewPager;
   private State mState;
 
-  @Override
-  public void onCreate(Bundle savedInstanceState) {
+  @Override public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     ((GithubJobsApplication) getApplication()).inject(this);
     getTracker(this).trackPageView(NAME_HOME);
@@ -83,22 +83,19 @@ public class HomeActivity extends TrackActivity {
     }
   }
 
-  @Override
-  public void setSupportProgressBarIndeterminateVisibility(boolean visible) {
+  @Override public void setSupportProgressBarIndeterminateVisibility(boolean visible) {
     super.setSupportProgressBarIndeterminateVisibility(visible);
     if (mState != null) {
       mState.loading = visible;
     }
   }
 
-  @Override
-  public Object onRetainCustomNonConfigurationInstance() {
+  @Override public Object onRetainCustomNonConfigurationInstance() {
     mState.currentTab = mViewPager.getCurrentItem();
     return mState;
   }
 
-  @Override
-  protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+  @Override protected void onActivityResult(int requestCode, int resultCode, Intent data) {
     super.onActivityResult(requestCode, resultCode, data);
     if (requestCode != SEARCH_REQUEST || resultCode != Activity.RESULT_OK) {
       return;
@@ -120,8 +117,7 @@ public class HomeActivity extends TrackActivity {
     selectTab(position);
   }
 
-  @Override
-  public boolean onOptionsItemSelected(MenuItem item) {
+  @Override public boolean onOptionsItemSelected(MenuItem item) {
     switch (item.getItemId()) {
       case R.id.menu_search:
         getTracker(this).trackEvent(CATEGORY_SEARCH, ACTION_OPEN, LABEL_DIALOG);
@@ -139,10 +135,13 @@ public class HomeActivity extends TrackActivity {
     return super.onOptionsItemSelected(item);
   }
 
-  @Override
-  public boolean onCreateOptionsMenu(Menu menu) {
+  @Override public boolean onCreateOptionsMenu(Menu menu) {
     getSupportMenuInflater().inflate(R.menu.home_menu, menu);
     return true;
+  }
+
+  @Subscribe public void showProgressWheel(ProgressWheel progressWheel) {
+    setSupportProgressBarIndeterminateVisibility(progressWheel.show);
   }
 
   private void showTabs() {
@@ -152,21 +151,21 @@ public class HomeActivity extends TrackActivity {
     mIndicator.setVisibility(View.VISIBLE);
   }
 
-  void hideTabs() {
+  private void hideTabs() {
     if (mIndicator == null) {
       return;
     }
     mIndicator.setVisibility(View.GONE);
   }
 
-  void selectTab(int i) {
+  private void selectTab(int i) {
     mIndicator.setCurrentItem(i);
     mViewPager.setCurrentItem(i);
   }
 
-  public void removeSearch(SearchPack searchPack) {
-    int position = mSearchJobFragmentAdapter.positionFor(searchPack);
-    mSearchJobFragmentAdapter.removeItem(searchPack);
+  @Subscribe public void removeSearch(RemoveSearch removeSearch) {
+    int position = mSearchJobFragmentAdapter.positionFor(removeSearch.searchPack);
+    mSearchJobFragmentAdapter.removeItem(removeSearch.searchPack);
     mIndicator.notifyDataSetChanged();
     // choose the next open tab or the latest one
     if (position < mSearchJobFragmentAdapter.getCount()) {
@@ -179,11 +178,8 @@ public class HomeActivity extends TrackActivity {
     }
   }
 
-  @Subscribe public void showProgressWheel(ProgressWheel progressWheel) {
-    setSupportProgressBarIndeterminateVisibility(progressWheel.show);
-  }
-
   public SearchReceiver getSearchReceiver() {
+    // TODO revisit this part to make sure it does not suck (spoiler: it does)
     return mState.receiver;
   }
 

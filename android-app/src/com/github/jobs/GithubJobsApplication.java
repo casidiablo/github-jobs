@@ -25,10 +25,7 @@ import com.codeslap.persistence.PersistenceLogManager;
 import com.crittercism.app.Crittercism;
 import com.github.jobs.bean.*;
 import com.github.jobs.receivers.SearchReceiver;
-import com.github.jobs.ui.activity.EditTemplateActivity;
-import com.github.jobs.ui.activity.HomeActivity;
-import com.github.jobs.ui.activity.JobDetailsActivity;
-import com.github.jobs.ui.activity.TemplatesActivity;
+import com.github.jobs.ui.activity.*;
 import com.github.jobs.ui.dialog.DeleteTemplateDialog;
 import com.github.jobs.ui.dialog.RemoveServicesDialog;
 import com.github.jobs.ui.fragment.EditTemplateFragment;
@@ -83,7 +80,8 @@ public class GithubJobsApplication extends Application {
       EditTemplateFragment.class, //
       JobDetailsActivity.class, //
       RemoveServicesDialog.class, //
-      DeleteTemplateDialog.class})
+      DeleteTemplateDialog.class, //
+      SOUserPickerActivity.class})
   static class GithubJobsModule {
     private final Context context;
 

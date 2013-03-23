@@ -33,8 +33,7 @@ public abstract class BaseActivity extends SherlockFragmentActivity {
   private boolean mSetContentViewAlreadyCalled;
   @Inject Bus bus;
 
-  @Override
-  protected void onCreate(Bundle savedInstanceState) {
+  @Override protected void onCreate(Bundle savedInstanceState) {
     requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
     super.onCreate(savedInstanceState);
     ((GithubJobsApplication) getApplication()).inject(this);
