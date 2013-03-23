@@ -29,6 +29,8 @@ import com.github.jobs.ui.activity.EditTemplateActivity;
 import com.github.jobs.ui.activity.HomeActivity;
 import com.github.jobs.ui.activity.JobDetailsActivity;
 import com.github.jobs.ui.activity.TemplatesActivity;
+import com.github.jobs.ui.dialog.DeleteTemplateDialog;
+import com.github.jobs.ui.dialog.RemoveServicesDialog;
 import com.github.jobs.ui.fragment.EditTemplateFragment;
 import com.github.jobs.ui.fragment.JobListFragment;
 import com.github.jobs.ui.fragment.SOUserFetcherReceiver;
@@ -39,7 +41,6 @@ import com.squareup.otto.Bus;
 import dagger.Module;
 import dagger.ObjectGraph;
 import dagger.Provides;
-
 import javax.inject.Singleton;
 
 public class GithubJobsApplication extends Application {
@@ -72,18 +73,18 @@ public class GithubJobsApplication extends Application {
     objectGraph.inject(object);
   }
 
-  @Module(entryPoints = {
-    HomeActivity.class,
-    EditTemplateActivity.class,
-    TemplatesActivity.class,
-    SOUserFetcherReceiver.class,
-    SOUserPickerFragment.class,
-    SearchReceiver.class,
-    JobListFragment.class,
-    EditTemplateFragment.class,
-    JobDetailsActivity.class
-  })
-  private static class GithubJobsModule {
+  @Module(entryPoints = {HomeActivity.class, //
+      EditTemplateActivity.class, //
+      TemplatesActivity.class, //
+      SOUserFetcherReceiver.class, //
+      SOUserPickerFragment.class, //
+      SearchReceiver.class, //
+      JobListFragment.class, //
+      EditTemplateFragment.class, //
+      JobDetailsActivity.class, //
+      RemoveServicesDialog.class, //
+      DeleteTemplateDialog.class})
+  static class GithubJobsModule {
     private final Context context;
 
     private GithubJobsModule(Context context) {

@@ -13,4 +13,8 @@ public class ViewUtils {
   public void toast(String text) {
     Toast.makeText(context, text, Toast.LENGTH_LONG).show();
   }
+
+  public void toast(int resId) {
+    Toast.makeText(context, resId, Toast.LENGTH_LONG).show();
+  }
 }

@@ -18,6 +18,7 @@ package com.github.jobs.ui.fragment;
 
 import android.os.Bundle;
 import android.os.Parcelable;
+import android.support.v4.app.Fragment;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -33,14 +34,12 @@ import com.codeslap.persistence.SqlAdapter;
 import com.github.jobs.R;
 import com.github.jobs.bean.Template;
 import com.github.jobs.bean.TemplateService;
-import com.github.jobs.events.SaveTemplateDone;
-import com.github.jobs.events.SaveTemplateEvent;
-import com.github.jobs.events.SelectEditorTab;
+import com.github.jobs.events.*;
 import com.github.jobs.templates.TemplatesHelper;
+import com.github.jobs.ui.dialog.RemoveServicesDialog;
 import com.github.jobs.utils.AppUtils;
 import com.github.jobs.utils.GithubJobsJavascriptInterface;
 import com.squareup.otto.Subscribe;
-
 import java.util.ArrayList;
 
 import static com.github.jobs.utils.GithubJobsJavascriptInterface.JS_INTERFACE;
@@ -233,12 +232,21 @@ public class EditTemplateFragment extends BusFragment {
     updatePreview();
   }
 
-  public ArrayList<TemplateService> getTemplateServices() {
-    return mTemplateServices;
+  @Subscribe public void removeServices(DeleteServices deleteServices) {
+    mTemplateServices.removeAll(deleteServices.toDelete);
+    updatePreview();
+    bus.post(new ServicesDeleted(mTemplateServices.isEmpty()));
   }
 
-  public void removeServices(ArrayList<TemplateService> services) {
-    mTemplateServices.removeAll(services);
-    updatePreview();
+  @Subscribe public void onRemoveServicesClicked(RemoveServicesClicked removeServicesClicked) {
+    // this should never happen but I don't trust anyone, nor even my grandmother
+    if (mTemplateServices.isEmpty()) {
+      bus.post(new ServicesDeleted(false));
+      return;
+    }
+
+    // show a dialog to allow users to remove current services
+    Fragment fragment = RemoveServicesDialog.newInstance(mTemplateServices);
+    getFragmentManager().beginTransaction().add(fragment, RemoveServicesDialog.TAG).commitAllowingStateLoss();
   }
 }

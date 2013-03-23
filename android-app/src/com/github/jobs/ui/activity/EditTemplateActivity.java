@@ -33,20 +33,18 @@ import com.github.jobs.R;
 import com.github.jobs.bean.SOUser;
 import com.github.jobs.bean.Template;
 import com.github.jobs.bean.TemplateService;
-import com.github.jobs.events.SaveTemplateDone;
-import com.github.jobs.events.SaveTemplateEvent;
-import com.github.jobs.events.SelectEditorTab;
+import com.github.jobs.events.*;
 import com.github.jobs.templates.services.StackOverflowService;
 import com.github.jobs.templates.services.WebsiteService;
 import com.github.jobs.ui.dialog.DeleteTemplateDialog;
-import com.github.jobs.ui.dialog.RemoveServicesDialog;
 import com.github.jobs.ui.dialog.ServiceChooserDialog;
 import com.github.jobs.ui.fragment.EditTemplateFragment;
 import com.github.jobs.utils.AppUtils;
 import com.github.jobs.utils.TabListenerAdapter;
+import com.github.jobs.utils.ViewUtils;
 import com.squareup.otto.Subscribe;
 
-import java.util.ArrayList;
+import javax.inject.Inject;
 
 import static com.github.jobs.templates.TemplatesHelper.getTemplateFromResult;
 
@@ -71,6 +69,8 @@ public class EditTemplateActivity extends TrackActivity {
   private MenuItem mMenuEditOrSave, mMenuAddService, mMenuRemoveService, mMenuDelete;
   private boolean mEditModeEnabled;
   private long mTemplateId;
+
+  @Inject ViewUtils viewUtils;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -153,26 +153,7 @@ public class EditTemplateActivity extends TrackActivity {
         startActivityForResult(serviceChooser, ServiceChooserDialog.REQUEST_CODE);
         return true;
       case R.id.menu_remove_service:
-        EditTemplateFragment editTemplateFragment = findFragment(EditTemplateFragment.class);
-        if (editTemplateFragment != null) {
-          // this should never happen but I don't trust anyone, nor even my grandmother
-          if (editTemplateFragment.getTemplateServices().isEmpty()) {
-            if (mMenuRemoveService != null) {
-              mMenuRemoveService.setVisible(false);
-            }
-            return true;
-          }
-
-          // create an bundle with the current services
-          ArrayList<TemplateService> templateServices = editTemplateFragment.getTemplateServices();
-          Bundle args = new Bundle();
-          args.putParcelableArrayList(RemoveServicesDialog.ARG_SERVICES, templateServices);
-
-          // show a dialog to allow users to remove current services
-          RemoveServicesDialog dialog = new RemoveServicesDialog();
-          dialog.setArguments(args);
-          getSupportFragmentManager().beginTransaction().add(dialog, RemoveServicesDialog.TAG).commitAllowingStateLoss();
-        }
+        bus.post(new RemoveServicesClicked());
         break;
     }
     return super.onOptionsItemSelected(item);
@@ -235,16 +216,35 @@ public class EditTemplateActivity extends TrackActivity {
     }
   }
 
-  public void removeServices(ArrayList<TemplateService> services) {
-    EditTemplateFragment editTemplateFragment = findFragment(EditTemplateFragment.class);
-    if (editTemplateFragment != null) {
-      editTemplateFragment.removeServices(services);
-      mMenuRemoveService.setVisible(!editTemplateFragment.getTemplateServices().isEmpty());
+  @Subscribe public void onServicesDeleted(ServicesDeleted servicesDeleted) {
+    mMenuRemoveService.setVisible(!servicesDeleted.noServicesRemaining);
+  }
+
+  @Subscribe public void doDelete(DeleteTemplate deleteTemplate) {
+    SqlAdapter adapter = Persistence.getAdapter(this);
+    Template template = new Template();
+    template.setId(mTemplateId);
+    int delete = adapter.delete(template);
+    if (delete > 0) {
+      viewUtils.toast(R.string.cover_letter_deleted_successfully);
+    }
+    setResult(RESULT_OK);
+    finish();
+  }
+
+  @Subscribe public void selectEditorTab(SelectEditorTab selectEditorTab) {
+    if (getSupportActionBar().getSelectedTab().getPosition() != 0) {
+      getSupportActionBar().getTabAt(0).select();
     }
   }
 
+  @Subscribe public void onSaveTemplateDone(SaveTemplateDone saveTemplateDone) {
+    setResult(RESULT_OK);
+    finish();
+  }
+
   private void showRemoveServiceBtnIfNecessary() {
-    if (mTemplateId != -1) {
+    if (mTemplateId != -1 && mMenuRemoveService != null) {
       SqlAdapter adapter = Persistence.getAdapter(this);
       int count = adapter.count(TemplateService.class, "template_id = ?", new String[]{String.valueOf(mTemplateId)});
       if (count > 0) {
@@ -263,18 +263,6 @@ public class EditTemplateActivity extends TrackActivity {
     // since we added a template service, show the remove action button
     mMenuRemoveService.setVisible(true);
     return true;
-  }
-
-  public void doDelete() {
-    SqlAdapter adapter = Persistence.getAdapter(this);
-    Template template = new Template();
-    template.setId(mTemplateId);
-    int delete = adapter.delete(template);
-    if (delete > 0) {
-      Toast.makeText(this, R.string.cover_letter_deleted_successfully, Toast.LENGTH_LONG).show();
-    }
-    setResult(RESULT_OK);
-    finish();
   }
 
   private void enableEditMode() {
@@ -338,17 +326,6 @@ public class EditTemplateActivity extends TrackActivity {
     if (mMenuDelete != null) {
       mMenuDelete.setVisible(true);
     }
-  }
-
-  @Subscribe public void selectEditorTab(SelectEditorTab selectEditorTab) {
-    if (getSupportActionBar().getSelectedTab().getPosition() != 0) {
-      getSupportActionBar().getTabAt(0).select();
-    }
-  }
-
-  @Subscribe public void onSaveTemplateDone(SaveTemplateDone saveTemplateDone) {
-    setResult(RESULT_OK);
-    finish();
   }
 
   private void showEditor(boolean showEditor) {
