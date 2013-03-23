@@ -35,8 +35,7 @@ public class SearchDialog extends TrackDialog implements View.OnClickListener {
   private EditText mDescription, mLocation;
   private CheckBox mFullTime;
 
-  @Override
-  protected void onCreate(Bundle savedInstanceState) {
+  @Override protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     getTracker(this).trackPageView(NAME_SEARCH_DIALOG);
     setContentView(R.layout.search_settings);
@@ -49,8 +48,7 @@ public class SearchDialog extends TrackDialog implements View.OnClickListener {
     findViewById(R.id.btn_cancel).setOnClickListener(this);
   }
 
-  @Override
-  public void onClick(View view) {
+  @Override public void onClick(View view) {
     switch (view.getId()) {
       case R.id.btn_search:
         // validate data

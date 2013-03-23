@@ -49,8 +49,7 @@ public class TemplatesListFragment extends SherlockListFragment implements Loade
   private static final int TEMPLATES_LOADER_ID = 8432;
   private TemplatesAdapter mAdapter;
 
-  @Override
-  public void onActivityCreated(Bundle savedInstanceState) {
+  @Override public void onActivityCreated(Bundle savedInstanceState) {
     super.onActivityCreated(savedInstanceState);
     setHasOptionsMenu(true);
     mAdapter = new TemplatesAdapter(getActivity());
@@ -58,8 +57,7 @@ public class TemplatesListFragment extends SherlockListFragment implements Loade
     queryList();
   }
 
-  @Override
-  public void onListItemClick(ListView l, View v, int position, long id) {
+  @Override public void onListItemClick(ListView l, View v, int position, long id) {
     FragmentActivity activity = getActivity();
     if (!(activity instanceof TemplatesActivity)) {
       return;
@@ -74,14 +72,12 @@ public class TemplatesListFragment extends SherlockListFragment implements Loade
     }
   }
 
-  @Override
-  public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+  @Override public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
     super.onCreateOptionsMenu(menu, inflater);
     inflater.inflate(R.menu.templates_list_menu, menu);
   }
 
-  @Override
-  public boolean onOptionsItemSelected(MenuItem item) {
+  @Override public boolean onOptionsItemSelected(MenuItem item) {
     switch (item.getItemId()) {
       case R.id.menu_add_template:
         getTracker(getActivity()).trackPageView(NAME_EDIT_TEMPLATES);
@@ -92,16 +88,14 @@ public class TemplatesListFragment extends SherlockListFragment implements Loade
     return super.onOptionsItemSelected(item);
   }
 
-  @Override
-  public void onActivityResult(int requestCode, int resultCode, Intent data) {
+  @Override public void onActivityResult(int requestCode, int resultCode, Intent data) {
     super.onActivityResult(requestCode, resultCode, data);
     if (requestCode == REQUEST_CODE && resultCode == RESULT_OK) {
       queryList();
     }
   }
 
-  @Override
-  public Loader<List<Template>> onCreateLoader(int id, Bundle args) {
+  @Override public Loader<List<Template>> onCreateLoader(int id, Bundle args) {
     FragmentActivity activity = getActivity();
     if (activity == null || !isAdded()) {
       return null;
@@ -109,8 +103,7 @@ public class TemplatesListFragment extends SherlockListFragment implements Loade
     return new TemplatesLoader(activity);
   }
 
-  @Override
-  public void onLoadFinished(Loader<List<Template>> loader, List<Template> data) {
+  @Override public void onLoadFinished(Loader<List<Template>> loader, List<Template> data) {
     mAdapter.updateItems(data);
     if (data.isEmpty()) {
       setEmptyText(getString(R.string.empty_cover_letters_list));
@@ -119,8 +112,7 @@ public class TemplatesListFragment extends SherlockListFragment implements Loade
     }
   }
 
-  @Override
-  public void onLoaderReset(Loader<List<Template>> loader) {
+  @Override public void onLoaderReset(Loader<List<Template>> loader) {
     mAdapter.clear();
   }
 

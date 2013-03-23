@@ -25,12 +25,16 @@ import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ViewSwitcher;
+import com.github.jobs.GithubJobsApplication;
 import com.github.jobs.R;
+import com.github.jobs.events.EmailSubscriberProgress;
 import com.github.jobs.resolver.EmailSubscriberTask;
 import com.github.jobs.ui.fragment.EmailSubscriberReceiver;
+import com.squareup.otto.Bus;
+import com.squareup.otto.Subscribe;
 import com.telly.groundy.Groundy;
 import com.telly.groundy.ReceiverFragment;
-
+import javax.inject.Inject;
 import java.util.regex.Matcher;
 
 import static com.github.jobs.utils.AnalyticsHelper.NAME_SUBSCRIBE_DIALOG;
@@ -46,9 +50,11 @@ public class SubscribeDialog extends TrackFragmentDialog implements View.OnClick
   private EmailSubscriberReceiver mEmailSubscriberReceiver;
   private ViewSwitcher mContentSwitcher;
 
-  @Override
-  protected void onCreate(Bundle savedInstanceState) {
+  @Inject Bus bus;
+
+  @Override protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
+    ((GithubJobsApplication) getApplication()).inject(this);
     getTracker(this).trackPageView(NAME_SUBSCRIBE_DIALOG);
     setContentView(R.layout.subscribe_dialog);
 
@@ -61,12 +67,21 @@ public class SubscribeDialog extends TrackFragmentDialog implements View.OnClick
     if (mEmailSubscriberReceiver == null) {
       mEmailSubscriberReceiver = new EmailSubscriberReceiver();
       fm.beginTransaction().add(mEmailSubscriberReceiver, ReceiverFragment.TAG).commit();
-      progress(false);
+      internalProgress(false);
     }
   }
 
-  @Override
-  public void onClick(View v) {
+  @Override protected void onResume() {
+    super.onResume();
+    bus.register(this);
+  }
+
+  @Override protected void onPause() {
+    super.onPause();
+    bus.unregister(this);
+  }
+
+  @Override public void onClick(View v) {
     switch (v.getId()) {
       case R.id.btn_subscribe:
         String emailAddress = mEmail.getText().toString().trim();
@@ -90,15 +105,19 @@ public class SubscribeDialog extends TrackFragmentDialog implements View.OnClick
     }
   }
 
-  public void progress(boolean running) {
+  @Subscribe public void progress(EmailSubscriberProgress emailSubscriberProgress) {
+    internalProgress(emailSubscriberProgress.running);
+  }
+
+  private void internalProgress(boolean running) {
     InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
     if (running) {
       imm.hideSoftInputFromWindow(mEmail.getWindowToken(), 0);
-      mContentSwitcher.showNext();
+      mContentSwitcher.setDisplayedChild(1);
     } else {
       mEmail.requestFocus();
       getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
-      mContentSwitcher.showPrevious();
+      mContentSwitcher.setDisplayedChild(0);
     }
   }
 }

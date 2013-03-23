@@ -44,8 +44,7 @@ public class SOUserDialog extends TrackDialog implements View.OnClickListener {
   private String mTitle;
   private SOUser mSoUser;
 
-  @Override
-  protected void onCreate(Bundle savedInstanceState) {
+  @Override protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     mSoUser = (SOUser) getIntent().getParcelableExtra(SOUserPickerActivity.EXTRA_USER);
     if (mSoUser == null) {
@@ -111,13 +110,11 @@ public class SOUserDialog extends TrackDialog implements View.OnClickListener {
     });
   }
 
-  @Override
-  protected void onTitleChanged(CharSequence title, int color) {
+  @Override protected void onTitleChanged(CharSequence title, int color) {
     super.onTitleChanged(this.mTitle, color);
   }
 
-  @Override
-  public void onClick(View v) {
+  @Override public void onClick(View v) {
     switch (v.getId()) {
       case R.id.btn_choose_user:
         mSoUser.setWebsiteUrl(null);

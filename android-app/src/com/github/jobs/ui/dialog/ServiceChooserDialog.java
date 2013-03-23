@@ -69,8 +69,7 @@ public class ServiceChooserDialog extends TrackDialog implements AdapterView.OnI
   private State mState;
   private DetachableResultReceiver mDetachableReceiver = new DetachableResultReceiver(new Handler());
 
-  @Override
-  protected void onCreate(Bundle savedInstanceState) {
+  @Override protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.service_chooser_dialog);
 
@@ -115,16 +114,14 @@ public class ServiceChooserDialog extends TrackDialog implements AdapterView.OnI
     mFetchServiceInfo.setOnClickListener(this);
   }
 
-  @Override
-  public Object onRetainNonConfigurationInstance() {
+  @Override public Object onRetainNonConfigurationInstance() {
     // Clear any strong references to this Activity, we'll reattach to handle events on the other side.
     mState.receiver.clearReceiver();
     mState.currentViewSwitcherView = mServicesFlipper.getDisplayedChild();
     return mState;
   }
 
-  @Override
-  public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+  @Override public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
     mState.lastService = (int) id;
 
     // if it was stack overflow, finish this activity and pass info to the parent
@@ -142,8 +139,7 @@ public class ServiceChooserDialog extends TrackDialog implements AdapterView.OnI
     showServiceDataRetrieval();
   }
 
-  @Override
-  public void onClick(View v) {
+  @Override public void onClick(View v) {
     switch (v.getId()) {
       case R.id.btn_fetch_service_info:
         if (!isServiceDataValid()) {
@@ -154,14 +150,12 @@ public class ServiceChooserDialog extends TrackDialog implements AdapterView.OnI
     }
   }
 
-  @Override
-  protected void onDestroy() {
+  @Override protected void onDestroy() {
     super.onDestroy();
     mDetachableReceiver.clearReceiver();
   }
 
-  @Override
-  public void onBackPressed() {
+  @Override public void onBackPressed() {
     if (mServicesFlipper.getDisplayedChild() == SERVICE_CONFIRMATION) {
       mServicesFlipper.setDisplayedChild(SERVICE_DATA_RETRIEVAL);
     } else if (mServicesFlipper.getDisplayedChild() == SERVICE_LOADING) {
@@ -175,8 +169,7 @@ public class ServiceChooserDialog extends TrackDialog implements AdapterView.OnI
     }
   }
 
-  @Override
-  public void onReceiveResult(int resultCode, Bundle resultData) {
+  @Override public void onReceiveResult(int resultCode, Bundle resultData) {
     switch (resultCode) {
       case Groundy.STATUS_FINISHED:
         setupPayload(resultData);

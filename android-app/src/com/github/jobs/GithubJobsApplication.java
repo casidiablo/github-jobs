@@ -29,6 +29,7 @@ import com.github.jobs.ui.activity.*;
 import com.github.jobs.ui.dialog.DeleteTemplateDialog;
 import com.github.jobs.ui.dialog.HowToApplyDialog;
 import com.github.jobs.ui.dialog.RemoveServicesDialog;
+import com.github.jobs.ui.dialog.SubscribeDialog;
 import com.github.jobs.ui.fragment.*;
 import com.github.jobs.utils.AppUtils;
 import com.github.jobs.utils.ViewUtils;
@@ -84,6 +85,8 @@ public class GithubJobsApplication extends Application {
       TemplatesLoader.class, //
       JobDetailsFragment.class, //
       HowToApplyDialog.class, //
+      EmailSubscriberReceiver.class, //
+      SubscribeDialog.class, //
       SearchJobsTask.class})
   static class GithubJobsModule {
     private final Context context;

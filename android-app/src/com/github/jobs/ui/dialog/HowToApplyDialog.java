@@ -65,8 +65,7 @@ public class HowToApplyDialog extends TrackDialog implements View.OnClickListene
   private ArrayList<ApplyOption> mOptions;
   @Inject SqlAdapter adapter;
 
-  @Override
-  public void onCreate(Bundle savedInstanceState) {
+  @Override public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     ((GithubJobsApplication) getApplication()).inject(this);
     getTracker(this).trackPageView(NAME_HOW_TO_APPLY);
@@ -116,8 +115,7 @@ public class HowToApplyDialog extends TrackDialog implements View.OnClickListene
     }
   }
 
-  @Override
-  public void onClick(View v) {
+  @Override public void onClick(View v) {
     switch (v.getId()) {
       case R.id.btn_apply:
         Intent templates = new Intent(this, TemplatesActivity.class);
@@ -127,8 +125,7 @@ public class HowToApplyDialog extends TrackDialog implements View.OnClickListene
     }
   }
 
-  @Override
-  protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+  @Override protected void onActivityResult(int requestCode, int resultCode, Intent data) {
     super.onActivityResult(requestCode, resultCode, data);
     if (resultCode != RESULT_OK) {
       return;
@@ -144,8 +141,7 @@ public class HowToApplyDialog extends TrackDialog implements View.OnClickListene
     }
   }
 
-  @Override
-  protected Dialog onCreateDialog(int id, final Bundle args) {
+  @Override protected Dialog onCreateDialog(int id, final Bundle args) {
     switch (id) {
       case APPLICATION_CHOICES:
         ApplyChoicesAdapter adapter = new ApplyChoicesAdapter(this);

@@ -160,15 +160,6 @@ public class SOUserPickerFragment extends BusFragment implements AdapterView.OnI
     return super.onOptionsItemSelected(item);
   }
 
-  private void executeSearch(String search) {
-    Bundle extras = new Bundle();
-    extras.putString(StackOverflowUserTask.EXTRA_SEARCH, search);
-    Groundy.create(getActivity(), StackOverflowUserTask.class)
-      .params(extras)
-      .receiver(mSOUserFetcherReceiver.getReceiver())
-      .execute();
-  }
-
   @Subscribe public void updateItems(SOUsersUpdateEvent soUsersUpdateEvent) {
     mAdapter.updateItems(soUsersUpdateEvent.users);
   }
@@ -176,5 +167,14 @@ public class SOUserPickerFragment extends BusFragment implements AdapterView.OnI
   @Subscribe public void hideKeyboard(HideKeyboardEvent event) {
     InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
     imm.hideSoftInputFromWindow(mUserSearch.getWindowToken(), 0);
+  }
+
+  private void executeSearch(String search) {
+    Bundle extras = new Bundle();
+    extras.putString(StackOverflowUserTask.EXTRA_SEARCH, search);
+    Groundy.create(getActivity(), StackOverflowUserTask.class)
+      .params(extras)
+      .receiver(mSOUserFetcherReceiver.getReceiver())
+      .execute();
   }
 }
