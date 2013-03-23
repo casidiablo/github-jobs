@@ -28,8 +28,7 @@ import com.telly.groundy.ReceiverFragment;
  * @version 1.0
  */
 public class EmailSubscriberReceiver extends ReceiverFragment {
-  @Override
-  protected void onFinished(Bundle resultData) {
+  @Override protected void onFinished(Bundle resultData) {
     super.onFinished(resultData);
     FragmentActivity activity = getActivity();
     if (activity == null || !isAdded()) {
@@ -39,8 +38,7 @@ public class EmailSubscriberReceiver extends ReceiverFragment {
     activity.finish();
   }
 
-  @Override
-  protected void onError(Bundle resultData) {
+  @Override protected void onError(Bundle resultData) {
     super.onError(resultData);
     FragmentActivity activity = getActivity();
     if (activity == null || !isAdded()) {
@@ -50,8 +48,7 @@ public class EmailSubscriberReceiver extends ReceiverFragment {
     activity.finish();
   }
 
-  @Override
-  protected void onProgressChanged(boolean running) {
+  @Override protected void onProgressChanged(boolean running) {
     FragmentActivity activity = getActivity();
     if (activity instanceof SubscribeDialog) {
       ((SubscribeDialog) activity).progress(running);

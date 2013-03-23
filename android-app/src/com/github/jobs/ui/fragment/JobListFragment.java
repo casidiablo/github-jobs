@@ -20,6 +20,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Parcelable;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
@@ -50,7 +51,6 @@ import com.github.jobs.ui.dialog.SubscribeDialog;
 import com.github.jobs.utils.ShareHelper;
 import com.squareup.otto.Subscribe;
 import com.telly.groundy.Groundy;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -66,28 +66,20 @@ public class JobListFragment extends BusFragment implements LoaderManager.Loader
   private static final String KEY_LOADING = "loading_key";
   private static final String KEY_LAST_TOTAL_ITEM_COUNT = "last_total_item_count_key";
 
-  public static JobListFragment newInstance(SearchPack searchPack) {
-    JobListFragment jobListFragment = new JobListFragment();
-    Bundle args = new Bundle();
-    args.putParcelable(KEY_SEARCH, searchPack);
-    jobListFragment.setArguments(args);
-    return jobListFragment;
-  }
-
   private static final int JOB_DETAILS = 8474;
+
   private static final int HOW_TO_APPLY = 5763;
   private static final int SHARE = 4722;
-
   private SearchPack mCurrentSearch = new SearchPack();
-  private JobsAdapter mAdapter;
 
+  private JobsAdapter mAdapter;
   private View mMoreRootView;
+
   private ListView mList;
   private boolean mLoading = false;
   private int mLastTotalItemCount;
 
-  @Override
-  public void onCreate(Bundle savedInstanceState) {
+  @Override public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     if (savedInstanceState != null) {
       mCurrentSearch = (SearchPack) savedInstanceState.getParcelable(KEY_SEARCH);
@@ -98,13 +90,11 @@ public class JobListFragment extends BusFragment implements LoaderManager.Loader
     }
   }
 
-  @Override
-  public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+  @Override public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
     return inflater.inflate(R.layout.jobs_list, null, false);
   }
 
-  @Override
-  public void onActivityCreated(Bundle savedInstanceState) {
+  @Override public void onActivityCreated(Bundle savedInstanceState) {
     super.onActivityCreated(savedInstanceState);
     mAdapter = new JobsAdapter(getActivity());
     mList = (ListView) getView().findViewById(R.id.job_list);
@@ -123,8 +113,7 @@ public class JobListFragment extends BusFragment implements LoaderManager.Loader
     }
   }
 
-  @Override
-  public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+  @Override public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
     super.onCreateContextMenu(menu, v, menuInfo);
     FragmentActivity activity = getActivity();
     if (activity == null || !isAdded()) {
@@ -139,8 +128,7 @@ public class JobListFragment extends BusFragment implements LoaderManager.Loader
     getTracker(activity).trackEvent(CATEGORY_JOBS, ACTION_OPEN_CONTEXT, mCurrentSearch.getSearch());
   }
 
-  @Override
-  public boolean onContextItemSelected(android.view.MenuItem item) {
+  @Override public boolean onContextItemSelected(android.view.MenuItem item) {
     FragmentActivity activity = getActivity();
     if (activity == null || !isAdded()) {
       return true;
@@ -171,8 +159,7 @@ public class JobListFragment extends BusFragment implements LoaderManager.Loader
     return super.onContextItemSelected(item);
   }
 
-  @Override
-  public boolean onOptionsItemSelected(MenuItem item) {
+  @Override public boolean onOptionsItemSelected(MenuItem item) {
     FragmentActivity activity = getActivity();
     if (activity == null || !isAdded()) {
       return true;
@@ -192,8 +179,7 @@ public class JobListFragment extends BusFragment implements LoaderManager.Loader
     return super.onOptionsItemSelected(item);
   }
 
-  @Override
-  public Loader<List<Job>> onCreateLoader(int id, Bundle args) {
+  @Override public Loader<List<Job>> onCreateLoader(int id, Bundle args) {
     FragmentActivity activity = getActivity();
     if (activity == null || !isAdded()) {
       return null;
@@ -201,21 +187,18 @@ public class JobListFragment extends BusFragment implements LoaderManager.Loader
     return new JobListLoader(activity, mCurrentSearch);
   }
 
-  @Override
-  public void onLoadFinished(Loader<List<Job>> listLoader, List<Job> data) {
+  @Override public void onLoadFinished(Loader<List<Job>> listLoader, List<Job> data) {
     mAdapter.updateItems(data);
     if (data.isEmpty()) {
       removeFooterFromList();
     }
   }
 
-  @Override
-  public void onLoaderReset(Loader<List<Job>> listLoader) {
+  @Override public void onLoaderReset(Loader<List<Job>> listLoader) {
     mAdapter.clear();
   }
 
-  @Override
-  public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+  @Override public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
     if (mAdapter.getCount() <= position) {
       // ignore invalid clicks
       return;
@@ -229,12 +212,10 @@ public class JobListFragment extends BusFragment implements LoaderManager.Loader
     getTracker(getActivity()).trackEvent(CATEGORY_JOBS, ACTION_OPEN, job.getTitle() + "," + job.getUrl());
   }
 
-  @Override
-  public void onScrollStateChanged(AbsListView view, int scrollState) {
+  @Override public void onScrollStateChanged(AbsListView view, int scrollState) {
   }
 
-  @Override
-  public void onScroll(AbsListView absListView, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+  @Override public void onScroll(AbsListView absListView, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
     if (mMoreRootView == null) {
       return;
     }
@@ -249,20 +230,52 @@ public class JobListFragment extends BusFragment implements LoaderManager.Loader
     }
   }
 
-  @Override
-  public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+  @Override public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
     super.onCreateOptionsMenu(menu, inflater);
     if (menu.findItem(R.id.menu_subscribe) == null && !mCurrentSearch.isDefault()) {
       inflater.inflate(R.menu.jobs_list_menu, menu);
     }
   }
 
-  @Override
-  public void onSaveInstanceState(Bundle outState) {
+  @Override public void onSaveInstanceState(Bundle outState) {
     super.onSaveInstanceState(outState);
     outState.putParcelable(KEY_SEARCH, mCurrentSearch);
     outState.putBoolean(KEY_LOADING, mLoading);
     outState.putInt(KEY_LAST_TOTAL_ITEM_COUNT, mLastTotalItemCount);
+  }
+
+  @Subscribe public void onFinished(SearchFinished searchFinished) {
+    if (!shouldProcess(searchFinished)) {
+      return;
+    }
+    ArrayList<Parcelable> parcelableArrayList = searchFinished.resultData.getParcelableArrayList(SearchJobsTask.DATA_JOBS);
+    if (parcelableArrayList == null) {
+      return;
+    }
+    ArrayList<Job> jobs = new ArrayList<Job>();
+    for (Parcelable parcelable : parcelableArrayList) {
+      jobs.add((Job) parcelable);
+    }
+    mAdapter.addItems(jobs);
+    if (jobs.size() == 0) {
+      removeFooterFromList();
+    } else {
+      addFooterToList();
+    }
+    mLoading = false;
+  }
+
+  @Subscribe public void onError(SearchError searchError) {
+    if (shouldProcess(searchError)) {
+      removeFooterFromList();
+      mLoading = false;
+    }
+  }
+
+  @Subscribe public void onProgressChanged(SearchProgressChanged searchProgressChanged) {
+    if (shouldProcess(searchProgressChanged)) {
+      mLoading = searchProgressChanged.syncing;
+    }
   }
 
   private void queryList() {
@@ -327,41 +340,15 @@ public class JobListFragment extends BusFragment implements LoaderManager.Loader
     ((SherlockFragmentActivity) getActivity()).setSupportProgressBarIndeterminateVisibility(true);
   }
 
-  @Subscribe public void onFinished(SearchFinished searchFinished) {
-    if (!shouldProcess(searchFinished)) {
-      return;
-    }
-    ArrayList<Parcelable> parcelableArrayList = searchFinished.resultData.getParcelableArrayList(SearchJobsTask.DATA_JOBS);
-    if (parcelableArrayList == null) {
-      return;
-    }
-    ArrayList<Job> jobs = new ArrayList<Job>();
-    for (Parcelable parcelable : parcelableArrayList) {
-      jobs.add((Job) parcelable);
-    }
-    mAdapter.addItems(jobs);
-    if (jobs.size() == 0) {
-      removeFooterFromList();
-    } else {
-      addFooterToList();
-    }
-    mLoading = false;
-  }
-
-  @Subscribe public void onError(SearchError searchError) {
-    if (shouldProcess(searchError)) {
-      removeFooterFromList();
-      mLoading = false;
-    }
-  }
-
-  @Subscribe public void onProgressChanged(SearchProgressChanged searchProgressChanged) {
-    if (shouldProcess(searchProgressChanged)) {
-      mLoading = searchProgressChanged.syncing;
-    }
-  }
-
   private boolean shouldProcess(SearchEvent searchEvent) {
     return searchEvent.searchPack != null && searchEvent.searchPack.equals(mCurrentSearch);
+  }
+
+  public static Fragment newInstance(SearchPack searchPack) {
+    JobListFragment jobListFragment = new JobListFragment();
+    Bundle args = new Bundle();
+    args.putParcelable(KEY_SEARCH, searchPack);
+    jobListFragment.setArguments(args);
+    return jobListFragment;
   }
 }
