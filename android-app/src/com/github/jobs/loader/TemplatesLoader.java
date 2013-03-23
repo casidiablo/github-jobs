@@ -21,11 +21,13 @@ import android.util.Log;
 import com.codeslap.persistence.Persistence;
 import com.codeslap.persistence.PreferencesAdapter;
 import com.codeslap.persistence.SqlAdapter;
+import com.github.jobs.GithubJobsApplication;
 import com.github.jobs.bean.GeneralSettings;
 import com.github.jobs.bean.Template;
 import com.github.jobs.utils.AppUtils;
 import com.telly.groundy.loader.SupportListLoader;
 
+import javax.inject.Inject;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
@@ -36,13 +38,14 @@ import java.util.List;
  */
 public class TemplatesLoader extends SupportListLoader<Template> {
 
+  @Inject SqlAdapter sqlAdapter;
+
   public TemplatesLoader(Context context) {
     super(context);
+    ((GithubJobsApplication)context.getApplicationContext()).inject(this);
   }
 
-  @Override
-  protected List<Template> getData() {
-    SqlAdapter sqlAdapter = Persistence.getAdapter(getContext());
+  @Override protected List<Template> getData() {
     List<Template> templates = sqlAdapter.findAll(Template.class);
     if (templates.isEmpty()) {
       PreferencesAdapter preferenceAdapter = Persistence.getPreferenceAdapter(getContext());

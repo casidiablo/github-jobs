@@ -17,15 +17,15 @@
 package com.github.jobs.resolver;
 
 import android.os.Bundle;
-import com.codeslap.persistence.Persistence;
 import com.codeslap.persistence.SqlAdapter;
+import com.github.jobs.GithubJobsApplication;
 import com.github.jobs.api.GithubJobsApi;
 import com.github.jobs.bean.Job;
 import com.github.jobs.bean.Search;
 import com.github.jobs.bean.SearchPack;
 import com.github.jobs.bean.SearchesAndJobs;
 import com.telly.groundy.GroundyTask;
-
+import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -34,9 +34,11 @@ public class SearchJobsTask extends GroundyTask {
   public static final String EXTRA_SEARCH_PACK = "com.github.jobs.extra_search_pack";
   public static final String DATA_JOBS = "com.github.jobs.data.jobs";
   public static final String DATA_SEARCH_PACK = "com.github.jobs.data.search_pack";
+  @Inject SqlAdapter sqlAdapter;
 
   @Override
   protected boolean doInBackground() {
+    ((GithubJobsApplication) getContext().getApplicationContext()).inject(this);
     // get parameters
     Bundle params = getParameters();
     SearchPack searchPack = (SearchPack) params.getParcelable(EXTRA_SEARCH_PACK);
@@ -58,7 +60,6 @@ public class SearchJobsTask extends GroundyTask {
     }
 
     ArrayList<Job> jobs = new ArrayList<Job>(jobsList);
-    SqlAdapter sqlAdapter = Persistence.getAdapter(getContext());
     // delete old content
     if (searchPack.getPage() == 0 && jobs.size() > 0) {
       if (searchPack.isDefault()) {

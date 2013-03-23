@@ -18,20 +18,18 @@ package com.github.jobs;
 
 import android.app.Application;
 import android.content.Context;
-import com.codeslap.persistence.DatabaseSpec;
-import com.codeslap.persistence.HasMany;
-import com.codeslap.persistence.PersistenceConfig;
-import com.codeslap.persistence.PersistenceLogManager;
+import com.codeslap.persistence.*;
 import com.crittercism.app.Crittercism;
 import com.github.jobs.bean.*;
+import com.github.jobs.loader.JobListLoader;
+import com.github.jobs.loader.TemplatesLoader;
 import com.github.jobs.receivers.SearchReceiver;
+import com.github.jobs.resolver.SearchJobsTask;
 import com.github.jobs.ui.activity.*;
 import com.github.jobs.ui.dialog.DeleteTemplateDialog;
+import com.github.jobs.ui.dialog.HowToApplyDialog;
 import com.github.jobs.ui.dialog.RemoveServicesDialog;
-import com.github.jobs.ui.fragment.EditTemplateFragment;
-import com.github.jobs.ui.fragment.JobListFragment;
-import com.github.jobs.ui.fragment.SOUserFetcherReceiver;
-import com.github.jobs.ui.fragment.SOUserPickerFragment;
+import com.github.jobs.ui.fragment.*;
 import com.github.jobs.utils.AppUtils;
 import com.github.jobs.utils.ViewUtils;
 import com.squareup.otto.Bus;
@@ -81,7 +79,12 @@ public class GithubJobsApplication extends Application {
       JobDetailsActivity.class, //
       RemoveServicesDialog.class, //
       DeleteTemplateDialog.class, //
-      SOUserPickerActivity.class})
+      SOUserPickerActivity.class, //
+      JobListLoader.class, //
+      TemplatesLoader.class, //
+      JobDetailsFragment.class, //
+      HowToApplyDialog.class, //
+      SearchJobsTask.class})
   static class GithubJobsModule {
     private final Context context;
 
@@ -95,6 +98,10 @@ public class GithubJobsApplication extends Application {
 
     @Provides @Singleton ViewUtils provideViewUtils() {
       return new ViewUtils(context);
+    }
+
+    @Provides @Singleton SqlAdapter provideSqlAdapter() {
+      return Persistence.getAdapter(context);
     }
   }
 }

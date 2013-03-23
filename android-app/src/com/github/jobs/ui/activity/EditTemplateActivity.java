@@ -27,7 +27,6 @@ import android.widget.Toast;
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
-import com.codeslap.persistence.Persistence;
 import com.codeslap.persistence.SqlAdapter;
 import com.github.jobs.R;
 import com.github.jobs.bean.SOUser;
@@ -69,7 +68,8 @@ public class EditTemplateActivity extends TrackActivity {
   private boolean mEditModeEnabled;
   private long mTemplateId;
 
-  @Inject ViewUtils viewUtils;// TODO is this OK?
+  @Inject ViewUtils viewUtils;
+  @Inject SqlAdapter adapter;
 
   @Override protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
@@ -215,7 +215,6 @@ public class EditTemplateActivity extends TrackActivity {
   }
 
   @Subscribe public void doDelete(DeleteTemplate deleteTemplate) {
-    SqlAdapter adapter = Persistence.getAdapter(this);
     Template template = new Template();
     template.setId(mTemplateId);
     int delete = adapter.delete(template);
@@ -239,7 +238,6 @@ public class EditTemplateActivity extends TrackActivity {
 
   private void showRemoveServiceBtnIfNecessary() {
     if (mTemplateId != -1 && mMenuRemoveService != null) {
-      SqlAdapter adapter = Persistence.getAdapter(this);
       int count = adapter.count(TemplateService.class, "template_id = ?", new String[]{String.valueOf(mTemplateId)});
       if (count > 0) {
         mMenuRemoveService.setVisible(true);

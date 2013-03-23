@@ -31,7 +31,8 @@ import android.util.Patterns;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
-import com.codeslap.persistence.Persistence;
+import com.codeslap.persistence.SqlAdapter;
+import com.github.jobs.GithubJobsApplication;
 import com.github.jobs.R;
 import com.github.jobs.adapter.ApplyChoicesAdapter;
 import com.github.jobs.bean.Template;
@@ -40,7 +41,7 @@ import com.github.jobs.templates.TemplatesHelper;
 import com.github.jobs.ui.activity.TemplatesActivity;
 import com.github.jobs.utils.WebsiteHelper;
 import in.uncod.android.bypass.Bypass;
-
+import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -62,10 +63,12 @@ public class HowToApplyDialog extends TrackDialog implements View.OnClickListene
   private static final int APPLICATION_CHOICES = 884;
 
   private ArrayList<ApplyOption> mOptions;
+  @Inject SqlAdapter adapter;
 
   @Override
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
+    ((GithubJobsApplication) getApplication()).inject(this);
     getTracker(this).trackPageView(NAME_HOW_TO_APPLY);
     setContentView(R.layout.how_to_apply_dialog);
 
@@ -148,17 +151,14 @@ public class HowToApplyDialog extends TrackDialog implements View.OnClickListene
         ApplyChoicesAdapter adapter = new ApplyChoicesAdapter(this);
         adapter.updateItems(mOptions);
 
-        return new AlertDialog.Builder(this)
-            .setTitle(getString(R.string.apply_for_this_job_via))
-            .setAdapter(adapter, new DialogInterface.OnClickListener() {
-              @Override
-              public void onClick(DialogInterface dialog, int which) {
-                Template template = findTemplate(args.getLong(EXTRA_TEMPLATE_ID));
-                applyForThisJob(mOptions.get(which), template);
-                dismissDialog(APPLICATION_CHOICES);
-              }
-            })
-            .create();
+        return new AlertDialog.Builder(this).setTitle(getString(R.string.apply_for_this_job_via)).setAdapter(adapter, new DialogInterface.OnClickListener() {
+          @Override
+          public void onClick(DialogInterface dialog, int which) {
+            Template template = findTemplate(args.getLong(EXTRA_TEMPLATE_ID));
+            applyForThisJob(mOptions.get(which), template);
+            dismissDialog(APPLICATION_CHOICES);
+          }
+        }).create();
     }
     return super.onCreateDialog(id);
   }
@@ -176,7 +176,7 @@ public class HowToApplyDialog extends TrackDialog implements View.OnClickListene
   private Template findTemplate(long templateId) {
     Template where = new Template();
     where.setId(templateId);
-    return Persistence.getAdapter(this).findFirst(where);
+    return adapter.findFirst(where);
   }
 
   private void applyForThisJob(ApplyOption applyOption, Template template) {

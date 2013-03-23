@@ -23,12 +23,12 @@ import android.support.v4.view.ViewPager;
 import android.widget.Toast;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
-import com.codeslap.persistence.Persistence;
+import com.codeslap.persistence.SqlAdapter;
 import com.github.jobs.R;
 import com.github.jobs.adapter.JobsDetailsAdapter;
 import com.github.jobs.bean.Job;
 import com.github.jobs.ui.dialog.HowToApplyDialog;
-
+import javax.inject.Inject;
 import java.util.List;
 
 import static com.github.jobs.utils.AnalyticsHelper.*;
@@ -47,6 +47,7 @@ public class JobDetailsActivity extends TrackActivity implements ViewPager.OnPag
   private ViewPager mJobsPager;
   private List<String> mJobsIds;
   private int mCurrentJobPosition;
+  @Inject SqlAdapter adapter;
 
   @Override protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
@@ -125,7 +126,7 @@ public class JobDetailsActivity extends TrackActivity implements ViewPager.OnPag
     // get job object from database
     Job job = new Job();
     job.setId(jobId);
-    job = Persistence.getAdapter(this).findFirst(job);
+    job = adapter.findFirst(job);
     return job;
   }
 }

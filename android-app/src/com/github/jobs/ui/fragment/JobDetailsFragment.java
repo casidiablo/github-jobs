@@ -23,6 +23,7 @@ import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.v4.app.Fragment;
 import android.text.Html;
 import android.text.SpannableString;
 import android.text.method.LinkMovementMethod;
@@ -34,12 +35,11 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
-import com.actionbarsherlock.app.SherlockFragment;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
 import com.actionbarsherlock.widget.ShareActionProvider;
-import com.codeslap.persistence.Persistence;
+import com.codeslap.persistence.SqlAdapter;
 import com.github.jobs.R;
 import com.github.jobs.bean.Job;
 import com.github.jobs.ui.activity.JobDetailsActivity;
@@ -47,42 +47,34 @@ import com.github.jobs.utils.ShareHelper;
 import com.github.jobs.utils.StringUtils;
 import com.telly.wasp.BitmapHelper;
 import com.telly.wasp.CallbackBitmapObserver;
+import javax.inject.Inject;
 
 import static com.github.jobs.utils.AnalyticsHelper.*;
 
 /**
  * @author cristian
  */
-public class JobDetailsFragment extends SherlockFragment implements View.OnClickListener {
+public class JobDetailsFragment extends BusFragment implements View.OnClickListener {
 
   private static final int SHARE = 484;
   private static final String KEY_JOB_ID = "com.github.jobs.KEY_JOB_ID";
 
   private Job mJob;
   private ImageView mBackground;
+  @Inject SqlAdapter adapter;
 
-  public static JobDetailsFragment newInstance(String id) {
-    JobDetailsFragment jobDetailsFragment = new JobDetailsFragment();
-    Bundle args = new Bundle();
-    args.putString(KEY_JOB_ID, id);
-    jobDetailsFragment.setArguments(args);
-    return jobDetailsFragment;
-  }
-
-  @Override
-  public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+  @Override public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
     return inflater.inflate(R.layout.job_details, null, false);
   }
 
-  @Override
-  public void onActivityCreated(Bundle savedInstanceState) {
+  @Override public void onActivityCreated(Bundle savedInstanceState) {
     super.onActivityCreated(savedInstanceState);
 
     Bundle arguments = getArguments();
     String jobId = arguments.getString(KEY_JOB_ID);
     mJob = new Job();
     mJob.setId(jobId);
-    mJob = Persistence.getAdapter(getActivity()).findFirst(mJob);
+    mJob = adapter.findFirst(mJob);
     if (mJob == null) {
       mJob = new Job();
       Toast.makeText(getActivity(), R.string.error_getting_job_info, Toast.LENGTH_LONG).show();
@@ -129,8 +121,7 @@ public class JobDetailsFragment extends SherlockFragment implements View.OnClick
     setLogoBackground();
   }
 
-  @Override
-  public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+  @Override public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
     super.onCreateOptionsMenu(menu, inflater);
     Context themedContext = getSherlockActivity().getSupportActionBar().getThemedContext();
     ShareActionProvider shareActionProvider = new ShareActionProvider(themedContext);
@@ -152,8 +143,7 @@ public class JobDetailsFragment extends SherlockFragment implements View.OnClick
     actionProvider.setShareIntent(ShareHelper.getShareIntent(mJob));
   }
 
-  @Override
-  public void onClick(View v) {
+  @Override public void onClick(View v) {
     switch (v.getId()) {
       case R.id.company_url:
         Intent companyUrl = new Intent(Intent.ACTION_VIEW);
@@ -186,5 +176,13 @@ public class JobDetailsFragment extends SherlockFragment implements View.OnClick
       }
     }, mJob.getCompanyLogo(), new Handler());
     BitmapHelper.getInstance().registerBitmapObserver(getActivity(), rawBitmapObserver);
+  }
+
+  public static Fragment newInstance(String id) {
+    JobDetailsFragment jobDetailsFragment = new JobDetailsFragment();
+    Bundle args = new Bundle();
+    args.putString(KEY_JOB_ID, id);
+    jobDetailsFragment.setArguments(args);
+    return jobDetailsFragment;
   }
 }

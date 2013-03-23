@@ -29,7 +29,6 @@ import android.view.ViewGroup;
 import android.webkit.WebView;
 import android.widget.EditText;
 import android.widget.ViewSwitcher;
-import com.codeslap.persistence.Persistence;
 import com.codeslap.persistence.SqlAdapter;
 import com.github.jobs.R;
 import com.github.jobs.bean.Template;
@@ -40,6 +39,7 @@ import com.github.jobs.ui.dialog.RemoveServicesDialog;
 import com.github.jobs.utils.AppUtils;
 import com.github.jobs.utils.GithubJobsJavascriptInterface;
 import com.squareup.otto.Subscribe;
+import javax.inject.Inject;
 import java.util.ArrayList;
 
 import static com.github.jobs.utils.GithubJobsJavascriptInterface.JS_INTERFACE;
@@ -68,6 +68,7 @@ public class EditTemplateFragment extends BusFragment {
   private ArrayList<TemplateService> mTemplateServices;
   private ViewSwitcher mViewSwitcher;
   private boolean mShowEditor = false;
+  @Inject SqlAdapter adapter;
 
   @Override public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
     mTemplateServices = new ArrayList<TemplateService>();
@@ -113,7 +114,6 @@ public class EditTemplateFragment extends BusFragment {
 
     if (mTemplateId != -1) {
       // retrieve template from database
-      SqlAdapter adapter = Persistence.getAdapter(getActivity());
       Template template = new Template();
       template.setId(mTemplateId);
       template = adapter.findFirst(template);
@@ -200,7 +200,6 @@ public class EditTemplateFragment extends BusFragment {
       return;
     }
     Template template = buildTemplate();
-    SqlAdapter adapter = Persistence.getAdapter(getActivity());
     if (template.getId() > 0) {
       String[] args = {String.valueOf(template.getId())};
       int deleted = adapter.delete(TemplateService.class, "template_id = ?", args);

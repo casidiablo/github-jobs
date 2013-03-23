@@ -18,15 +18,15 @@ package com.github.jobs.loader;
 
 import android.content.Context;
 import android.util.Log;
-import com.codeslap.persistence.Persistence;
 import com.codeslap.persistence.SqlAdapter;
+import com.github.jobs.GithubJobsApplication;
 import com.github.jobs.adapter.JobsAdapter;
 import com.github.jobs.bean.Job;
 import com.github.jobs.bean.SearchPack;
 import com.github.jobs.bean.SearchesAndJobs;
 import com.telly.groundy.loader.SupportListLoader;
 import org.joda.time.DateTime;
-
+import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -38,15 +38,15 @@ import java.util.List;
 public class JobListLoader extends SupportListLoader<Job> {
 
   private final SearchPack mCurrentSearch;
+  @Inject SqlAdapter sqlAdapter;
 
   public JobListLoader(Context context, SearchPack currentSearch) {
     super(context);
+    ((GithubJobsApplication) context.getApplicationContext()).inject(this);
     mCurrentSearch = currentSearch;
   }
 
-  @Override
-  protected List<Job> getData() {
-    SqlAdapter sqlAdapter = Persistence.getAdapter(getContext());
+  @Override protected List<Job> getData() {
     if (mCurrentSearch.isDefault()) {
       return sort(sqlAdapter.findAll(Job.class));
     }
