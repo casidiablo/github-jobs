@@ -320,10 +320,6 @@ public class EditTemplateActivity extends TrackActivity {
   }
 
   private void showEditor(boolean showEditor) {
-    EditTemplateFragment fragment = findFragment(EditTemplateFragment.class);
-    if (fragment == null || !fragment.isAdded()) {
-      return;
-    }
-    fragment.showEditor(showEditor);
+    bus.post(new ShowTemplateEditor(showEditor));
   }
 }

@@ -149,52 +149,6 @@ public class EditTemplateFragment extends BusFragment {
     }
   };
 
-  private void updatePreview() {
-    if (mJavascriptInterface == null) {
-      return;
-    }
-    String markdownContent = mTemplateContent.getText().toString().trim();
-    if (mTemplateServices != null && !mTemplateServices.isEmpty()) {
-      markdownContent += "\n\n---\n";
-      for (TemplateService service : mTemplateServices) {
-        markdownContent += TemplatesHelper.getContent(getActivity(), service) + "\n\n";
-      }
-
-    }
-    mJavascriptInterface.setContent(markdownContent);
-    mJavascriptInterface.onLoaded();
-  }
-
-  public Template buildTemplate() {
-    // build the template
-    Template template = new Template();
-    if (mTemplateId > 0) {
-      template.setId(mTemplateId);
-    }
-    template.setName(mTemplateName.getText().toString().trim());
-    template.setContent(mTemplateContent.getText().toString().trim());
-    template.setLastUpdate(System.currentTimeMillis());
-    template.setTemplateServices(mTemplateServices);
-    return template;
-  }
-
-  // TODO fix this!
-  public boolean isTemplateValid() {
-    if (TextUtils.isEmpty(mTemplateName.getText().toString().trim())) {
-      bus.post(new SelectEditorTab());
-      mTemplateName.setError(getString(R.string.cover_letter_name_is_empty));
-      mTemplateName.requestFocus();
-      return false;
-    }
-    if (TextUtils.isEmpty(mTemplateContent.getText().toString().trim())) {
-      bus.post(new SelectEditorTab());
-      mTemplateContent.setError(getString(R.string.cover_letter_content_is_empty));
-      mTemplateContent.requestFocus();
-      return false;
-    }
-    return true;
-  }
-
   @Subscribe public void saveTemplate(SaveTemplateEvent saveTemplateEvent) {
     if (!isTemplateValid()) {
       return;
@@ -218,17 +172,8 @@ public class EditTemplateFragment extends BusFragment {
     bus.post(new SaveTemplateDone());
   }
 
-  public void showEditor(boolean showEditor) {
-    mShowEditor = showEditor;
-    if (mViewSwitcher == null) {
-      return;
-    }
-    mViewSwitcher.setDisplayedChild(showEditor ? EDITOR_MODE : PREVIEW_MODE);
-  }
-
-  public void addTemplateService(TemplateService templateService) {
-    mTemplateServices.add(templateService);
-    updatePreview();
+  @Subscribe public void showEditor(ShowTemplateEditor showTemplateEditor) {
+    showEditor(showTemplateEditor.showEditor);
   }
 
   @Subscribe public void removeServices(DeleteServices deleteServices) {
@@ -247,5 +192,64 @@ public class EditTemplateFragment extends BusFragment {
     // show a dialog to allow users to remove current services
     Fragment fragment = RemoveServicesDialog.newInstance(mTemplateServices);
     getFragmentManager().beginTransaction().add(fragment, RemoveServicesDialog.TAG).commitAllowingStateLoss();
+  }
+
+  public void addTemplateService(TemplateService templateService) {
+    // TODO fix me, please
+    mTemplateServices.add(templateService);
+    updatePreview();
+  }
+
+  private void showEditor(boolean showEditor) {
+    mShowEditor = showEditor;
+    if (mViewSwitcher == null) {
+      return;
+    }
+    mViewSwitcher.setDisplayedChild(showEditor ? EDITOR_MODE : PREVIEW_MODE);
+  }
+
+  private boolean isTemplateValid() {
+    if (TextUtils.isEmpty(mTemplateName.getText().toString().trim())) {
+      bus.post(new SelectEditorTab());
+      mTemplateName.setError(getString(R.string.cover_letter_name_is_empty));
+      mTemplateName.requestFocus();
+      return false;
+    }
+    if (TextUtils.isEmpty(mTemplateContent.getText().toString().trim())) {
+      bus.post(new SelectEditorTab());
+      mTemplateContent.setError(getString(R.string.cover_letter_content_is_empty));
+      mTemplateContent.requestFocus();
+      return false;
+    }
+    return true;
+  }
+
+  private Template buildTemplate() {
+    // build the template
+    Template template = new Template();
+    if (mTemplateId > 0) {
+      template.setId(mTemplateId);
+    }
+    template.setName(mTemplateName.getText().toString().trim());
+    template.setContent(mTemplateContent.getText().toString().trim());
+    template.setLastUpdate(System.currentTimeMillis());
+    template.setTemplateServices(mTemplateServices);
+    return template;
+  }
+
+  private void updatePreview() {
+    if (mJavascriptInterface == null) {
+      return;
+    }
+    String markdownContent = mTemplateContent.getText().toString().trim();
+    if (mTemplateServices != null && !mTemplateServices.isEmpty()) {
+      markdownContent += "\n\n---\n";
+      for (TemplateService service : mTemplateServices) {
+        markdownContent += TemplatesHelper.getContent(getActivity(), service) + "\n\n";
+      }
+
+    }
+    mJavascriptInterface.setContent(markdownContent);
+    mJavascriptInterface.onLoaded();
   }
 }
