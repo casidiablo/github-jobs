@@ -21,22 +21,25 @@ import android.os.Parcelable;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebView;
 import android.widget.EditText;
 import android.widget.ViewSwitcher;
-import com.actionbarsherlock.app.SherlockFragment;
 import com.codeslap.persistence.Persistence;
 import com.codeslap.persistence.SqlAdapter;
 import com.github.jobs.R;
 import com.github.jobs.bean.Template;
 import com.github.jobs.bean.TemplateService;
+import com.github.jobs.events.SaveTemplateDone;
+import com.github.jobs.events.SaveTemplateEvent;
+import com.github.jobs.events.SelectEditorTab;
 import com.github.jobs.templates.TemplatesHelper;
-import com.github.jobs.ui.activity.EditTemplateActivity;
 import com.github.jobs.utils.AppUtils;
 import com.github.jobs.utils.GithubJobsJavascriptInterface;
+import com.squareup.otto.Subscribe;
 
 import java.util.ArrayList;
 
@@ -48,7 +51,7 @@ import static com.github.jobs.utils.GithubJobsJavascriptInterface.PREVIEW_TEMPLA
  * @author cristian
  * @version 1.0
  */
-public class EditTemplateFragment extends SherlockFragment {
+public class EditTemplateFragment extends BusFragment {
   private static final String KEY_TEMPLATE_SERVICES = "com.github.jobs.key.template_services";
 
   public static final String ARG_TEMPLATE_ID = "com.github.jobs.arg.template_id";
@@ -56,6 +59,7 @@ public class EditTemplateFragment extends SherlockFragment {
 
   private static final int EDITOR_MODE = 0;
   private static final int PREVIEW_MODE = 1;
+  private static final String TAG = EditTemplateFragment.class.getName();
 
   private EditText mTemplateContent;
   private EditText mTemplateName;
@@ -66,8 +70,7 @@ public class EditTemplateFragment extends SherlockFragment {
   private ViewSwitcher mViewSwitcher;
   private boolean mShowEditor = false;
 
-  @Override
-  public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+  @Override public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
     mTemplateServices = new ArrayList<TemplateService>();
     if (savedInstanceState != null) {
       ArrayList<Parcelable> list = savedInstanceState.getParcelableArrayList(KEY_TEMPLATE_SERVICES);
@@ -80,14 +83,12 @@ public class EditTemplateFragment extends SherlockFragment {
     return inflater.inflate(R.layout.edit_template, null, false);
   }
 
-  @Override
-  public void onSaveInstanceState(Bundle outState) {
+  @Override public void onSaveInstanceState(Bundle outState) {
     super.onSaveInstanceState(outState);
     outState.putParcelableArrayList(KEY_TEMPLATE_SERVICES, mTemplateServices);
   }
 
-  @Override
-  public void onActivityCreated(Bundle savedInstanceState) {
+  @Override public void onActivityCreated(Bundle savedInstanceState) {
     super.onActivityCreated(savedInstanceState);
     // init argument fields
     Bundle arguments = getArguments();
@@ -178,15 +179,16 @@ public class EditTemplateFragment extends SherlockFragment {
     return template;
   }
 
+  // TODO fix this!
   public boolean isTemplateValid() {
     if (TextUtils.isEmpty(mTemplateName.getText().toString().trim())) {
-      selectEditorTab();
+      bus.post(new SelectEditorTab());
       mTemplateName.setError(getString(R.string.cover_letter_name_is_empty));
       mTemplateName.requestFocus();
       return false;
     }
     if (TextUtils.isEmpty(mTemplateContent.getText().toString().trim())) {
-      selectEditorTab();
+      bus.post(new SelectEditorTab());
       mTemplateContent.setError(getString(R.string.cover_letter_content_is_empty));
       mTemplateContent.requestFocus();
       return false;
@@ -194,11 +196,28 @@ public class EditTemplateFragment extends SherlockFragment {
     return true;
   }
 
-  private void selectEditorTab() {
-    if (getActivity() instanceof EditTemplateActivity) {
-      EditTemplateActivity activity = (EditTemplateActivity) getActivity();
-      activity.selectEditorTab();
+  @Subscribe public void saveTemplate(SaveTemplateEvent saveTemplateEvent) {
+    if (!isTemplateValid()) {
+      return;
     }
+    Template template = buildTemplate();
+    SqlAdapter adapter = Persistence.getAdapter(getActivity());
+    if (template.getId() > 0) {
+      String[] args = {String.valueOf(template.getId())};
+      int deleted = adapter.delete(TemplateService.class, "template_id = ?", args);
+      Log.d(TAG, "Deleted " + deleted + " templates");
+
+      Template where = new Template();
+      where.setId(template.getId());
+      adapter.update(template, where);
+
+      if (template.getTemplateServices() != null) {
+        adapter.storeCollection(template.getTemplateServices(), template, null);
+      }
+    } else {
+      adapter.store(template);
+    }
+    bus.post(new SaveTemplateDone());
   }
 
   public void showEditor(boolean showEditor) {

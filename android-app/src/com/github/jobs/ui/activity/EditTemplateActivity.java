@@ -33,6 +33,9 @@ import com.github.jobs.R;
 import com.github.jobs.bean.SOUser;
 import com.github.jobs.bean.Template;
 import com.github.jobs.bean.TemplateService;
+import com.github.jobs.events.SaveTemplateDone;
+import com.github.jobs.events.SaveTemplateEvent;
+import com.github.jobs.events.SelectEditorTab;
 import com.github.jobs.templates.services.StackOverflowService;
 import com.github.jobs.templates.services.WebsiteService;
 import com.github.jobs.ui.dialog.DeleteTemplateDialog;
@@ -41,6 +44,7 @@ import com.github.jobs.ui.dialog.ServiceChooserDialog;
 import com.github.jobs.ui.fragment.EditTemplateFragment;
 import com.github.jobs.utils.AppUtils;
 import com.github.jobs.utils.TabListenerAdapter;
+import com.squareup.otto.Subscribe;
 
 import java.util.ArrayList;
 
@@ -136,30 +140,7 @@ public class EditTemplateActivity extends TrackActivity {
           enableEditMode();
           return true;
         }
-
-        EditTemplateFragment fragment = findFragment(EditTemplateFragment.class);
-        if (!fragment.isTemplateValid()) {
-          return true;
-        }
-        Template template = fragment.buildTemplate();
-        SqlAdapter adapter = Persistence.getAdapter(this);
-        if (template.getId() > 0) {
-          String[] args = {String.valueOf(template.getId())};
-          int deleted = adapter.delete(TemplateService.class, "template_id = ?", args);
-          Log.d(TAG, "Deleted " + deleted + " templates");
-
-          Template where = new Template();
-          where.setId(template.getId());
-          adapter.update(template, where);
-
-          if (template.getTemplateServices() != null) {
-            adapter.storeCollection(template.getTemplateServices(), template, null);
-          }
-        } else {
-          adapter.store(template);
-        }
-        setResult(RESULT_OK);
-        finish();
+        bus.post(new SaveTemplateEvent());
         break;
       case R.id.menu_delete_template:
         FragmentManager fm = getSupportFragmentManager();
@@ -359,10 +340,15 @@ public class EditTemplateActivity extends TrackActivity {
     }
   }
 
-  public void selectEditorTab() {
+  @Subscribe public void selectEditorTab(SelectEditorTab selectEditorTab) {
     if (getSupportActionBar().getSelectedTab().getPosition() != 0) {
       getSupportActionBar().getTabAt(0).select();
     }
+  }
+
+  @Subscribe public void onSaveTemplateDone(SaveTemplateDone saveTemplateDone) {
+    setResult(RESULT_OK);
+    finish();
   }
 
   private void showEditor(boolean showEditor) {

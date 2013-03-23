@@ -16,28 +16,33 @@
 
 package com.github.jobs.ui.fragment;
 
-import android.content.Context;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.FragmentManager;
-import android.util.Log;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
 import com.actionbarsherlock.app.SherlockFragmentActivity;
+import com.github.jobs.GithubJobsApplication;
 import com.github.jobs.R;
 import com.github.jobs.bean.SOUser;
+import com.github.jobs.events.HideKeyboardEvent;
+import com.github.jobs.events.SOUsersUpdateEvent;
 import com.github.jobs.resolver.StackOverflowUserTask;
 import com.github.jobs.utils.AppUtils;
+import com.squareup.otto.Bus;
 import com.telly.groundy.ReceiverFragment;
 
+import javax.inject.Inject;
 import java.util.ArrayList;
 
 public class SOUserFetcherReceiver extends ReceiverFragment {
 
-  @Override
-  protected void onError(Bundle resultData) {
-    super.onError(resultData);
+  @Inject Bus bus;
+
+  @Override public void onCreate(Bundle savedInstanceState) {
+    super.onCreate(savedInstanceState);
+    ((GithubJobsApplication) getActivity().getApplication()).inject(this);
+  }
+
+  @Override protected void onError(Bundle resultData) {
     FragmentActivity activity = getActivity();
     if (activity == null || !isAdded()) {
       return;
@@ -49,36 +54,19 @@ public class SOUserFetcherReceiver extends ReceiverFragment {
     }
   }
 
-  @Override
-  protected void onFinished(Bundle resultData) {
-    super.onFinished(resultData);
-    FragmentManager fragmentManager = getFragmentManager();
-    Fragment fragment = fragmentManager.findFragmentById(R.id.base_container);
-    if (fragment instanceof SOUserPickerFragment) {
-      SOUserPickerFragment soUserPickerFragment = (SOUserPickerFragment) fragment;
-      ArrayList<SOUser> users = resultData.getParcelableArrayList(StackOverflowUserTask.RESULT_USERS);
-      soUserPickerFragment.updateItems(users);
-    } else {
-      Log.wtf("FragmentReceiver", "The fragment isn't an instance of SOUserFetcherReceiver");
-    }
+  @Override protected void onFinished(Bundle resultData) {
+    ArrayList<SOUser> users = resultData.getParcelableArrayList(StackOverflowUserTask.RESULT_USERS);
+    bus.post(new SOUsersUpdateEvent(users));
   }
 
-  @Override
-  protected void onProgressChanged(boolean running) {
+  @Override protected void onProgressChanged(boolean running) {
+    if (running) {
+      bus.post(new HideKeyboardEvent());
+    }
     FragmentActivity activity = getActivity();
     if (activity == null) {
       return;
     }
     ((SherlockFragmentActivity) activity).setSupportProgressBarIndeterminateVisibility(running);
-    InputMethodManager imm = (InputMethodManager) activity.getSystemService(Context.INPUT_METHOD_SERVICE);
-    if (running) {
-      FragmentManager manager = getFragmentManager();
-      Fragment fragmentById = manager.findFragmentById(R.id.base_container);
-      if (fragmentById instanceof SOUserPickerFragment) {
-        SOUserPickerFragment pickerFragment = (SOUserPickerFragment) fragmentById;
-        imm.hideSoftInputFromWindow(pickerFragment.getWindowToken(), 0);
-      }
-
-    }
   }
 }

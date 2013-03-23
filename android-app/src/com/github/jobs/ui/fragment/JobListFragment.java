@@ -30,7 +30,6 @@ import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ListView;
-import com.actionbarsherlock.app.SherlockFragment;
 import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
@@ -39,7 +38,12 @@ import com.github.jobs.R;
 import com.github.jobs.adapter.JobsAdapter;
 import com.github.jobs.bean.Job;
 import com.github.jobs.bean.SearchPack;
+import com.github.jobs.events.SearchError;
+import com.github.jobs.events.SearchEvent;
+import com.github.jobs.events.SearchFinished;
+import com.github.jobs.events.SearchProgressChanged;
 import com.github.jobs.loader.JobListLoader;
+import com.github.jobs.receivers.SearchReceiver;
 import com.github.jobs.resolver.EmailSubscriberTask;
 import com.github.jobs.resolver.SearchJobsTask;
 import com.github.jobs.ui.activity.HomeActivity;
@@ -47,6 +51,7 @@ import com.github.jobs.ui.activity.JobDetailsActivity;
 import com.github.jobs.ui.dialog.HowToApplyDialog;
 import com.github.jobs.ui.dialog.SubscribeDialog;
 import com.github.jobs.utils.ShareHelper;
+import com.squareup.otto.Subscribe;
 import com.telly.groundy.Groundy;
 
 import java.util.ArrayList;
@@ -57,8 +62,8 @@ import static com.github.jobs.utils.AnalyticsHelper.*;
 /**
  * @author cristian
  */
-public class JobListFragment extends SherlockFragment implements LoaderManager.LoaderCallbacks<List<Job>>,
-    AdapterView.OnItemClickListener, AbsListView.OnScrollListener {
+public class JobListFragment extends BusFragment implements LoaderManager.LoaderCallbacks<List<Job>>,
+  AdapterView.OnItemClickListener, AbsListView.OnScrollListener {
 
   private static final String KEY_SEARCH = "search_key";
   private static final String KEY_LOADING = "loading_key";
@@ -317,7 +322,7 @@ public class JobListFragment extends SherlockFragment implements LoaderManager.L
     if (activity == null || !isAdded()) {
       return;
     }
-    SearchReceiverFragment receiver = activity.getSearchReceiver();
+    SearchReceiver receiver = activity.getSearchReceiver();
     Groundy.create(getActivity(), SearchJobsTask.class)
         .receiver(receiver.getReceiver())
         .params(extras)
@@ -325,8 +330,11 @@ public class JobListFragment extends SherlockFragment implements LoaderManager.L
     ((SherlockFragmentActivity) getActivity()).setSupportProgressBarIndeterminateVisibility(true);
   }
 
-  public void onFinished(Bundle resultData) {
-    ArrayList<Parcelable> parcelableArrayList = resultData.getParcelableArrayList(SearchJobsTask.DATA_JOBS);
+  @Subscribe public void onFinished(SearchFinished searchFinished) {
+    if (!shouldProcess(searchFinished)) {
+      return;
+    }
+    ArrayList<Parcelable> parcelableArrayList = searchFinished.resultData.getParcelableArrayList(SearchJobsTask.DATA_JOBS);
     if (parcelableArrayList == null) {
       return;
     }
@@ -343,12 +351,20 @@ public class JobListFragment extends SherlockFragment implements LoaderManager.L
     mLoading = false;
   }
 
-  public void onError() {
-    removeFooterFromList();
-    mLoading = false;
+  @Subscribe public void onError(SearchError searchError) {
+    if (shouldProcess(searchError)) {
+      removeFooterFromList();
+      mLoading = false;
+    }
   }
 
-  public void onProgressChanged(boolean running) {
-    mLoading = running;
+  @Subscribe public void onProgressChanged(SearchProgressChanged searchProgressChanged) {
+    if (shouldProcess(searchProgressChanged)) {
+      mLoading = searchProgressChanged.syncing;
+    }
+  }
+
+  private boolean shouldProcess(SearchEvent searchEvent) {
+    return searchEvent.searchPack != null && searchEvent.searchPack.equals(mCurrentSearch);
   }
 }

@@ -24,30 +24,43 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.actionbarsherlock.view.Window;
+import com.github.jobs.GithubJobsApplication;
+import com.squareup.otto.Bus;
+
+import javax.inject.Inject;
 
 public abstract class BaseActivity extends SherlockFragmentActivity {
   private boolean mSetContentViewAlreadyCalled;
+  @Inject Bus bus;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
     super.onCreate(savedInstanceState);
+    ((GithubJobsApplication) getApplication()).inject(this);
   }
 
-  @Override
-  public void setContentView(int layoutResId) {
+  @Override public void onResume() {
+    super.onResume();
+    bus.register(this);
+  }
+
+  @Override public void onPause() {
+    super.onPause();
+    bus.unregister(this);
+  }
+
+  @Override public void setContentView(int layoutResId) {
     super.setContentView(layoutResId);
     onSetContentView();
   }
 
-  @Override
-  public void setContentView(View view) {
+  @Override public void setContentView(View view) {
     super.setContentView(view);
     onSetContentView();
   }
 
-  @Override
-  public void setContentView(View view, ViewGroup.LayoutParams params) {
+  @Override public void setContentView(View view, ViewGroup.LayoutParams params) {
     super.setContentView(view, params);
     onSetContentView();
   }

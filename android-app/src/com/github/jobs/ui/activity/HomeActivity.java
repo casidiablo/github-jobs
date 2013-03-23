@@ -24,13 +24,15 @@ import android.support.v4.view.ViewPager;
 import android.view.View;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
+import com.github.jobs.GithubJobsApplication;
 import com.github.jobs.R;
 import com.github.jobs.adapter.SearchJobFragmentAdapter;
 import com.github.jobs.bean.SearchPack;
+import com.github.jobs.events.ProgressWheel;
+import com.github.jobs.receivers.SearchReceiver;
 import com.github.jobs.ui.dialog.AboutDialog;
 import com.github.jobs.ui.dialog.SearchDialog;
-import com.github.jobs.ui.fragment.JobListFragment;
-import com.github.jobs.ui.fragment.SearchReceiverFragment;
+import com.squareup.otto.Subscribe;
 import com.viewpagerindicator.TabPageIndicator;
 
 import java.util.ArrayList;
@@ -49,18 +51,16 @@ public class HomeActivity extends TrackActivity {
   @Override
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
+    ((GithubJobsApplication) getApplication()).inject(this);
     getTracker(this).trackPageView(NAME_HOME);
     setContentView(R.layout.main);
 
     mState = (State) getLastCustomNonConfigurationInstance();
     if (mState == null) {
       mState = new State();
-      mState.receiver = new SearchReceiverFragment(this);
-    } else {
-      mState.receiver.setActivity(this);
-      if (mState.loading) {
-        setSupportProgressBarIndeterminateVisibility(mState.loading);
-      }
+      mState.receiver = new SearchReceiver(this);
+    } else if (mState.loading) {
+      setSupportProgressBarIndeterminateVisibility(mState.loading);
     }
 
     mSearchJobFragmentAdapter = new SearchJobFragmentAdapter(this, getSupportFragmentManager());
@@ -179,41 +179,16 @@ public class HomeActivity extends TrackActivity {
     }
   }
 
-  public SearchReceiverFragment getSearchReceiver() {
+  @Subscribe public void showProgressWheel(ProgressWheel progressWheel) {
+    setSupportProgressBarIndeterminateVisibility(progressWheel.show);
+  }
+
+  public SearchReceiver getSearchReceiver() {
     return mState.receiver;
   }
 
-  public void onFinished(Bundle resultData, SearchPack searchPack) {
-    JobListFragment fragment = getJobListFragment(searchPack);
-    if (fragment == null) {
-      return;
-    }
-    fragment.onFinished(resultData);
-  }
-
-  public void onError(SearchPack searchPack) {
-    JobListFragment fragment = getJobListFragment(searchPack);
-    if (fragment == null) {
-      return;
-    }
-    fragment.onError();
-  }
-
-  public void onProgressChanged(boolean running, SearchPack searchPack) {
-    JobListFragment fragment = getJobListFragment(searchPack);
-    if (fragment == null) {
-      return;
-    }
-    fragment.onProgressChanged(running);
-  }
-
-  private JobListFragment getJobListFragment(SearchPack searchPack) {
-    int position = mSearchJobFragmentAdapter.positionFor(searchPack);
-    return (JobListFragment) mSearchJobFragmentAdapter.getFragment(position);
-  }
-
   private class State {
-    SearchReceiverFragment receiver;
+    SearchReceiver receiver;
     boolean loading;
     List<SearchPack> searchPacks;
     int currentTab;

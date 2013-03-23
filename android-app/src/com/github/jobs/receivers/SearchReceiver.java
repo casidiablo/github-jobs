@@ -14,39 +14,43 @@
  * limitations under the License.
  */
 
-package com.github.jobs.ui.fragment;
+package com.github.jobs.receivers;
 
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.ResultReceiver;
-import android.widget.Toast;
 import com.actionbarsherlock.app.SherlockFragmentActivity;
+import com.github.jobs.GithubJobsApplication;
 import com.github.jobs.bean.SearchPack;
+import com.github.jobs.events.ProgressWheel;
+import com.github.jobs.events.SearchError;
+import com.github.jobs.events.SearchFinished;
+import com.github.jobs.events.SearchProgressChanged;
 import com.github.jobs.resolver.SearchJobsTask;
-import com.github.jobs.ui.activity.HomeActivity;
+import com.github.jobs.utils.ViewUtils;
+import com.squareup.otto.Bus;
 import com.telly.groundy.DetachableResultReceiver;
 import com.telly.groundy.Groundy;
+
+import javax.inject.Inject;
 
 /**
  * @author cristian
  */
-public class SearchReceiverFragment implements DetachableResultReceiver.Receiver {
-  private SherlockFragmentActivity mActivity;
+public class SearchReceiver implements DetachableResultReceiver.Receiver {
   private boolean mSyncing;
   private final DetachableResultReceiver mReceiver;
+  @Inject ViewUtils viewUtils;
+  @Inject Bus bus;
 
-  public SearchReceiverFragment(SherlockFragmentActivity activity) {
-    mActivity = activity;
+  public SearchReceiver(SherlockFragmentActivity activity) {
+    ((GithubJobsApplication) activity.getApplication()).inject(this);
     mReceiver = new DetachableResultReceiver(new Handler());
     mReceiver.setReceiver(this);
   }
 
   @Override
   public void onReceiveResult(int resultCode, Bundle resultData) {
-    if (mActivity == null) {
-      return;
-    }
-
     SearchPack searchPack = null;
     if (resultData.containsKey(SearchJobsTask.DATA_SEARCH_PACK)) {
       searchPack = (SearchPack) resultData.get(SearchJobsTask.DATA_SEARCH_PACK);
@@ -60,30 +64,26 @@ public class SearchReceiverFragment implements DetachableResultReceiver.Receiver
       case Groundy.STATUS_FINISHED: {
         mSyncing = false;
         if (searchPack != null) {
-          ((HomeActivity) mActivity).onFinished(resultData, searchPack);
+          bus.post(new SearchFinished(searchPack, resultData));
         }
         break;
       }
       case Groundy.STATUS_ERROR: {
         mSyncing = false;
-        Toast.makeText(mActivity, resultData.getString(Groundy.KEY_ERROR), Toast.LENGTH_LONG).show();
+        viewUtils.toast(resultData.getString(Groundy.KEY_ERROR));
         if (searchPack != null) {
-          ((HomeActivity) mActivity).onError(searchPack);
+          bus.post(new SearchError(searchPack));
         }
         break;
       }
     }
-    mActivity.setSupportProgressBarIndeterminateVisibility(mSyncing);
+    bus.post(new ProgressWheel(mSyncing));
     if (searchPack != null) {
-      ((HomeActivity) mActivity).onProgressChanged(mSyncing, searchPack);
+      bus.post(new SearchProgressChanged(searchPack, mSyncing));
     }
   }
 
   public ResultReceiver getReceiver() {
     return mReceiver;
-  }
-
-  public void setActivity(SherlockFragmentActivity activity) {
-    mActivity = activity;
   }
 }

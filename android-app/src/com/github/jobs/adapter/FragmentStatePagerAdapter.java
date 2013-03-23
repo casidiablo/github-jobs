@@ -86,17 +86,6 @@ public abstract class FragmentStatePagerAdapter extends PagerAdapter {
     return fragment;
   }
 
-  public Fragment getFragment(int position) {
-    if (position >= mFragments.size()) {
-      return null;
-    }
-    try {
-      return mFragments.get(position);
-    } catch (Exception e) {
-      return null;
-    }
-  }
-
   @Override
   public void destroyItem(ViewGroup container, int position, Object object) {
     Fragment fragment = (Fragment) object;
