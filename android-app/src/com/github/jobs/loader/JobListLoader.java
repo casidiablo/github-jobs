@@ -24,7 +24,6 @@ import com.github.jobs.adapter.JobsAdapter;
 import com.github.jobs.bean.Job;
 import com.github.jobs.bean.SearchPack;
 import com.github.jobs.bean.SearchesAndJobs;
-import com.telly.groundy.loader.SupportListLoader;
 import org.joda.time.DateTime;
 import javax.inject.Inject;
 import java.util.ArrayList;

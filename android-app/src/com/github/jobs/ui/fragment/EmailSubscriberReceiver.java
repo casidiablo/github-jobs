@@ -17,20 +17,25 @@
 package com.github.jobs.ui.fragment;
 
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.widget.Toast;
 import com.github.jobs.GithubJobsApplication;
 import com.github.jobs.R;
 import com.github.jobs.events.EmailSubscriberProgress;
+import com.github.jobs.resolver.EmailSubscriberTask;
 import com.squareup.otto.Bus;
-import com.telly.groundy.ReceiverFragment;
+import com.telly.groundy.annotations.OnFailure;
+import com.telly.groundy.annotations.OnStart;
+import com.telly.groundy.annotations.OnSuccess;
 import javax.inject.Inject;
 
 /**
  * @author cristian
  * @version 1.0
  */
-public class EmailSubscriberReceiver extends ReceiverFragment {
+public class EmailSubscriberReceiver extends Fragment {
+  public static final String TAG = EmailSubscriberReceiver.class.getSimpleName();
   @Inject Bus bus;
 
   @Override public void onCreate(Bundle savedInstanceState) {
@@ -38,27 +43,31 @@ public class EmailSubscriberReceiver extends ReceiverFragment {
     ((GithubJobsApplication) getActivity().getApplication()).inject(this);
   }
 
-  @Override protected void onFinished(Bundle resultData) {
-    super.onFinished(resultData);
+  @OnStart(EmailSubscriberTask.class) public void onSubscriberStart() {
+    showProgress(true);
+  }
+
+  @OnSuccess(EmailSubscriberTask.class) public void onFinished() {
     FragmentActivity activity = getActivity();
     if (activity == null || !isAdded()) {
       return;
     }
     Toast.makeText(activity, R.string.subscribed, Toast.LENGTH_LONG).show();
     activity.finish();
+    showProgress(false);
   }
 
-  @Override protected void onError(Bundle resultData) {
-    super.onError(resultData);
+  @OnFailure(EmailSubscriberTask.class) public void onError() {
     FragmentActivity activity = getActivity();
     if (activity == null || !isAdded()) {
       return;
     }
     Toast.makeText(activity, R.string.error_subscribing, Toast.LENGTH_LONG).show();
     activity.finish();
+    showProgress(false);
   }
 
-  @Override protected void onProgressChanged(boolean running) {
+  private void showProgress(boolean running) {
     bus.post(new EmailSubscriberProgress(running));
   }
 }

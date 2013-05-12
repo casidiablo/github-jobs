@@ -18,10 +18,17 @@ package com.github.jobs.ui.dialog;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
+import android.os.Parcelable;
 import android.text.TextUtils;
 import android.view.View;
-import android.widget.*;
+import android.widget.AdapterView;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.FrameLayout;
+import android.widget.GridView;
+import android.widget.ImageView;
+import android.widget.Toast;
+import android.widget.ViewFlipper;
 import com.github.jobs.R;
 import com.github.jobs.adapter.ServicesAdapter;
 import com.github.jobs.bean.AboutMeService;
@@ -30,20 +37,25 @@ import com.github.jobs.bean.TemplateService;
 import com.github.jobs.resolver.AboutMeTask;
 import com.github.jobs.templates.fetcher.AboutMeFetcher;
 import com.github.jobs.utils.AppUtils;
-import com.telly.groundy.DetachableResultReceiver;
+import com.telly.groundy.CallbacksManager;
 import com.telly.groundy.Groundy;
-
+import com.telly.groundy.annotations.OnFailure;
+import com.telly.groundy.annotations.OnSuccess;
+import com.telly.groundy.annotations.Param;
 import java.util.List;
 
-import static com.github.jobs.templates.TemplatesHelper.*;
+import static com.github.jobs.templates.TemplatesHelper.getAddServiceButtonLabel;
+import static com.github.jobs.templates.TemplatesHelper.getHint;
+import static com.github.jobs.templates.TemplatesHelper.getServiceDrawable;
+import static com.github.jobs.templates.TemplatesHelper.getServices;
 import static com.github.jobs.templates.fetcher.AboutMeFetcher.AboutMeServicesCallback;
 
 /**
  * @author cristian
  * @version 1.0
  */
-public class ServiceChooserDialog extends TrackDialog implements AdapterView.OnItemClickListener, View.OnClickListener,
-    DetachableResultReceiver.Receiver {
+public class ServiceChooserDialog extends TrackDialog
+    implements AdapterView.OnItemClickListener, View.OnClickListener {
   public static final String RESULT_SERVICE_ID = "com.github.jobs.result.service_id";
   public static final String RESULT_SERVICE_TYPE = "com.github.jobs.result.service_type";
   public static final String RESULT_SERVICE_DATA = "com.github.jobs.result.service_data";
@@ -63,11 +75,9 @@ public class ServiceChooserDialog extends TrackDialog implements AdapterView.OnI
   private Button mFetchServiceInfo;
   private FrameLayout mConfirmationContainer;
 
-  /**
-   * State held between configuration changes.
-   */
+  /** State held between configuration changes. */
+  private CallbacksManager callbacksManager;
   private State mState;
-  private DetachableResultReceiver mDetachableReceiver = new DetachableResultReceiver(new Handler());
 
   @Override protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
@@ -85,12 +95,10 @@ public class ServiceChooserDialog extends TrackDialog implements AdapterView.OnI
     // restore last state if any
     mState = (State) getLastNonConfigurationInstance();
     final boolean previousState = mState != null;
-    if (previousState) {
-      mState.receiver.setReceiver(this);
-    } else {
+    if (!previousState) {
       mState = new State();
-      mState.receiver.setReceiver(this);
     }
+    callbacksManager = CallbacksManager.init(savedInstanceState, this);
     switch (mState.currentViewSwitcherView) {
       case SERVICE_DATA_RETRIEVAL:
         // update the views to show the service data retrieval form
@@ -116,9 +124,13 @@ public class ServiceChooserDialog extends TrackDialog implements AdapterView.OnI
 
   @Override public Object onRetainNonConfigurationInstance() {
     // Clear any strong references to this Activity, we'll reattach to handle events on the other side.
-    mState.receiver.clearReceiver();
     mState.currentViewSwitcherView = mServicesFlipper.getDisplayedChild();
     return mState;
+  }
+
+  @Override protected void onSaveInstanceState(Bundle outState) {
+    super.onSaveInstanceState(outState);
+    callbacksManager.onSaveInstanceState(outState);
   }
 
   @Override public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -152,15 +164,14 @@ public class ServiceChooserDialog extends TrackDialog implements AdapterView.OnI
 
   @Override protected void onDestroy() {
     super.onDestroy();
-    mDetachableReceiver.clearReceiver();
+    callbacksManager.onDestroy();
   }
 
   @Override public void onBackPressed() {
     if (mServicesFlipper.getDisplayedChild() == SERVICE_CONFIRMATION) {
       mServicesFlipper.setDisplayedChild(SERVICE_DATA_RETRIEVAL);
     } else if (mServicesFlipper.getDisplayedChild() == SERVICE_LOADING) {
-      // TODO stop groundy task
-      mDetachableReceiver.clearReceiver();
+      // TODO stop Groundy task
       mServicesFlipper.setDisplayedChild(SERVICE_DATA_RETRIEVAL);
     } else if (mServicesFlipper.getDisplayedChild() == SERVICE_DATA_RETRIEVAL) {
       mServicesFlipper.setDisplayedChild(SERVICE_CHOOSER);
@@ -169,24 +180,16 @@ public class ServiceChooserDialog extends TrackDialog implements AdapterView.OnI
     }
   }
 
-  @Override public void onReceiveResult(int resultCode, Bundle resultData) {
-    switch (resultCode) {
-      case Groundy.STATUS_FINISHED:
-        setupPayload(resultData);
-        break;
-      case Groundy.STATUS_ERROR:
-        mServicesFlipper.setDisplayedChild(SERVICE_DATA_RETRIEVAL);
-        Toast.makeText(ServiceChooserDialog.this, R.string.nothing_found, Toast.LENGTH_LONG).show();
-        break;
-    }
+  @OnFailure(AboutMeTask.class) public void onAboutMeFailed() {
+    mServicesFlipper.setDisplayedChild(SERVICE_DATA_RETRIEVAL);
+    Toast.makeText(ServiceChooserDialog.this, R.string.nothing_found, Toast.LENGTH_LONG).show();
   }
 
-  /**
-   * Configures data retrieval form using the current service
-   */
+  /** Configures data retrieval form using the current service */
   private void showServiceDataRetrieval() {
     mFetchServiceInfo.setText(getAddServiceButtonLabel(mState.lastService));
-    mServiceType.setVisibility(mState.lastService == R.id.service_custom ? View.VISIBLE : View.GONE);
+    mServiceType.setVisibility(
+        mState.lastService == R.id.service_custom ? View.VISIBLE : View.GONE);
     mServiceData.setHint(getHint(mState.lastService));
     mServiceImage.setImageResource(getServiceDrawable(mState.lastService));
     mServicesFlipper.setDisplayedChild(SERVICE_DATA_RETRIEVAL);
@@ -212,35 +215,29 @@ public class ServiceChooserDialog extends TrackDialog implements AdapterView.OnI
         setResultAndFinish();
         return;
       case R.id.service_about_me:
-        Bundle extras = new Bundle();
-        extras.putString(AboutMeTask.PARAM_USERNAME, data);
-        Groundy.create(this, AboutMeTask.class)
-            .receiver(mState.receiver)
-            .params(extras)
-            .execute();
+        Groundy.create(AboutMeTask.class)
+            .callback(this)
+            .callbackManager(callbacksManager)
+            .arg(AboutMeTask.PARAM_USERNAME, data)
+            .execute(this);
         AppUtils.hideKeyboard(this, mServiceData.getWindowToken());
         mServicesFlipper.setDisplayedChild(SERVICE_LOADING);
         break;
     }
   }
 
-  /**
-   * Setups state's payload for the current service
-   *
-   * @param resultData data returned by the service fetcher resolver
-   */
-  private void setupPayload(Bundle resultData) {
+  /** Setups state's payload for the current service */
+  @OnSuccess(AboutMeTask.class)
+  public void setupPayload(@Param(AboutMeTask.RESULT_USER) Parcelable payload) {
     switch (mState.lastService) {
       case R.id.service_about_me:
-        mState.servicePayload = resultData.getParcelable(AboutMeTask.RESULT_USER);
+        mState.servicePayload = payload;
         setupConfirmationView();
         break;
     }
   }
 
-  /**
-   * Configures the confirmation view depending on the current service and its payload
-   */
+  /** Configures the confirmation view depending on the current service and its payload */
   private void setupConfirmationView() {
     switch (mState.lastService) {
       case R.id.service_about_me:
@@ -260,7 +257,8 @@ public class ServiceChooserDialog extends TrackDialog implements AdapterView.OnI
    * @return true if data is correct
    */
   private boolean isServiceDataValid() {
-    if (mState.lastService == R.id.service_custom && TextUtils.isEmpty(mServiceType.getText().toString().trim())) {
+    if (mState.lastService == R.id.service_custom && TextUtils.isEmpty(
+        mServiceType.getText().toString().trim())) {
       mServiceType.setError(getString(R.string.this_shall_not_be_empty));
       mServiceType.requestFocus();
       return false;
@@ -280,7 +278,6 @@ public class ServiceChooserDialog extends TrackDialog implements AdapterView.OnI
    * class should remain {@code static class}.
    */
   private static class State {
-    DetachableResultReceiver receiver;
     int currentViewSwitcherView = SERVICE_CHOOSER;
     int lastService;
 
@@ -289,16 +286,9 @@ public class ServiceChooserDialog extends TrackDialog implements AdapterView.OnI
     // later in the confirmation screen.
     Object servicePayload;
     String serviceType;
-
-    private State() {
-      receiver = new DetachableResultReceiver(new Handler());
-    }
-
   }
 
-  /**
-   * Finishes the activity and puts the last service into the result
-   */
+  /** Finishes the activity and puts the last service into the result */
   private void setResultAndFinish() {
     Intent data = new Intent();
     data.putExtra(ServiceChooserDialog.RESULT_SERVICE_ID, mState.lastService);

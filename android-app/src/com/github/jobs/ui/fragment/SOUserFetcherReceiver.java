@@ -17,6 +17,7 @@
 package com.github.jobs.ui.fragment;
 
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.widget.Toast;
 import com.actionbarsherlock.app.SherlockFragmentActivity;
@@ -28,12 +29,16 @@ import com.github.jobs.events.SOUsersUpdateEvent;
 import com.github.jobs.resolver.StackOverflowUserTask;
 import com.github.jobs.utils.AppUtils;
 import com.squareup.otto.Bus;
-import com.telly.groundy.ReceiverFragment;
-
-import javax.inject.Inject;
+import com.telly.groundy.annotations.OnFailure;
+import com.telly.groundy.annotations.OnStart;
+import com.telly.groundy.annotations.OnSuccess;
+import com.telly.groundy.annotations.Param;
 import java.util.ArrayList;
+import javax.inject.Inject;
 
-public class SOUserFetcherReceiver extends ReceiverFragment {
+public class SOUserFetcherReceiver extends Fragment {
+
+  public static final String TAG = SOUserFetcherReceiver.class.getSimpleName();
 
   @Inject Bus bus;
 
@@ -42,27 +47,32 @@ public class SOUserFetcherReceiver extends ReceiverFragment {
     ((GithubJobsApplication) getActivity().getApplication()).inject(this);
   }
 
-  @Override protected void onError(Bundle resultData) {
+  @OnFailure(StackOverflowUserTask.class) public void onError() {
     FragmentActivity activity = getActivity();
     if (activity == null || !isAdded()) {
       return;
     }
     if (!AppUtils.isOnline(activity)) {
-      Toast.makeText(activity, R.string.error_fetching_search_result_network, Toast.LENGTH_LONG).show();
+      Toast.makeText(activity, R.string.error_fetching_search_result_network, Toast.LENGTH_LONG)
+          .show();
     } else {
       Toast.makeText(activity, R.string.error_fetching_search_result, Toast.LENGTH_LONG).show();
     }
+    changeProgress(false);
   }
 
-  @Override protected void onFinished(Bundle resultData) {
-    ArrayList<SOUser> users = resultData.getParcelableArrayList(StackOverflowUserTask.RESULT_USERS);
+  @OnSuccess(StackOverflowUserTask.class)
+  public void onFinished(@Param(StackOverflowUserTask.RESULT_USERS) ArrayList<SOUser> users) {
     bus.post(new SOUsersUpdateEvent(users));
+    changeProgress(false);
   }
 
-  @Override protected void onProgressChanged(boolean running) {
-    if (running) {
-      bus.post(new HideKeyboardEvent());
-    }
+  @OnStart(StackOverflowUserTask.class) public void onFetchStart() {
+    bus.post(new HideKeyboardEvent());
+    changeProgress(true);
+  }
+
+  private void changeProgress(boolean running) {
     FragmentActivity activity = getActivity();
     if (activity == null) {
       return;

@@ -26,8 +26,6 @@ import com.github.jobs.bean.Job;
 import com.github.jobs.ui.activity.JobDetailsActivity;
 import com.github.jobs.utils.RelativeDate;
 import com.github.jobs.utils.StringUtils;
-import com.telly.groundy.adapter.Layout;
-import com.telly.groundy.adapter.ListBaseAdapter;
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;

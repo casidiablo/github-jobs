@@ -24,8 +24,6 @@ import com.github.jobs.R;
 import com.github.jobs.bean.Template;
 import com.github.jobs.utils.RelativeDate;
 import com.github.jobs.utils.StringUtils;
-import com.telly.groundy.adapter.Layout;
-import com.telly.groundy.adapter.ListBaseAdapter;
 import in.uncod.android.bypass.Bypass;
 
 /**

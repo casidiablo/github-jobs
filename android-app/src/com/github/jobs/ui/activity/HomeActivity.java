@@ -20,6 +20,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.v4.view.ViewPager;
 import android.view.View;
 import com.actionbarsherlock.view.Menu;
@@ -30,16 +31,33 @@ import com.github.jobs.adapter.SearchJobFragmentAdapter;
 import com.github.jobs.bean.SearchPack;
 import com.github.jobs.events.ProgressWheel;
 import com.github.jobs.events.RemoveSearch;
-import com.github.jobs.receivers.SearchReceiver;
+import com.github.jobs.events.SearchError;
+import com.github.jobs.events.SearchFinished;
+import com.github.jobs.events.SearchProgressChanged;
+import com.github.jobs.resolver.SearchJobsTask;
 import com.github.jobs.ui.dialog.AboutDialog;
 import com.github.jobs.ui.dialog.SearchDialog;
+import com.github.jobs.utils.ViewUtils;
+import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
+import com.telly.groundy.CallbacksManager;
+import com.telly.groundy.Groundy;
+import com.telly.groundy.annotations.OnFailure;
+import com.telly.groundy.annotations.OnStart;
+import com.telly.groundy.annotations.OnSuccess;
+import com.telly.groundy.annotations.Param;
 import com.viewpagerindicator.TabPageIndicator;
-
 import java.util.ArrayList;
 import java.util.List;
+import javax.inject.Inject;
 
-import static com.github.jobs.utils.AnalyticsHelper.*;
+import static com.github.jobs.utils.AnalyticsHelper.ACTION_OPEN;
+import static com.github.jobs.utils.AnalyticsHelper.CATEGORY_ABOUT;
+import static com.github.jobs.utils.AnalyticsHelper.CATEGORY_SEARCH;
+import static com.github.jobs.utils.AnalyticsHelper.LABEL_DIALOG;
+import static com.github.jobs.utils.AnalyticsHelper.NAME_HOME;
+import static com.github.jobs.utils.AnalyticsHelper.NAME_TEMPLATES;
+import static com.github.jobs.utils.AnalyticsHelper.getTracker;
 
 public class HomeActivity extends TrackActivity {
   private static final int SEARCH_REQUEST = 534;
@@ -48,6 +66,10 @@ public class HomeActivity extends TrackActivity {
   private SearchJobFragmentAdapter mSearchJobFragmentAdapter;
   private ViewPager mViewPager;
   private State mState;
+  private CallbacksManager callbacksManager;
+  private boolean mSyncing;
+  @Inject ViewUtils viewUtils;
+  @Inject Bus bus;
 
   @Override public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
@@ -56,9 +78,9 @@ public class HomeActivity extends TrackActivity {
     setContentView(R.layout.main);
 
     mState = (State) getLastCustomNonConfigurationInstance();
+    callbacksManager = CallbacksManager.init(savedInstanceState, this);
     if (mState == null) {
       mState = new State();
-      mState.receiver = new SearchReceiver(this);
     } else if (mState.loading) {
       setSupportProgressBarIndeterminateVisibility(mState.loading);
     }
@@ -81,6 +103,16 @@ public class HomeActivity extends TrackActivity {
       mIndicator.notifyDataSetChanged();
       selectTab(mState.currentTab);
     }
+  }
+
+  @Override protected void onSaveInstanceState(Bundle outState) {
+    super.onSaveInstanceState(outState);
+    callbacksManager.onSaveInstanceState(outState);
+  }
+
+  @Override protected void onDestroy() {
+    super.onDestroy();
+    callbacksManager.onDestroy();
   }
 
   @Override public void setSupportProgressBarIndeterminateVisibility(boolean visible) {
@@ -178,13 +210,34 @@ public class HomeActivity extends TrackActivity {
     }
   }
 
-  public SearchReceiver getSearchReceiver() {
-    // TODO revisit this part to make sure it does not suck (spoiler: it does)
-    return mState.receiver;
+  @OnStart(SearchJobsTask.class) public void onSearchStart() {
+    mSyncing = true;
+    bus.post(new ProgressWheel(mSyncing));
+  }
+
+  @OnSuccess(SearchJobsTask.class)
+  public void onSearchFinished(@Param(SearchJobsTask.DATA_SEARCH_PACK) SearchPack searchPack,
+      @Param(SearchJobsTask.DATA_JOBS) ArrayList<Parcelable> parcelableArrayList) {
+    mSyncing = false;
+    if (searchPack != null) {
+      bus.post(new SearchFinished(searchPack, parcelableArrayList));
+      bus.post(new SearchProgressChanged(searchPack, mSyncing));
+    }
+    bus.post(new ProgressWheel(mSyncing));
+  }
+
+  @OnFailure(SearchJobsTask.class)
+  public void onSearchFailed(@Param(Groundy.CRASH_MESSAGE) String error,
+      @Param(SearchJobsTask.DATA_SEARCH_PACK) SearchPack searchPack) {
+    mSyncing = false;
+    viewUtils.toast(error);
+    if (searchPack != null) {
+      bus.post(new SearchError(searchPack));
+      bus.post(new SearchProgressChanged(searchPack, mSyncing));
+    }
   }
 
   private class State {
-    SearchReceiver receiver;
     boolean loading;
     List<SearchPack> searchPacks;
     int currentTab;

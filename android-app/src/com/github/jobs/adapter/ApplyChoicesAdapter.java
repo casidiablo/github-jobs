@@ -22,9 +22,6 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import com.github.jobs.R;
 import com.github.jobs.ui.dialog.HowToApplyDialog;
-import com.telly.groundy.adapter.Layout;
-import com.telly.groundy.adapter.ListBaseAdapter;
-import com.telly.groundy.adapter.ResourceId;
 
 /**
  * @author cristian

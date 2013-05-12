@@ -16,11 +16,10 @@
 
 package com.github.jobs.resolver;
 
-import android.os.Bundle;
 import com.github.jobs.bean.SOUser;
 import com.github.jobs.templates.fetcher.StackOverflowUsersFetcher;
 import com.telly.groundy.GroundyTask;
-
+import com.telly.groundy.TaskResult;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,22 +32,18 @@ public class StackOverflowUserTask extends GroundyTask {
   public static final String RESULT_USERS = "com.github.jobs.result.users";
 
   @Override
-  protected boolean doInBackground() {
-    Bundle parameters = getParameters();
-    String search = parameters.getString(EXTRA_SEARCH);
+  protected TaskResult doInBackground() {
+    String search = getStringArg(EXTRA_SEARCH);
 
     StackOverflowUsersFetcher stackOverflowUsersFetcher = new StackOverflowUsersFetcher();
     List<SOUser> users = stackOverflowUsersFetcher.findUser(search);
 
     if (users == null) {
-      return false; // something went wrong :-/
+      return failed(); // something went wrong :-/
     }
 
     // pack the result in an parcelable array list
-    Bundle resultData = getResultData();
     ArrayList<SOUser> SOUsers = new ArrayList<SOUser>(users);
-    resultData.putParcelableArrayList(RESULT_USERS, SOUsers);
-
-    return true; // everything went fine :)
+    return succeeded().add(RESULT_USERS, SOUsers); // everything went fine :)
   }
 }

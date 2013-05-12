@@ -39,9 +39,12 @@ import com.github.jobs.R;
 import com.github.jobs.adapter.JobsAdapter;
 import com.github.jobs.bean.Job;
 import com.github.jobs.bean.SearchPack;
-import com.github.jobs.events.*;
+import com.github.jobs.events.RemoveSearch;
+import com.github.jobs.events.SearchError;
+import com.github.jobs.events.SearchEvent;
+import com.github.jobs.events.SearchFinished;
+import com.github.jobs.events.SearchProgressChanged;
 import com.github.jobs.loader.JobListLoader;
-import com.github.jobs.receivers.SearchReceiver;
 import com.github.jobs.resolver.EmailSubscriberTask;
 import com.github.jobs.resolver.SearchJobsTask;
 import com.github.jobs.ui.activity.HomeActivity;
@@ -54,7 +57,18 @@ import com.telly.groundy.Groundy;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.github.jobs.utils.AnalyticsHelper.*;
+import static com.github.jobs.utils.AnalyticsHelper.ACTION_FOLLOW_CONTEXT;
+import static com.github.jobs.utils.AnalyticsHelper.ACTION_OPEN;
+import static com.github.jobs.utils.AnalyticsHelper.ACTION_OPEN_CONTEXT;
+import static com.github.jobs.utils.AnalyticsHelper.ACTION_REMOVE;
+import static com.github.jobs.utils.AnalyticsHelper.CATEGORY_JOBS;
+import static com.github.jobs.utils.AnalyticsHelper.CATEGORY_SEARCH;
+import static com.github.jobs.utils.AnalyticsHelper.CATEGORY_SUBSCRIBE;
+import static com.github.jobs.utils.AnalyticsHelper.LABEL_APPLY;
+import static com.github.jobs.utils.AnalyticsHelper.LABEL_DETAILS;
+import static com.github.jobs.utils.AnalyticsHelper.LABEL_DIALOG;
+import static com.github.jobs.utils.AnalyticsHelper.LABEL_SHARE;
+import static com.github.jobs.utils.AnalyticsHelper.getTracker;
 
 /**
  * @author cristian
@@ -82,11 +96,11 @@ public class JobListFragment extends BusFragment implements LoaderManager.Loader
   @Override public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     if (savedInstanceState != null) {
-      mCurrentSearch = (SearchPack) savedInstanceState.getParcelable(KEY_SEARCH);
+      mCurrentSearch = savedInstanceState.getParcelable(KEY_SEARCH);
       mLoading = savedInstanceState.getBoolean(KEY_LOADING);
       mLastTotalItemCount = savedInstanceState.getInt(KEY_LAST_TOTAL_ITEM_COUNT);
     } else {
-      mCurrentSearch = (SearchPack) getArguments().getParcelable(KEY_SEARCH);
+      mCurrentSearch = getArguments().getParcelable(KEY_SEARCH);
     }
   }
 
@@ -248,7 +262,7 @@ public class JobListFragment extends BusFragment implements LoaderManager.Loader
     if (!shouldProcess(searchFinished)) {
       return;
     }
-    ArrayList<Parcelable> parcelableArrayList = searchFinished.resultData.getParcelableArrayList(SearchJobsTask.DATA_JOBS);
+    ArrayList<Parcelable> parcelableArrayList = searchFinished.payload;
     if (parcelableArrayList == null) {
       return;
     }
@@ -324,19 +338,15 @@ public class JobListFragment extends BusFragment implements LoaderManager.Loader
   }
 
   private void triggerJobSearch() {
-    Bundle extras = new Bundle();
-    extras.putParcelable(SearchJobsTask.EXTRA_SEARCH_PACK, mCurrentSearch);
-
     mLoading = true;
     HomeActivity activity = (HomeActivity) getActivity();
     if (activity == null || !isAdded()) {
       return;
     }
-    SearchReceiver receiver = activity.getSearchReceiver();
-    Groundy.create(getActivity(), SearchJobsTask.class)
-        .receiver(receiver.getReceiver())
-        .params(extras)
-        .execute();
+    Groundy.create(SearchJobsTask.class)
+        .callback(activity)
+        .arg(SearchJobsTask.EXTRA_SEARCH_PACK, mCurrentSearch)
+        .execute(activity);
     ((SherlockFragmentActivity) getActivity()).setSupportProgressBarIndeterminateVisibility(true);
   }
 

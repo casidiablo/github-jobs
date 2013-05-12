@@ -35,7 +35,7 @@
     <dependency>
       <groupId>com.telly</groupId>
       <artifactId>groundy</artifactId>
-      <version>0.8</version>
+      <version>0.9-SNAPSHOT</version>
       <scope>compile</scope>
     </dependency>
     <dependency>

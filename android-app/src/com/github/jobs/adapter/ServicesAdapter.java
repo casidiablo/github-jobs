@@ -22,8 +22,6 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import com.github.jobs.R;
 import com.github.jobs.bean.Service;
-import com.telly.groundy.adapter.Layout;
-import com.telly.groundy.adapter.ListBaseAdapter;
 
 /**
  * @author cristian

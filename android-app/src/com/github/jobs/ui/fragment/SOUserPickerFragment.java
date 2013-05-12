@@ -45,7 +45,6 @@ import com.github.jobs.ui.activity.SOUserPickerActivity;
 import com.github.jobs.ui.dialog.SOUserDialog;
 import com.squareup.otto.Subscribe;
 import com.telly.groundy.Groundy;
-import com.telly.groundy.ReceiverFragment;
 
 import java.util.ArrayList;
 
@@ -71,10 +70,10 @@ public class SOUserPickerFragment extends BusFragment implements AdapterView.OnI
     super.onActivityCreated(savedInstanceState);
     setHasOptionsMenu(true);
     FragmentManager fm = getFragmentManager();
-    mSOUserFetcherReceiver = (SOUserFetcherReceiver) fm.findFragmentByTag(ReceiverFragment.TAG);
+    mSOUserFetcherReceiver = (SOUserFetcherReceiver) fm.findFragmentByTag(SOUserFetcherReceiver.TAG);
     if (mSOUserFetcherReceiver == null) {
       mSOUserFetcherReceiver = new SOUserFetcherReceiver();
-      fm.beginTransaction().add(mSOUserFetcherReceiver, ReceiverFragment.TAG).commitAllowingStateLoss();
+      fm.beginTransaction().add(mSOUserFetcherReceiver, SOUserFetcherReceiver.TAG).commitAllowingStateLoss();
     }
 
     mUserSearch = (EditText) getView().findViewById(R.id.edit_user_search);
@@ -170,11 +169,9 @@ public class SOUserPickerFragment extends BusFragment implements AdapterView.OnI
   }
 
   private void executeSearch(String search) {
-    Bundle extras = new Bundle();
-    extras.putString(StackOverflowUserTask.EXTRA_SEARCH, search);
-    Groundy.create(getActivity(), StackOverflowUserTask.class)
-      .params(extras)
-      .receiver(mSOUserFetcherReceiver.getReceiver())
-      .execute();
+    Groundy.create(StackOverflowUserTask.class)
+      .arg(StackOverflowUserTask.EXTRA_SEARCH, search)
+      .callback(mSOUserFetcherReceiver)
+      .execute(getActivity());
   }
 }

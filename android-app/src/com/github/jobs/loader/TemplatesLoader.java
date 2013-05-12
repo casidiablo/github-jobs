@@ -25,7 +25,6 @@ import com.github.jobs.GithubJobsApplication;
 import com.github.jobs.bean.GeneralSettings;
 import com.github.jobs.bean.Template;
 import com.github.jobs.utils.AppUtils;
-import com.telly.groundy.loader.SupportListLoader;
 
 import javax.inject.Inject;
 import java.util.Collections;

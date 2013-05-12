@@ -25,6 +25,7 @@ import com.github.jobs.bean.Search;
 import com.github.jobs.bean.SearchPack;
 import com.github.jobs.bean.SearchesAndJobs;
 import com.telly.groundy.GroundyTask;
+import com.telly.groundy.TaskResult;
 import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.List;
@@ -37,11 +38,11 @@ public class SearchJobsTask extends GroundyTask {
   @Inject SqlAdapter sqlAdapter;
 
   @Override
-  protected boolean doInBackground() {
+  protected TaskResult doInBackground() {
     ((GithubJobsApplication) getContext().getApplicationContext()).inject(this);
     // get parameters
-    Bundle params = getParameters();
-    SearchPack searchPack = (SearchPack) params.getParcelable(EXTRA_SEARCH_PACK);
+    Bundle params = getArgs();
+    SearchPack searchPack = params.getParcelable(EXTRA_SEARCH_PACK);
 
     // configure search
     Search.Builder builder = new Search.Builder();
@@ -56,7 +57,7 @@ public class SearchJobsTask extends GroundyTask {
     Search search = builder.createSearch();
     List<Job> jobsList = GithubJobsApi.search(search);
     if (jobsList == null) {
-      return false;
+      return failed();
     }
 
     ArrayList<Job> jobs = new ArrayList<Job>(jobsList);
@@ -85,10 +86,10 @@ public class SearchJobsTask extends GroundyTask {
     sqlAdapter.storeCollection(jobs, null);
 
     // prepare result
-    Bundle resultData = getResultData();
+    Bundle resultData = new Bundle();
     resultData.putParcelable(DATA_SEARCH_PACK, searchPack);
     resultData.putParcelableArrayList(DATA_JOBS, jobs);
-    return true;
+    return succeeded().addAll(resultData);
   }
 
   @Override

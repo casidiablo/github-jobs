@@ -33,7 +33,6 @@ import com.github.jobs.ui.fragment.EmailSubscriberReceiver;
 import com.squareup.otto.Bus;
 import com.squareup.otto.Subscribe;
 import com.telly.groundy.Groundy;
-import com.telly.groundy.ReceiverFragment;
 import javax.inject.Inject;
 import java.util.regex.Matcher;
 
@@ -63,10 +62,10 @@ public class SubscribeDialog extends TrackFragmentDialog implements View.OnClick
     findViewById(R.id.btn_subscribe).setOnClickListener(this);
 
     FragmentManager fm = getSupportFragmentManager();
-    mEmailSubscriberReceiver = (EmailSubscriberReceiver) fm.findFragmentByTag(ReceiverFragment.TAG);
+    mEmailSubscriberReceiver = (EmailSubscriberReceiver) fm.findFragmentByTag(EmailSubscriberReceiver.TAG);
     if (mEmailSubscriberReceiver == null) {
       mEmailSubscriberReceiver = new EmailSubscriberReceiver();
-      fm.beginTransaction().add(mEmailSubscriberReceiver, ReceiverFragment.TAG).commit();
+      fm.beginTransaction().add(mEmailSubscriberReceiver, EmailSubscriberReceiver.TAG).commit();
       internalProgress(false);
     }
   }
@@ -97,10 +96,10 @@ public class SubscribeDialog extends TrackFragmentDialog implements View.OnClick
           extras.putAll(getIntent().getExtras());
         }
         extras.putString(EmailSubscriberTask.EXTRA_EMAIL, emailAddress);
-        Groundy.create(this, EmailSubscriberTask.class)
-            .receiver(mEmailSubscriberReceiver.getReceiver())
-            .params(extras)
-            .queue();
+        Groundy.create(EmailSubscriberTask.class)
+            .callback(mEmailSubscriberReceiver)
+            .args(extras)
+            .queue(this);
         break;
     }
   }
