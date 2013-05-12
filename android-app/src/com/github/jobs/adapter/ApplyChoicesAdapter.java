@@ -27,13 +27,15 @@ import com.github.jobs.ui.dialog.HowToApplyDialog;
  * @author cristian
  * @version 1.0
  */
-public class ApplyChoicesAdapter extends ListBaseAdapter<HowToApplyDialog.ApplyOption, ApplyChoicesAdapter.ViewHolder> {
+public class ApplyChoicesAdapter
+    extends ListBaseAdapter<HowToApplyDialog.ApplyOption, ApplyChoicesAdapter.ViewHolder> {
   public ApplyChoicesAdapter(Context context) {
     super(context, ViewHolder.class);
   }
 
   @Override
-  public void populateHolder(int position, View view, ViewGroup parent, HowToApplyDialog.ApplyOption item, ViewHolder holder) {
+  public void populateHolder(int position, View view, ViewGroup parent,
+      HowToApplyDialog.ApplyOption item, ViewHolder holder) {
     if (item.type == HowToApplyDialog.TYPE_EMAIL) {
       holder.label.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_email, 0, 0, 0);
     } else {
@@ -44,7 +46,6 @@ public class ApplyChoicesAdapter extends ListBaseAdapter<HowToApplyDialog.ApplyO
 
   @Layout(R.layout.apply_option_item)
   public static class ViewHolder {
-    @ResourceId(R.id.lbl_apply_option)
-    TextView label;
+    @ResourceId(R.id.lbl_apply_option) TextView label;
   }
 }

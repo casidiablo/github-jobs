@@ -105,13 +105,14 @@ public class BadgeCount implements Parcelable {
   }
 
   @SuppressWarnings("UnusedDeclaration")
-  public static final Parcelable.Creator<BadgeCount> CREATOR = new Parcelable.Creator<BadgeCount>() {
-    public BadgeCount createFromParcel(Parcel in) {
-      return new BadgeCount(in);
-    }
+  public static final Parcelable.Creator<BadgeCount> CREATOR =
+      new Parcelable.Creator<BadgeCount>() {
+        public BadgeCount createFromParcel(Parcel in) {
+          return new BadgeCount(in);
+        }
 
-    public BadgeCount[] newArray(int size) {
-      return new BadgeCount[size];
-    }
-  };
+        public BadgeCount[] newArray(int size) {
+          return new BadgeCount[size];
+        }
+      };
 }

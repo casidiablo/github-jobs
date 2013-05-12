@@ -49,7 +49,8 @@ public class JellyBeanSpanFixTextView extends TextView {
     public final List<Object> spansWithSpacesBefore;
     public final List<Object> spansWithSpacesAfter;
 
-    public static FixingResult fixed(List<Object> spansWithSpacesBefore, List<Object> spansWithSpacesAfter) {
+    public static FixingResult fixed(List<Object> spansWithSpacesBefore,
+        List<Object> spansWithSpacesAfter) {
       return new FixingResult(true, spansWithSpacesBefore, spansWithSpacesAfter);
     }
 
@@ -57,7 +58,8 @@ public class JellyBeanSpanFixTextView extends TextView {
       return new FixingResult(false, null, null);
     }
 
-    private FixingResult(boolean fixed, List<Object> spansWithSpacesBefore, List<Object> spansWithSpacesAfter) {
+    private FixingResult(boolean fixed, List<Object> spansWithSpacesBefore,
+        List<Object> spansWithSpacesAfter) {
       this.fixed = fixed;
       this.spansWithSpacesBefore = spansWithSpacesBefore;
       this.spansWithSpacesAfter = spansWithSpacesAfter;
@@ -105,8 +107,10 @@ public class JellyBeanSpanFixTextView extends TextView {
    * Add spaces around spans until the text is fixed, and then removes the
    * unneeded spaces
    */
-  private void fixSpannedWithSpaces(SpannableStringBuilder builder, int widthMeasureSpec, int heightMeasureSpec) {
-    FixingResult result = addSpacesAroundSpansUntilFixed(builder, widthMeasureSpec, heightMeasureSpec);
+  private void fixSpannedWithSpaces(SpannableStringBuilder builder, int widthMeasureSpec,
+      int heightMeasureSpec) {
+    FixingResult result =
+        addSpacesAroundSpansUntilFixed(builder, widthMeasureSpec, heightMeasureSpec);
 
     if (result.fixed) {
       removeUnneededSpaces(widthMeasureSpec, heightMeasureSpec, builder, result);
@@ -115,7 +119,8 @@ public class JellyBeanSpanFixTextView extends TextView {
     }
   }
 
-  private FixingResult addSpacesAroundSpansUntilFixed(SpannableStringBuilder builder, int widthMeasureSpec, int heightMeasureSpec) {
+  private FixingResult addSpacesAroundSpansUntilFixed(SpannableStringBuilder builder,
+      int widthMeasureSpec, int heightMeasureSpec) {
 
     Object[] spans = builder.getSpans(0, builder.length(), Object.class);
     List<Object> spansWithSpacesBefore = new ArrayList<Object>(spans.length);
@@ -155,7 +160,8 @@ public class JellyBeanSpanFixTextView extends TextView {
     super.onMeasure(widthMeasureSpec, heightMeasureSpec);
   }
 
-  private void removeUnneededSpaces(int widthMeasureSpec, int heightMeasureSpec, SpannableStringBuilder builder, FixingResult result) {
+  private void removeUnneededSpaces(int widthMeasureSpec, int heightMeasureSpec,
+      SpannableStringBuilder builder, FixingResult result) {
 
     for (Object span : result.spansWithSpacesAfter) {
       int spanEnd = builder.getSpanEnd(span);

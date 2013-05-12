@@ -1,82 +1,89 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Github Jobs</string>
-    <string name="github_jobs">github:jobs</string>
-    <string name="search">Search</string>
-    <string name="search_example">title, companies, etc.</string>
-    <string name="search_title">Search</string>
-    <string name="location_hint">city, state, zip code or country</string>
-    <string name="location_lbl">Location:</string>
-    <string name="full_time">Full time</string>
-    <string name="job_description">Job description</string>
-    <string name="must_specify_description">You must specify a description</string>
-    <string name="job_details">Job details</string>
-    <string name="apply">Apply</string>
-    <string name="how_to_apply">How to apply?</string>
-    <string name="subscribe">Subscribe</string>
-    <string name="subscribe_by_email">Subscribe by Email</string>
-    <string name="faked_promise">We promise not to spam or share your email.</string>
-    <string name="email">email</string>
-    <string name="subscribed">Subscribed! Expect an email with new listings soon!</string>
-    <string name="error_subscribing">Error Subscribing, please try again in a few minutes.</string>
-    <string name="months_ago">%1$s months ago</string>
-    <string name="weeks_ago">%1$s weeks ago</string>
-    <string name="days_ago">%1$s days ago</string>
-    <string name="hours_ago">%1$s hours ago</string>
-    <string name="minutes_ago">%1$s minutes ago</string>
-    <string name="seconds_ago">%1$s seconds ago</string>
-    <string name="one_year_ago">one year ago</string>
-    <string name="years_ago">%1$s years ago</string>
-    <string name="one_month_ago">one month ago</string>
-    <string name="one_week_ago">one week ago</string>
-    <string name="one_day_ago">one day ago</string>
-    <string name="one_hour_ago">one hour ago</string>
-    <string name="one_minute_ago">one minute ago</string>
-    <string name="one_second_ago">one second ago</string>
-    <string name="few_secs_ago">Few moments ago</string>
-    <string name="share">Share</string>
-    <string name="loading_more">Loading more…</string>
-    <string name="all_jobs">All jobs</string>
-    <string name="delete_search">Delete search</string>
-    <string name="cancel">Cancel</string>
-    <string name="description_background">Background</string>
-    <string name="ga_api_key">UA-884125-4</string>
-    <string name="about_this_app">About this app</string>
-    <string name="about_me">about author…</string>
-    <string name="about_me_content">My name is Cristian and I am an Android developer who works as freelance (mainly
-        through oDesk.com). I am a fast, reliable coder who is seeking opportunities to build Android applications from
-        the ground up for you or your business.
-    </string>
-    <string name="about_this_app_title">about this app…</string>
-    <string name="about_this">GitHub app for Android allows you to search for jobs posted on the jobs.github.com
-        service. This app is not affiliated with Github. It\'s just a sample app I did for fun but thought it was
-        complete enough to publish it. You can fork its code from github: github.com/casidiablo/github-jobs
-    </string>
-    <string name="email_subject_about_app">About Github Jobs app…</string>
-    <string name="could_not_launch_url">Cannot launch website…</string>
-    <string name="cannot_launch_email_app">Cannot launch email app</string>
-    <string name="app_libraries">this app is powered by…</string>
-    <string name="library_maven">maven: cool tool for building and managing any Java-based project</string>
-    <string name="library_abs">ActionBarSherlock and ViewPagerIndicator: best ActionBar and ViewPager libraries (by J.
-        Wharton)
-    </string>
-    <string name="library_wasp">telly:wasp: library to handle/cache bitmap resources</string>
-    <string name="library_persistence">codeslap:persistence: a persistence library for Android I wrote a while ago
-    </string>
-    <string name="library_groundy">codeslap:groundy: library for Android containing some boilerplate code for
-        implementing background REST API calls implementations
-    </string>
-    <string name="cover_letters_list">Cover letters</string>
-    <string name="empty_cover_letters_list">You don\'t have cover letter yet. Click plus to add one.</string>
-    <string name="add_cover_letter">Add cover letter</string>
-    <string name="hint_cover_letter_name">Cover letter name</string>
-    <string name="hint_cover_letter_content">Cover letter content (use Markdown syntax)</string>
-    <string name="save">Save</string>
-    <string name="cover_letter_preview">Cover letter preview…</string>
-    <string name="add_service">Add service</string>
-    <string name="just_now">just now</string>
-    <string name="default_cover_letter_name">Cover letter example</string>
-    <string name="default_cover_letter_content"><![CDATA[Dear employer! My name is **Foo Bar** and I\'m a senior FooBar developer.
+  <string name="app_name">Github Jobs</string>
+  <string name="github_jobs">github:jobs</string>
+  <string name="search">Search</string>
+  <string name="search_example">title, companies, etc.</string>
+  <string name="search_title">Search</string>
+  <string name="location_hint">city, state, zip code or country</string>
+  <string name="location_lbl">Location:</string>
+  <string name="full_time">Full time</string>
+  <string name="job_description">Job description</string>
+  <string name="must_specify_description">You must specify a description</string>
+  <string name="job_details">Job details</string>
+  <string name="apply">Apply</string>
+  <string name="how_to_apply">How to apply?</string>
+  <string name="subscribe">Subscribe</string>
+  <string name="subscribe_by_email">Subscribe by Email</string>
+  <string name="faked_promise">We promise not to spam or share your email.</string>
+  <string name="email">email</string>
+  <string name="subscribed">Subscribed! Expect an email with new listings soon!</string>
+  <string name="error_subscribing">Error Subscribing, please try again in a few minutes.</string>
+  <string name="months_ago">%1$s months ago</string>
+  <string name="weeks_ago">%1$s weeks ago</string>
+  <string name="days_ago">%1$s days ago</string>
+  <string name="hours_ago">%1$s hours ago</string>
+  <string name="minutes_ago">%1$s minutes ago</string>
+  <string name="seconds_ago">%1$s seconds ago</string>
+  <string name="one_year_ago">one year ago</string>
+  <string name="years_ago">%1$s years ago</string>
+  <string name="one_month_ago">one month ago</string>
+  <string name="one_week_ago">one week ago</string>
+  <string name="one_day_ago">one day ago</string>
+  <string name="one_hour_ago">one hour ago</string>
+  <string name="one_minute_ago">one minute ago</string>
+  <string name="one_second_ago">one second ago</string>
+  <string name="share">Share</string>
+  <string name="loading_more">Loading more…</string>
+  <string name="all_jobs">All jobs</string>
+  <string name="delete_search">Delete search</string>
+  <string name="cancel">Cancel</string>
+  <string name="description_background">Background</string>
+  <string name="about_this_app">About this app</string>
+  <string name="about_me">about author…</string>
+  <string name="about_me_content">My name is Cristian and I am an Android developer who works as
+    freelance (mainly
+    through oDesk.com). I am a fast, reliable coder who is seeking opportunities to build Android
+    applications from
+    the ground up for you or your business.
+  </string>
+  <string name="about_this_app_title">about this app…</string>
+  <string name="about_this">GitHub app for Android allows you to search for jobs posted on the
+    jobs.github.com
+    service. This app is not affiliated with Github. It\'s just a sample app I did for fun but
+    thought it was
+    complete enough to publish it. You can fork its code from github:
+    github.com/casidiablo/github-jobs
+  </string>
+  <string name="email_subject_about_app">About Github Jobs app…</string>
+  <string name="could_not_launch_url">Cannot launch website…</string>
+  <string name="cannot_launch_email_app">Cannot launch email app</string>
+  <string name="app_libraries">this app is powered by…</string>
+  <string name="library_maven">maven: cool tool for building and managing any Java-based project
+  </string>
+  <string name="library_abs">ActionBarSherlock and ViewPagerIndicator: best ActionBar and ViewPager
+    libraries (by J.
+    Wharton)
+  </string>
+  <string name="library_wasp">telly:wasp: library to handle/cache bitmap resources</string>
+  <string name="library_persistence">codeslap:persistence: a persistence library for Android I wrote
+    a while ago
+  </string>
+  <string name="library_groundy">codeslap:groundy: library for Android containing some boilerplate
+    code for
+    implementing background REST API calls implementations
+  </string>
+  <string name="cover_letters_list">Cover letters</string>
+  <string name="empty_cover_letters_list">You don\'t have cover letter yet. Click plus to add one.
+  </string>
+  <string name="add_cover_letter">Add cover letter</string>
+  <string name="hint_cover_letter_name">Cover letter name</string>
+  <string name="hint_cover_letter_content">Cover letter content (use Markdown syntax)</string>
+  <string name="cover_letter_preview">Cover letter preview…</string>
+  <string name="add_service">Add service</string>
+  <string name="just_now">just now</string>
+  <string name="default_cover_letter_name">Cover letter example</string>
+  <string name="default_cover_letter_content"><![CDATA[Dear employer! My name is **Foo Bar** and I\'m a senior FooBar developer.
 \n\n
 My primary focus right now is (back|front)-end development in, let\'s say, [Ruby on Rails][1]. Also I have decent baz experience. So, my core skills are the following: blah, blah, blah, blah, etc. In my practice I always pay a lot of attention to quality of code, testing and project organization.
 \n\n
@@ -85,79 +92,71 @@ I always prefer to use foo-bar approaches and thus use various foo-bar framework
 Best regards, Foo Bar.
 \n\n
   [1]: http://rubyonrails.org/]]></string>
-    <string name="delete_cover_letter">Delete cover letter</string>
-    <string name="are_you_sure">Are you sure?</string>
-    <string name="are_you_really_sure">Are you sure you want to delete this cover letter? This cannot be undone.</string>
-    <string name="yes_i_am">Yes, I am</string>
-    <string name="cover_letter_deleted_successfully">Cover letter deleted successfully</string>
-    <string name="so_user_picker">StackOverflow user picker</string>
-    <string name="search_by_username">Search by username</string>
-    <string name="user_avatar">User avatar</string>
-    <string name="invalid_so_user">Invalid StackOverflow user</string>
-    <string name="label_email_address">Email Address</string>
-    <string name="label_password">Password</string>
-    <string name="label_sign_in">Sign In</string>
-    <string name="message_signing_in">Signing in…</string>
-    <string name="message_bad_credentials">Email Address or Password is incorrect</string>
-    <string name="authenticate">Authentication</string>
-    <string name="reputation">Reputation: %s</string>
-    <string name="link">Link: %s</string>
-    <string name="website">Website: %s</string>
-    <string name="badge_counts">Badges:</string>
-    <string name="gold">Gold:</string>
-    <string name="silver">Silver:</string>
-    <string name="bronze">Bronze:</string>
-    <string name="service_chooser">Service chooser</string>
-    <string name="lbl_github">Github</string>
-    <string name="lbl_stack_overflow">StackOverflow</string>
-    <string name="lbl_linked_in">LinkedIn</string>
-    <string name="lbl_skype">Skype</string>
-    <string name="lbl_about_me">About me</string>
-    <string name="lbl_website">Website</string>
-    <string name="service_explanation">This will be placed at the end of your cover letter</string>
-    <string name="choose_user">Import user</string>
-    <string name="choose_user_and_website">Import user and website</string>
-    <string name="cover_letter_name_is_empty">Cover letter name shall not be empty</string>
-    <string name="cover_letter_content_is_empty">Cover letter content shall not be empty</string>
-    <string name="cover_letter_footer">**%1$s**: %2$s</string>
-    <string name="lbl_editor">Editor</string>
-    <string name="preview">Preview</string>
-    <string name="edit_cover_letter">Edit cover letter</string>
-    <string name="new_cover_letter">New cover letter</string>
-    <string name="so_link_added">StackOverflow link added. See preview footer.</string>
-    <string name="your_about_me_username">your about.me username</string>
-    <string name="get_about_me_user_info">Get about.me user info</string>
-    <string name="your_linked_in_username">public profile suffix</string>
-    <string name="get_linked_in_user_info">Add LinkedIn to template</string>
-    <string name="your_github_username">your Github username</string>
-    <string name="get_github_user_info">Add Github link</string>
-    <string name="your_skype_username">your Skype username</string>
-    <string name="your_custom_username">your custom service data</string>
-    <string name="your_username">your username</string>
-    <string name="get_skype_user_info">Add Skype info</string>
-    <string name="add_custom_info">Add to template</string>
-    <string name="fetch_service_info">Fetch service information</string>
-    <string name="get_user_info">Add info to template</string>
-    <string name="this_shall_not_be_empty">this shall not be empty</string>
-    <string name="nothing_found">Nothing found</string>
-    <string name="import_services">Import services</string>
-    <string name="lbl_facebook">Facebook</string>
-    <string name="no_services_checked">No services checked</string>
-    <string name="remove_service">Remove service</string>
-    <string name="title_remove_services">Remove services</string>
-    <string name="remove_selected_services">Remove selected services</string>
-    <string name="service_list_item">%1$s (%2$s)</string>
-    <string name="btn_apply">Apply</string>
-    <string name="btn_apply_with_template">Apply with template</string>
-    <string name="apply_for_job_with">Apply for this job with…</string>
-    <string name="template_content_copied_to_clipboard">Template content copied to the clipboard</string>
-    <string name="apply_for_this_job_via">Apply for this job via…</string>
-    <string name="invalid_email_address">Invalid email address</string>
-    <string name="you_must_have_network_connection">You must have a network connection</string>
-    <string name="error_fetching_search_result">Error fetching search result</string>
-    <string name="error_fetching_search_result_network">Error fetching search result. Check your network connection.</string>
-    <string name="custom_service">Custom service</string>
-    <string name="hint_service_name">service name</string>
-    <string name="error_getting_job_info">Error getting job information</string>
-    <string name="could_not_find_apply_info">Could not find application info</string>
+  <string name="delete_cover_letter">Delete cover letter</string>
+  <string name="are_you_sure">Are you sure?</string>
+  <string name="are_you_really_sure">Are you sure you want to delete this cover letter? This cannot
+    be undone.
+  </string>
+  <string name="yes_i_am">Yes, I am</string>
+  <string name="cover_letter_deleted_successfully">Cover letter deleted successfully</string>
+  <string name="so_user_picker">StackOverflow user picker</string>
+  <string name="search_by_username">Search by username</string>
+  <string name="user_avatar">User avatar</string>
+  <string name="invalid_so_user">Invalid StackOverflow user</string>
+  <string name="reputation">Reputation: %s</string>
+  <string name="website">Website: %s</string>
+  <string name="badge_counts">Badges:</string>
+  <string name="service_chooser">Service chooser</string>
+  <string name="lbl_github">Github</string>
+  <string name="lbl_stack_overflow">StackOverflow</string>
+  <string name="lbl_linked_in">LinkedIn</string>
+  <string name="lbl_skype">Skype</string>
+  <string name="lbl_about_me">About me</string>
+  <string name="lbl_website">Website</string>
+  <string name="service_explanation">This will be placed at the end of your cover letter</string>
+  <string name="choose_user">Import user</string>
+  <string name="choose_user_and_website">Import user and website</string>
+  <string name="cover_letter_name_is_empty">Cover letter name shall not be empty</string>
+  <string name="cover_letter_content_is_empty">Cover letter content shall not be empty</string>
+  <string name="cover_letter_footer">**%1$s**: %2$s</string>
+  <string name="lbl_editor">Editor</string>
+  <string name="preview">Preview</string>
+  <string name="edit_cover_letter">Edit cover letter</string>
+  <string name="new_cover_letter">New cover letter</string>
+  <string name="so_link_added">StackOverflow link added. See preview footer.</string>
+  <string name="your_about_me_username">your about.me username</string>
+  <string name="get_about_me_user_info">Get about.me user info</string>
+  <string name="your_linked_in_username">public profile suffix</string>
+  <string name="get_linked_in_user_info">Add LinkedIn to template</string>
+  <string name="your_github_username">your Github username</string>
+  <string name="get_github_user_info">Add Github link</string>
+  <string name="your_skype_username">your Skype username</string>
+  <string name="your_custom_username">your custom service data</string>
+  <string name="get_skype_user_info">Add Skype info</string>
+  <string name="add_custom_info">Add to template</string>
+  <string name="fetch_service_info">Fetch service information</string>
+  <string name="this_shall_not_be_empty">this shall not be empty</string>
+  <string name="nothing_found">Nothing found</string>
+  <string name="import_services">Import services</string>
+  <string name="lbl_facebook">Facebook</string>
+  <string name="no_services_checked">No services checked</string>
+  <string name="remove_service">Remove service</string>
+  <string name="title_remove_services">Remove services</string>
+  <string name="remove_selected_services">Remove selected services</string>
+  <string name="service_list_item">%1$s (%2$s)</string>
+  <string name="btn_apply_with_template">Apply with template</string>
+  <string name="apply_for_job_with">Apply for this job with…</string>
+  <string name="template_content_copied_to_clipboard">Template content copied to the clipboard
+  </string>
+  <string name="apply_for_this_job_via">Apply for this job via…</string>
+  <string name="invalid_email_address">Invalid email address</string>
+  <string name="you_must_have_network_connection">You must have a network connection</string>
+  <string name="error_fetching_search_result">Error fetching search result</string>
+  <string name="error_fetching_search_result_network">Error fetching search result. Check your
+    network connection.
+  </string>
+  <string name="custom_service">Custom service</string>
+  <string name="hint_service_name">service name</string>
+  <string name="error_getting_job_info">Error getting job information</string>
+  <string name="could_not_find_apply_info">Could not find application info</string>
 </resources>

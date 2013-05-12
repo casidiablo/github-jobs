@@ -39,7 +39,8 @@ public class ServicesAdapter extends ListBaseAdapter<Service, ServicesAdapter.Vi
   }
 
   @Override
-  public void populateHolder(int position, View view, ViewGroup parent, Service item, ViewHolder holder) {
+  public void populateHolder(int position, View view, ViewGroup parent, Service item,
+      ViewHolder holder) {
     holder.item.setImageResource(item.getDrawable());
   }
 

@@ -1,41 +1,41 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ViewSwitcher
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        android:id="@+id/switcher_edit_mode"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:inAnimation="@android:anim/fade_in"
-        android:outAnimation="@android:anim/fade_out">
-    <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical"
-            android:padding="5dip">
+<ViewSwitcher xmlns:android="http://schemas.android.com/apk/res/android"
+  android:id="@+id/switcher_edit_mode"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent"
+  android:inAnimation="@android:anim/fade_in"
+  android:outAnimation="@android:anim/fade_out">
 
-        <EditText
-                android:id="@+id/edit_cover_letter_name"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:inputType="text|textCapWords"
-                android:hint="@string/hint_cover_letter_name"/>
+  <LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="5dip">
 
-        <EditText
-                android:id="@+id/edit_cover_letter_content"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1"
-                android:gravity="left|top"
-                android:inputType="text|textCapSentences|textMultiLine"
-                android:typeface="monospace"
-                android:textAppearance="?android:attr/textAppearanceSmall"
-                android:hint="@string/hint_cover_letter_content"/>
-    </LinearLayout>
+    <EditText
+      android:id="@+id/edit_cover_letter_name"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:inputType="text|textCapWords"
+      android:hint="@string/hint_cover_letter_name" />
 
-    <WebView
-            android:id="@+id/lbl_cover_letter_preview"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:text="@string/cover_letter_preview"
-            android:background="@drawable/preview_bg"/>
+    <EditText
+      android:id="@+id/edit_cover_letter_content"
+      android:layout_width="match_parent"
+      android:layout_height="0dp"
+      android:layout_weight="1"
+      android:gravity="left|top"
+      android:inputType="text|textCapSentences|textMultiLine"
+      android:typeface="monospace"
+      android:textAppearance="?android:attr/textAppearanceSmall"
+      android:hint="@string/hint_cover_letter_content" />
+  </LinearLayout>
+
+  <WebView
+    android:id="@+id/lbl_cover_letter_preview"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:text="@string/cover_letter_preview"
+    android:background="@drawable/preview_bg" />
 
 </ViewSwitcher>

@@ -16,9 +16,7 @@
 
 package com.github.jobs.bean;
 
-/**
- * @author cristian
- */
+/** @author cristian */
 public class Search {
   //A search term, such as "ruby" or "java"
   private final String search;
@@ -33,7 +31,8 @@ public class Search {
   // page number...
   private final int page;
 
-  private Search(String search, String location, double latitude, double longitude, boolean fullTime, int page) {
+  private Search(String search, String location, double latitude, double longitude,
+      boolean fullTime, int page) {
     this.search = search;
     this.location = location;
     this.latitude = latitude;
@@ -106,7 +105,8 @@ public class Search {
 
     public Search createSearch() {
       if (location != null && (latitude != 0 || longitude != 0)) {
-        throw new IllegalStateException("If you set the location, you cannot set latitude and longitude");
+        throw new IllegalStateException(
+            "If you set the location, you cannot set latitude and longitude");
       }
       if (page < 0) {
         throw new IllegalStateException("Invalid page number. It must be a positive integer.");

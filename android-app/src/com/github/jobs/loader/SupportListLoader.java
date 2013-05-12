@@ -4,9 +4,7 @@ import android.content.Context;
 import android.support.v4.content.AsyncTaskLoader;
 import java.util.List;
 
-/**
- * AsyncTaskLoader which handles lists of generic objects
- */
+/** AsyncTaskLoader which handles lists of generic objects */
 public abstract class SupportListLoader<T> extends AsyncTaskLoader<List<T>> {
   private List<T> mList;
 

@@ -19,9 +19,7 @@ package com.github.jobs.utils;
 import android.app.Activity;
 import android.webkit.WebView;
 
-/**
- * @author cristian
- */
+/** @author cristian */
 public class GithubJobsJavascriptInterface {
   public static final String PREVIEW_TEMPLATE_URL = "file:///android_asset/preview_template.html";
   public static final String JS_INTERFACE = "githubJobs";
@@ -41,9 +39,7 @@ public class GithubJobsJavascriptInterface {
       mContent = null;
       return;
     }
-    mContent = content.replaceAll("'", "\\\\'")
-        .replaceAll("\n", "\\\\n")
-        .replaceAll("\r", "\\\\n");
+    mContent = content.replaceAll("'", "\\\\'").replaceAll("\n", "\\\\n").replaceAll("\r", "\\\\n");
   }
 
   public void onLoaded() {

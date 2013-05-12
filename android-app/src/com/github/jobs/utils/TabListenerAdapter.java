@@ -19,9 +19,7 @@ package com.github.jobs.utils;
 import android.app.ActionBar;
 import android.app.FragmentTransaction;
 
-/**
- * @author cristian
- */
+/** @author cristian */
 public abstract class TabListenerAdapter implements ActionBar.TabListener {
   @Override
   public abstract void onTabSelected(ActionBar.Tab tab, FragmentTransaction ft);

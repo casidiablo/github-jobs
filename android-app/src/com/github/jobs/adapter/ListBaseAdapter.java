@@ -29,9 +29,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-/**
- * Generic class used to easily create a list adapter.
- */
+/** Generic class used to easily create a list adapter. */
 public abstract class ListBaseAdapter<Item, ViewHolder> extends BaseAdapter {
 
   private final List<Item> mItems = new ArrayList<Item>();
@@ -47,7 +45,8 @@ public abstract class ListBaseAdapter<Item, ViewHolder> extends BaseAdapter {
     mViewHolderClass = viewHolder;
     mInflater = LayoutInflater.from(context);
     if (!viewHolder.isAnnotationPresent(Layout.class)) {
-      throw new IllegalStateException("viewHolder class must have a " + Layout.class + " annotation");
+      throw new IllegalStateException(
+          "viewHolder class must have a " + Layout.class + " annotation");
     }
     Layout layout = viewHolder.getAnnotation(Layout.class);
     mLayoutId = layout.value();
@@ -64,10 +63,13 @@ public abstract class ListBaseAdapter<Item, ViewHolder> extends BaseAdapter {
       int resourceId;
       if (!field.isAnnotationPresent(ResourceId.class)) {
         try {
-          resourceId = getContext().getResources().getIdentifier(field.getName(), "id", getContext().getPackageName());
+          resourceId = getContext().getResources()
+              .getIdentifier(field.getName(), "id", getContext().getPackageName());
         } catch (Exception e) {
-          throw new RuntimeException("Could not find id for field: " + field
-              + ". Either add a @ResourceId annotation or make the field have the same name than the id." +
+          throw new RuntimeException("Could not find id for field: "
+              + field
+              + ". Either add a @ResourceId annotation or make the field have the same name than the id."
+              +
               "Also, you can use the @ResourceId:ignore field.", e);
         }
       } else {
@@ -84,7 +86,6 @@ public abstract class ListBaseAdapter<Item, ViewHolder> extends BaseAdapter {
         throw new RuntimeException("Could not set view (" + resourceId + ") to " + field, e);
       }
     }
-
   }
 
   @Override
@@ -110,7 +111,9 @@ public abstract class ListBaseAdapter<Item, ViewHolder> extends BaseAdapter {
       try {
         holder = mViewHolderClass.newInstance();
       } catch (Exception e) {
-        throw new IllegalStateException("Could not instantiate view holder: " + mViewHolderClass + ". Make sure it has an empty constructor.", e);
+        throw new IllegalStateException("Could not instantiate view holder: "
+            + mViewHolderClass
+            + ". Make sure it has an empty constructor.", e);
       }
 
       // inflate the base view
@@ -122,7 +125,14 @@ public abstract class ListBaseAdapter<Item, ViewHolder> extends BaseAdapter {
         try {
           field.set(holder, viewById);
         } catch (Exception e) {
-          throw new RuntimeException("Could not set view (" + resourceId + ") to field " + field + ". Holder: " + holder + ", found view: " + viewById, e);
+          throw new RuntimeException("Could not set view ("
+              + resourceId
+              + ") to field "
+              + field
+              + ". Holder: "
+              + holder
+              + ", found view: "
+              + viewById, e);
         }
       }
       view.setTag(holder);
@@ -146,7 +156,8 @@ public abstract class ListBaseAdapter<Item, ViewHolder> extends BaseAdapter {
     return mLayoutIds.length;
   }
 
-  public abstract void populateHolder(int position, View view, ViewGroup parent, Item item, ViewHolder holder);
+  public abstract void populateHolder(int position, View view, ViewGroup parent, Item item,
+      ViewHolder holder);
 
   public Context getContext() {
     return mContext;

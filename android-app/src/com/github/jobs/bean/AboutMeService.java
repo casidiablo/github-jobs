@@ -72,9 +72,13 @@ public class AboutMeService implements Parcelable {
 
     AboutMeService that = (AboutMeService) o;
 
-    if (displayName != null ? !displayName.equals(that.displayName) : that.displayName != null) return false;
+    if (displayName != null ? !displayName.equals(that.displayName) : that.displayName != null) {
+      return false;
+    }
     if (platform != null ? !platform.equals(that.platform) : that.platform != null) return false;
-    if (serviceUrl != null ? !serviceUrl.equals(that.serviceUrl) : that.serviceUrl != null) return false;
+    if (serviceUrl != null ? !serviceUrl.equals(that.serviceUrl) : that.serviceUrl != null) {
+      return false;
+    }
 
     return true;
   }
@@ -109,16 +113,17 @@ public class AboutMeService implements Parcelable {
   }
 
   @SuppressWarnings("UnusedDeclaration")
-  public static final Parcelable.Creator<AboutMeService> CREATOR = new Parcelable.Creator<AboutMeService>() {
+  public static final Parcelable.Creator<AboutMeService> CREATOR =
+      new Parcelable.Creator<AboutMeService>() {
 
-    @Override
-    public AboutMeService createFromParcel(Parcel source) {
-      return new AboutMeService(source);
-    }
+        @Override
+        public AboutMeService createFromParcel(Parcel source) {
+          return new AboutMeService(source);
+        }
 
-    @Override
-    public AboutMeService[] newArray(int size) {
-      return new AboutMeService[size];
-    }
-  };
+        @Override
+        public AboutMeService[] newArray(int size) {
+          return new AboutMeService[size];
+        }
+      };
 }

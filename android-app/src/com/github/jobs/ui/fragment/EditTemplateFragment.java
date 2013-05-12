@@ -65,7 +65,6 @@ import static com.github.jobs.templates.TemplatesHelper.getTemplateFromResult;
 import static com.github.jobs.utils.GithubJobsJavascriptInterface.JS_INTERFACE;
 import static com.github.jobs.utils.GithubJobsJavascriptInterface.PREVIEW_TEMPLATE_URL;
 
-
 /**
  * @author cristian
  * @version 1.0
@@ -102,7 +101,8 @@ public class EditTemplateFragment extends BusFragment {
     setHasOptionsMenu(true);
   }
 
-  @Override public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+  @Override public View onCreateView(LayoutInflater inflater, ViewGroup container,
+      Bundle savedInstanceState) {
     mTemplateServices = new ArrayList<TemplateService>();
     if (savedInstanceState != null) {
       ArrayList<Parcelable> list = savedInstanceState.getParcelableArrayList(KEY_TEMPLATE_SERVICES);
@@ -151,7 +151,8 @@ public class EditTemplateFragment extends BusFragment {
       Template template = new Template();
       template.setId(mTemplateId);
       template = adapter.findFirst(template);
-      ArrayList<TemplateService> templateServices = new ArrayList<TemplateService>(template.getTemplateServices());
+      ArrayList<TemplateService> templateServices =
+          new ArrayList<TemplateService>(template.getTemplateServices());
       for (TemplateService savedService : mTemplateServices) {
         if (!templateServices.contains(savedService)) {
           templateServices.add(savedService);
@@ -257,7 +258,8 @@ public class EditTemplateFragment extends BusFragment {
       case ServiceChooserDialog.REQUEST_CODE:
         int serviceId = data.getIntExtra(ServiceChooserDialog.RESULT_SERVICE_ID, -1);
         if (serviceId == -1) {
-          Parcelable[] templateServices = data.getParcelableArrayExtra(ServiceChooserDialog.RESULT_SERVICES);
+          Parcelable[] templateServices =
+              data.getParcelableArrayExtra(ServiceChooserDialog.RESULT_SERVICES);
           if (templateServices != null) {
             for (Parcelable templateService : templateServices) {
               addTemplateService((TemplateService) templateService);
@@ -307,7 +309,9 @@ public class EditTemplateFragment extends BusFragment {
 
     // show a dialog to allow users to remove current services
     Fragment fragment = RemoveServicesDialog.newInstance(mTemplateServices);
-    getFragmentManager().beginTransaction().add(fragment, RemoveServicesDialog.TAG).commitAllowingStateLoss();
+    getFragmentManager().beginTransaction()
+        .add(fragment, RemoveServicesDialog.TAG)
+        .commitAllowingStateLoss();
   }
 
   private void saveTemplate() {
@@ -316,7 +320,7 @@ public class EditTemplateFragment extends BusFragment {
     }
     Template template = buildTemplate();
     if (template.getId() > 0) {
-      String[] args = {String.valueOf(template.getId())};
+      String[] args = { String.valueOf(template.getId()) };
       int deleted = adapter.delete(TemplateService.class, "template_id = ?", args);
       Log.d(TAG, "Deleted " + deleted + " templates");
 
@@ -335,7 +339,8 @@ public class EditTemplateFragment extends BusFragment {
 
   private void showRemoveServiceBtnIfNecessary() {
     if (mTemplateId != -1 && mMenuRemoveService != null) {
-      int count = adapter.count(TemplateService.class, "template_id = ?", new String[]{String.valueOf(mTemplateId)});
+      int count = adapter.count(TemplateService.class, "template_id = ?",
+          new String[] { String.valueOf(mTemplateId) });
       if (count > 0) {
         mMenuRemoveService.setVisible(true);
       }
@@ -430,7 +435,6 @@ public class EditTemplateFragment extends BusFragment {
       for (TemplateService service : mTemplateServices) {
         markdownContent += TemplatesHelper.getContent(getActivity(), service) + "\n\n";
       }
-
     }
     mJavascriptInterface.setContent(markdownContent);
     mJavascriptInterface.onLoaded();

@@ -61,7 +61,8 @@ public class SOUserPickerFragment extends BusFragment implements AdapterView.OnI
   private SOUsersAdapter mAdapter;
   private EditText mUserSearch;
 
-  @Override public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+  @Override public View onCreateView(LayoutInflater inflater, ViewGroup container,
+      Bundle savedInstanceState) {
     return inflater.inflate(R.layout.so_user_picker, null, false);
   }
 
@@ -69,10 +70,13 @@ public class SOUserPickerFragment extends BusFragment implements AdapterView.OnI
     super.onActivityCreated(savedInstanceState);
     setHasOptionsMenu(true);
     FragmentManager fm = getFragmentManager();
-    mSOUserFetcherReceiver = (SOUserFetcherReceiver) fm.findFragmentByTag(SOUserFetcherReceiver.TAG);
+    mSOUserFetcherReceiver =
+        (SOUserFetcherReceiver) fm.findFragmentByTag(SOUserFetcherReceiver.TAG);
     if (mSOUserFetcherReceiver == null) {
       mSOUserFetcherReceiver = new SOUserFetcherReceiver();
-      fm.beginTransaction().add(mSOUserFetcherReceiver, SOUserFetcherReceiver.TAG).commitAllowingStateLoss();
+      fm.beginTransaction()
+          .add(mSOUserFetcherReceiver, SOUserFetcherReceiver.TAG)
+          .commitAllowingStateLoss();
     }
 
     mUserSearch = (EditText) getView().findViewById(R.id.edit_user_search);
@@ -163,14 +167,15 @@ public class SOUserPickerFragment extends BusFragment implements AdapterView.OnI
   }
 
   @Subscribe public void hideKeyboard(HideKeyboardEvent event) {
-    InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+    InputMethodManager imm =
+        (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
     imm.hideSoftInputFromWindow(mUserSearch.getWindowToken(), 0);
   }
 
   private void executeSearch(String search) {
     Groundy.create(StackOverflowUserTask.class)
-      .arg(StackOverflowUserTask.EXTRA_SEARCH, search)
-      .callback(mSOUserFetcherReceiver)
-      .execute(getActivity());
+        .arg(StackOverflowUserTask.EXTRA_SEARCH, search)
+        .callback(mSOUserFetcherReceiver)
+        .execute(getActivity());
   }
 }

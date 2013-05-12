@@ -106,13 +106,14 @@ public class TemplateService implements Parcelable {
   }
 
   @SuppressWarnings("UnusedDeclaration")
-  public static final Parcelable.Creator<TemplateService> CREATOR = new Parcelable.Creator<TemplateService>() {
-    public TemplateService createFromParcel(Parcel in) {
-      return new TemplateService(in);
-    }
+  public static final Parcelable.Creator<TemplateService> CREATOR =
+      new Parcelable.Creator<TemplateService>() {
+        public TemplateService createFromParcel(Parcel in) {
+          return new TemplateService(in);
+        }
 
-    public TemplateService[] newArray(int size) {
-      return new TemplateService[size];
-    }
-  };
+        public TemplateService[] newArray(int size) {
+          return new TemplateService[size];
+        }
+      };
 }

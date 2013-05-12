@@ -72,7 +72,8 @@ public abstract class BaseActivity extends FragmentActivity {
    * Helper method that allows to initialize and add a fragment to activities that usually have
    * just one single fragment. Fragment is added using its class.getName() as tag.
    *
-   * @param containerId   resource id of the fragment container (must be created through android resources)
+   * @param containerId resource id of the fragment container (must be created through android
+   * resources)
    * @param fragmentClass the class of the fragment to setup
    */
   void setupBaseFragment(int containerId, Class<? extends Fragment> fragmentClass) {
@@ -83,15 +84,17 @@ public abstract class BaseActivity extends FragmentActivity {
    * Helper method that allows to initialize and add a fragment to activities that usually have
    * just one single fragment. Fragment is added using its class.getName() as tag.
    *
-   * @param containerId   resource id of the fragment container (must be created through android resources)
+   * @param containerId resource id of the fragment container (must be created through android
+   * resources)
    * @param fragmentClass the class of the fragment to setup
-   * @param args          bundle with the arguments to pass to the fragment
+   * @param args bundle with the arguments to pass to the fragment
    */
   void setupBaseFragment(int containerId, Class<? extends Fragment> fragmentClass, Bundle args) {
     if (mSetContentViewAlreadyCalled) {
       View view = findViewById(containerId);
       if (!(view instanceof ViewGroup)) {
-        throw new IllegalStateException("Since you already called setContentView, it must has a ViewGroup whose id is 'containerId'");
+        throw new IllegalStateException(
+            "Since you already called setContentView, it must has a ViewGroup whose id is 'containerId'");
       }
     } else {
       FrameLayout container = new FrameLayout(this);
@@ -127,5 +130,4 @@ public abstract class BaseActivity extends FragmentActivity {
     //noinspection unchecked
     return (T) fragment;
   }
-
 }

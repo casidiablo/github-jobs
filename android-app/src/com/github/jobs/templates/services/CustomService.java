@@ -68,7 +68,8 @@ public class CustomService implements ServiceContract {
 
       @Override
       public String generate(TemplateService templateService) {
-        return getString(R.string.cover_letter_footer, templateService.getType(), templateService.getData());
+        return getString(R.string.cover_letter_footer, templateService.getType(),
+            templateService.getData());
       }
     };
   }

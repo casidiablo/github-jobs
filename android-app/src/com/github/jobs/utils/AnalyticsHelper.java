@@ -118,8 +118,8 @@ public final class AnalyticsHelper {
    * Track an Event.
    *
    * @param category the category of the event
-   * @param action   the action of the event
-   * @param label    the label of the event, can be null
+   * @param action the action of the event
+   * @param label the label of the event, can be null
    */
   public void trackEvent(String category, String action, String label) {
     try {

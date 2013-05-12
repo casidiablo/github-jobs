@@ -49,9 +49,7 @@ import java.util.regex.Matcher;
 import static com.github.jobs.utils.AnalyticsHelper.NAME_HOW_TO_APPLY;
 import static com.github.jobs.utils.AnalyticsHelper.getTracker;
 
-/**
- * @author cristian
- */
+/** @author cristian */
 public class HowToApplyDialog extends TrackDialog implements View.OnClickListener {
   public static final String EXTRA_HOW_TO_APPLY = "com.github.jobs.extra.how_to_apply";
   public static final String EXTRA_TITLE = "com.github.jobs.extra.title";
@@ -147,14 +145,16 @@ public class HowToApplyDialog extends TrackDialog implements View.OnClickListene
         ApplyChoicesAdapter adapter = new ApplyChoicesAdapter(this);
         adapter.updateItems(mOptions);
 
-        return new AlertDialog.Builder(this).setTitle(getString(R.string.apply_for_this_job_via)).setAdapter(adapter, new DialogInterface.OnClickListener() {
-          @Override
-          public void onClick(DialogInterface dialog, int which) {
-            Template template = findTemplate(args.getLong(EXTRA_TEMPLATE_ID));
-            applyForThisJob(mOptions.get(which), template);
-            dismissDialog(APPLICATION_CHOICES);
-          }
-        }).create();
+        return new AlertDialog.Builder(this).setTitle(getString(R.string.apply_for_this_job_via))
+            .setAdapter(adapter, new DialogInterface.OnClickListener() {
+              @Override
+              public void onClick(DialogInterface dialog, int which) {
+                Template template = findTemplate(args.getLong(EXTRA_TEMPLATE_ID));
+                applyForThisJob(mOptions.get(which), template);
+                dismissDialog(APPLICATION_CHOICES);
+              }
+            })
+            .create();
     }
     return super.onCreateDialog(id);
   }
@@ -196,14 +196,15 @@ public class HowToApplyDialog extends TrackDialog implements View.OnClickListene
       case TYPE_EMAIL:
         Intent intent = new Intent(Intent.ACTION_SEND);
         intent.setType("text/html");
-        intent.putExtra(Intent.EXTRA_EMAIL, new String[]{applyOption.data});
+        intent.putExtra(Intent.EXTRA_EMAIL, new String[] { applyOption.data });
         intent.putExtra(Intent.EXTRA_SUBJECT, getIntent().getStringExtra(EXTRA_TITLE));
         intent.putExtra(Intent.EXTRA_TEXT, emailContent);
 
         try {
           startActivity(Intent.createChooser(intent, getString(R.string.apply_for_job_with)));
         } catch (Exception e) {
-          Toast.makeText(this, getString(R.string.cannot_launch_email_app), Toast.LENGTH_SHORT).show();
+          Toast.makeText(this, getString(R.string.cannot_launch_email_app), Toast.LENGTH_SHORT)
+              .show();
         }
         break;
       case TYPE_WEBSITE:
@@ -213,15 +214,19 @@ public class HowToApplyDialog extends TrackDialog implements View.OnClickListene
 
           int sdk = android.os.Build.VERSION.SDK_INT;
           if (sdk < android.os.Build.VERSION_CODES.HONEYCOMB) {
-            android.text.ClipboardManager clipboard = (android.text.ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
+            android.text.ClipboardManager clipboard =
+                (android.text.ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
             clipboard.setText(templateContent);
           } else {
-            android.content.ClipboardManager clipboard = (android.content.ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
-            android.content.ClipData clip = android.content.ClipData.newPlainText(template.getName(), templateContent);
+            android.content.ClipboardManager clipboard =
+                (android.content.ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
+            android.content.ClipData clip =
+                android.content.ClipData.newPlainText(template.getName(), templateContent);
             clipboard.setPrimaryClip(clip);
           }
 
-          Toast.makeText(this, R.string.template_content_copied_to_clipboard, Toast.LENGTH_LONG).show();
+          Toast.makeText(this, R.string.template_content_copied_to_clipboard, Toast.LENGTH_LONG)
+              .show();
         }
         break;
     }

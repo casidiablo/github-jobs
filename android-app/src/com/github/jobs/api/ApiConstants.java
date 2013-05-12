@@ -16,20 +16,14 @@
 
 package com.github.jobs.api;
 
-/**
- * @author cristian
- */
+/** @author cristian */
 public class ApiConstants {
-  public static final String API_URL = "https://api.github.com/%s";
-  public static final String GET_USER = "users/%s";
   static final String POSITIONS_URL = "https://jobs.github.com/positions.json";
   static final String EMAIL_SUBSCRIPTION_URL = "https://jobs.github.com/subscribe";
-  static final String JOB_URL = "https://jobs.github.com/positions/%s.json";
   static final String SEARCH = "search";
   static final String LOCATION = "location";
   static final String LATITUDE = "lat";
   static final String LONGITUDE = "long";
   static final String FULL_TIME = "full_time";
   static final String PAGE = "page";
-  static final String MARKDOWN = "markdown";
 }

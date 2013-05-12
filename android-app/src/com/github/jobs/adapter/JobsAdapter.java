@@ -23,21 +23,18 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import com.github.jobs.R;
 import com.github.jobs.bean.Job;
-import com.github.jobs.ui.activity.JobDetailsActivity;
 import com.github.jobs.utils.RelativeDate;
 import com.github.jobs.utils.StringUtils;
+import java.util.ArrayList;
+import java.util.Locale;
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
-import java.util.ArrayList;
-import java.util.Locale;
-
-/**
- * @author cristian
- */
+/** @author cristian */
 public class JobsAdapter extends ListBaseAdapter<Job, JobsAdapter.ViewHolder> {
-  public static final DateTimeFormatter DATE_PARSER = DateTimeFormat.forPattern("EEE MMM dd HH:mm:ss 'UTC' yyyy").withLocale(Locale.ENGLISH);
+  public static final DateTimeFormatter DATE_PARSER =
+      DateTimeFormat.forPattern("EEE MMM dd HH:mm:ss 'UTC' yyyy").withLocale(Locale.ENGLISH);
   private static final String TAG = "github:jobs:jobsAdapter";
 
   public JobsAdapter(Context context) {
@@ -45,15 +42,11 @@ public class JobsAdapter extends ListBaseAdapter<Job, JobsAdapter.ViewHolder> {
   }
 
   @Override
-  public void populateHolder(int position, View view, ViewGroup parent, Job job, ViewHolder holder) {
+  public void populateHolder(int position, View view, ViewGroup parent, Job job,
+      ViewHolder holder) {
     holder.title.setText(StringUtils.trim(job.getTitle()));
     holder.location.setText(StringUtils.trim(job.getLocation()));
-    if (JobDetailsActivity.FULL_TIME.equals(job.getType())) {
-      holder.company.setText(String.format("%s - ", job.getCompany()));
-    } else {
-      holder.company.setText(job.getCompany());
-    }
-    holder.type.setText(job.getType());
+    holder.company.setText(job.getCompany());
     try {
       DateTime parsed = DATE_PARSER.withZoneUTC().parseDateTime(job.getCreatedAt());
       String timeAgo = RelativeDate.getTimeAgo(getContext(), parsed.getMillis());
@@ -76,7 +69,6 @@ public class JobsAdapter extends ListBaseAdapter<Job, JobsAdapter.ViewHolder> {
     TextView title;
     TextView location;
     TextView company;
-    TextView type;
     TextView date;
   }
 }

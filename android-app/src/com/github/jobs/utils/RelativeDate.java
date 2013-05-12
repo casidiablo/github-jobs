@@ -29,7 +29,7 @@ public class RelativeDate {
    * date / time that it is right now.
    *
    * @param context used to build the string response
-   * @param time    time to compare with current time
+   * @param time time to compare with current time
    * @return a string representing the time ago
    */
   public static String getTimeAgo(Context context, long time) {

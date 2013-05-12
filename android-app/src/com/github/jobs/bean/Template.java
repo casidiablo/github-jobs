@@ -78,10 +78,14 @@ public class Template {
 
     if (lastUpdate != template.lastUpdate) return false;
     if (id != template.id) return false;
-    if (content != null ? !content.equals(template.content) : template.content != null) return false;
-    if (name != null ? !name.equals(template.name) : template.name != null) return false;
-    if (templateServices != null ? !templateServices.equals(template.templateServices) : template.templateServices != null)
+    if (content != null ? !content.equals(template.content) : template.content != null) {
       return false;
+    }
+    if (name != null ? !name.equals(template.name) : template.name != null) return false;
+    if (templateServices != null ? !templateServices.equals(template.templateServices)
+        : template.templateServices != null) {
+      return false;
+    }
 
     return true;
   }

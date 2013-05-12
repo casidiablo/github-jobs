@@ -31,7 +31,8 @@ import java.util.List;
  * @version 1.0
  */
 public class StackOverflowUsersFetcher {
-  public static final String URL = "https://api.stackexchange.com/2.1/users?order=desc&sort=reputation&inname=%s&site=stackoverflow&key=pi7fgVg11VspVuG0kdB2PA((";
+  public static final String URL =
+      "https://api.stackexchange.com/2.1/users?order=desc&sort=reputation&inname=%s&site=stackoverflow&key=pi7fgVg11VspVuG0kdB2PA((";
 
   public List<SOUser> findUser(String username) {
     if (TextUtils.isEmpty(username)) {

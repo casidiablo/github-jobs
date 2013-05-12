@@ -53,9 +53,7 @@ import static com.github.jobs.utils.AnalyticsHelper.ACTION_SHARE;
 import static com.github.jobs.utils.AnalyticsHelper.CATEGORY_JOBS;
 import static com.github.jobs.utils.AnalyticsHelper.getTracker;
 
-/**
- * @author cristian
- */
+/** @author cristian */
 public class JobDetailsFragment extends BusFragment implements View.OnClickListener {
 
   private static final int SHARE = 484;
@@ -65,7 +63,8 @@ public class JobDetailsFragment extends BusFragment implements View.OnClickListe
   private ImageView mBackground;
   @Inject SqlAdapter adapter;
 
-  @Override public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+  @Override public View onCreateView(LayoutInflater inflater, ViewGroup container,
+      Bundle savedInstanceState) {
     return inflater.inflate(R.layout.job_details, null, false);
   }
 
@@ -127,16 +126,19 @@ public class JobDetailsFragment extends BusFragment implements View.OnClickListe
     super.onCreateOptionsMenu(menu, inflater);
     Context themedContext = getActivity().getActionBar().getThemedContext();
     ShareActionProvider shareActionProvider = new ShareActionProvider(themedContext);
-    shareActionProvider.setOnShareTargetSelectedListener(new ShareActionProvider.OnShareTargetSelectedListener() {
-      @Override
-      public boolean onShareTargetSelected(ShareActionProvider shareActionProvider, Intent intent) {
-        getTracker(getActivity()).trackEvent(CATEGORY_JOBS, ACTION_SHARE, intent.getComponent().getPackageName());
-        return false;
-      }
-    });
+    shareActionProvider.setOnShareTargetSelectedListener(
+        new ShareActionProvider.OnShareTargetSelectedListener() {
+          @Override
+          public boolean onShareTargetSelected(ShareActionProvider shareActionProvider,
+              Intent intent) {
+            getTracker(getActivity()).trackEvent(CATEGORY_JOBS, ACTION_SHARE,
+                intent.getComponent().getPackageName());
+            return false;
+          }
+        });
     menu.add(0, SHARE, 0, R.string.share)
         .setActionProvider(shareActionProvider)
-        .setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
+        .setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
 
     // Set file with share history to the provider and set the share intent.
     MenuItem actionItem = menu.findItem(SHARE);
@@ -160,23 +162,24 @@ public class JobDetailsFragment extends BusFragment implements View.OnClickListe
     if (mJob.getCompanyLogo() == null) {
       return;
     }
-    CallbackBitmapObserver rawBitmapObserver = new CallbackBitmapObserver(new CallbackBitmapObserver.BitmapCallback() {
-      @Override
-      public boolean stillNeedsUrl(String uri) {
-        return true;
-      }
+    CallbackBitmapObserver rawBitmapObserver =
+        new CallbackBitmapObserver(new CallbackBitmapObserver.BitmapCallback() {
+          @Override
+          public boolean stillNeedsUrl(String uri) {
+            return true;
+          }
 
-      @Override
-      public void receiveBitmap(String uri, Bitmap bitmap) {
-        if (bitmap == null) {
-          return;
-        }
-        BitmapDrawable bitmapDrawable = new BitmapDrawable(bitmap);
-        bitmapDrawable.setAlpha(50);
-        bitmapDrawable.setGravity(Gravity.CENTER);
-        mBackground.setImageDrawable(bitmapDrawable);
-      }
-    }, mJob.getCompanyLogo(), new Handler());
+          @Override
+          public void receiveBitmap(String uri, Bitmap bitmap) {
+            if (bitmap == null) {
+              return;
+            }
+            BitmapDrawable bitmapDrawable = new BitmapDrawable(bitmap);
+            bitmapDrawable.setAlpha(50);
+            bitmapDrawable.setGravity(Gravity.CENTER);
+            mBackground.setImageDrawable(bitmapDrawable);
+          }
+        }, mJob.getCompanyLogo(), new Handler());
     BitmapHelper.getInstance().registerBitmapObserver(getActivity(), rawBitmapObserver);
   }
 

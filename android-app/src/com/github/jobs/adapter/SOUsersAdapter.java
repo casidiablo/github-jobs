@@ -43,7 +43,8 @@ public class SOUsersAdapter extends ListBaseAdapter<SOUser, SOUsersAdapter.SOUse
   }
 
   @Override
-  public void populateHolder(int position, View view, ViewGroup parent, SOUser item, SOUserViewHolder holder) {
+  public void populateHolder(int position, View view, ViewGroup parent, SOUser item,
+      SOUserViewHolder holder) {
     BitmapHelper bitmapHelper = BitmapHelper.getInstance();
     String avatarUrl = item.getProfileImage();
     Bitmap bitmap = bitmapHelper.getBitmap(avatarUrl);
@@ -60,11 +61,8 @@ public class SOUsersAdapter extends ListBaseAdapter<SOUser, SOUsersAdapter.SOUse
 
   @Layout(R.layout.so_user_row)
   public static class SOUserViewHolder {
-    @ResourceId(R.id.img_user_avatar)
-    ImageView avatar;
-    @ResourceId(R.id.lbl_username)
-    TextView username;
-    @ResourceId(R.id.lbl_reputation)
-    TextView reputation;
+    @ResourceId(R.id.img_user_avatar) ImageView avatar;
+    @ResourceId(R.id.lbl_username) TextView username;
+    @ResourceId(R.id.lbl_reputation) TextView reputation;
   }
 }

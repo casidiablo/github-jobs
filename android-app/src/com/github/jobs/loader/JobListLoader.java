@@ -31,9 +31,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-/**
- * @author cristian
- */
+/** @author cristian */
 public class JobListLoader extends SupportListLoader<Job> {
 
   private final SearchPack mCurrentSearch;

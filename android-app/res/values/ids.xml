@@ -1,9 +1,9 @@
 <resources>
-    <item type="id" name="base_container"/>
-    <item type="id" name="service_github"/>
-    <item type="id" name="service_so"/>
-    <item type="id" name="service_linked_in"/>
-    <item type="id" name="service_skype"/>
-    <item type="id" name="service_about_me"/>
-    <item type="id" name="service_custom"/>
+  <item type="id" name="base_container" />
+  <item type="id" name="service_github" />
+  <item type="id" name="service_so" />
+  <item type="id" name="service_linked_in" />
+  <item type="id" name="service_skype" />
+  <item type="id" name="service_about_me" />
+  <item type="id" name="service_custom" />
 </resources>

@@ -20,9 +20,7 @@ import android.content.Context;
 import com.github.jobs.R;
 import com.github.jobs.bean.TemplateService;
 
-/**
- * @author cristian
- */
+/** @author cristian */
 public abstract class ServiceGenerator {
 
   private final Context mContext;

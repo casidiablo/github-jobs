@@ -86,7 +86,8 @@ public class GithubJobsApplication extends Application {
     objectGraph.inject(object);
   }
 
-  @Module(entryPoints = {HomeActivity.class, //
+  @Module(entryPoints = {
+      HomeActivity.class, //
       EditTemplateActivity.class, //
       TemplatesActivity.class, //
       SOUserFetcherReceiver.class, //
@@ -103,7 +104,8 @@ public class GithubJobsApplication extends Application {
       HowToApplyDialog.class, //
       EmailSubscriberReceiver.class, //
       SubscribeDialog.class, //
-      SearchJobsTask.class})
+      SearchJobsTask.class
+  })
   static class GithubJobsModule {
     private final Context context;
 

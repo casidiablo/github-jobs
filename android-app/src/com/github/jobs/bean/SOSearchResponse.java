@@ -20,9 +20,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.List;
 
-/**
- * @author cristian
- */
+/** @author cristian */
 public class SOSearchResponse {
   private List<SOUser> items;
   @JsonProperty("quota_remaining")

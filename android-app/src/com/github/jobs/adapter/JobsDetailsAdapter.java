@@ -21,9 +21,7 @@ import android.support.v4.app.FragmentManager;
 import com.github.jobs.ui.fragment.JobDetailsFragment;
 import java.util.List;
 
-/**
- * @author cristian
- */
+/** @author cristian */
 public class JobsDetailsAdapter extends FragmentStatePagerAdapter {
   private final List<String> mIds;
 

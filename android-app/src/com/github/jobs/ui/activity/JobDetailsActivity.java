@@ -39,9 +39,7 @@ import static com.github.jobs.utils.AnalyticsHelper.LABEL_RIGHT;
 import static com.github.jobs.utils.AnalyticsHelper.NAME_DETAILS;
 import static com.github.jobs.utils.AnalyticsHelper.getTracker;
 
-/**
- * @author cristian
- */
+/** @author cristian */
 public class JobDetailsActivity extends TrackActivity implements ViewPager.OnPageChangeListener {
 
   public static final String EXTRA_CURRENT_JOB_ID = "com.github.jobs.CURRENT_JOB_ID";
@@ -103,13 +101,15 @@ public class JobDetailsActivity extends TrackActivity implements ViewPager.OnPag
         howToApplyDialog.putExtra(HowToApplyDialog.EXTRA_TITLE, job.getTitle());
         howToApplyDialog.putExtra(HowToApplyDialog.EXTRA_HOW_TO_APPLY, job.getHowToApply());
         startActivity(howToApplyDialog);
-        getTracker(this).trackEvent(CATEGORY_JOBS, ACTION_APPLY, job.getTitle() + "," + job.getUrl());
+        getTracker(this).trackEvent(CATEGORY_JOBS, ACTION_APPLY,
+            job.getTitle() + "," + job.getUrl());
         return true;
     }
     return super.onOptionsItemSelected(item);
   }
 
-  @Override public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+  @Override
+  public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
   }
 
   @Override public void onPageSelected(int position) {

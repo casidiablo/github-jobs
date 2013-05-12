@@ -100,12 +100,14 @@ public class AppUtils {
   }
 
   public static void hideKeyboard(Context context, IBinder token) {
-    InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
+    InputMethodManager imm =
+        (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
     imm.hideSoftInputFromWindow(token, 0);
   }
 
   public static boolean isOnline(Context context) {
-    ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+    ConnectivityManager cm =
+        (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
     if (cm == null) {
       return false;
     }

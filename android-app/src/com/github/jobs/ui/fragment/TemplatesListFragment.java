@@ -44,7 +44,8 @@ import static com.github.jobs.utils.AnalyticsHelper.getTracker;
  * @author cristian
  * @version 1.0
  */
-public class TemplatesListFragment extends ListFragment implements LoaderManager.LoaderCallbacks<List<Template>> {
+public class TemplatesListFragment extends ListFragment
+    implements LoaderManager.LoaderCallbacks<List<Template>> {
   private static final int TEMPLATES_LOADER_ID = 8432;
   private TemplatesAdapter mAdapter;
 

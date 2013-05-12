@@ -46,7 +46,7 @@ public class SOUserDialog extends TrackDialog implements View.OnClickListener {
 
   @Override protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-    mSoUser = (SOUser) getIntent().getParcelableExtra(SOUserPickerActivity.EXTRA_USER);
+    mSoUser = getIntent().getParcelableExtra(SOUserPickerActivity.EXTRA_USER);
     if (mSoUser == null) {
       Toast.makeText(this, R.string.invalid_so_user, Toast.LENGTH_LONG).show();
       finish();
@@ -99,7 +99,8 @@ public class SOUserDialog extends TrackDialog implements View.OnClickListener {
     if (BitmapUtils.isBitmapValid(avatar)) {
       userAvatar.setImageBitmap(avatar);
     } else {
-      BitmapObserver observer = new BitmapObserver(userAvatar, mSoUser.getProfileImage(), new Handler());
+      BitmapObserver observer =
+          new BitmapObserver(userAvatar, mSoUser.getProfileImage(), new Handler());
       bitmapHelper.registerBitmapObserver(this, observer);
     }
     userAvatar.setOnClickListener(new View.OnClickListener() {

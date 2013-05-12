@@ -31,9 +31,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-/**
- * @author cristian
- */
+/** @author cristian */
 public class GithubJobsApi {
 
   public static final String SUBSCRIPTION_EMAIL_PARAM = "email";
@@ -73,7 +71,8 @@ public class GithubJobsApi {
     return null;
   }
 
-  public static boolean subscribe(String email, String description, String location, boolean fullTime) {
+  public static boolean subscribe(String email, String description, String location,
+      boolean fullTime) {
     HashMap<String, String> parameters = new HashMap<String, String>();
     parameters.put(SUBSCRIPTION_EMAIL_PARAM, email);
     parameters.put(SUBSCRIPTION_DESCRIPTION_PARAM, description);

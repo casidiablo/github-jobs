@@ -59,8 +59,7 @@ public class SearchDialog extends TrackDialog implements View.OnClickListener {
         // everything looks ok, let's search
         String description = mDescription.getText().toString();
         String location = mLocation.getText().toString();
-        Intent data = new Intent()
-            .putExtra(EXTRA_DESCRIPTION, description)
+        Intent data = new Intent().putExtra(EXTRA_DESCRIPTION, description)
             .putExtra(EXTRA_LOCATION, location)
             .putExtra(EXTRA_FULL_TIME, mFullTime.isChecked());
         setResult(RESULT_OK, data);

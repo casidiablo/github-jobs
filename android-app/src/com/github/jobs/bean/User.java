@@ -166,11 +166,15 @@ public class User {
     if (following != user.following) return false;
     if (id != user.id) return false;
     if (publicRepos != user.publicRepos) return false;
-    if (avatarUrl != null ? !avatarUrl.equals(user.avatarUrl) : user.avatarUrl != null) return false;
+    if (avatarUrl != null ? !avatarUrl.equals(user.avatarUrl) : user.avatarUrl != null) {
+      return false;
+    }
     if (bio != null ? !bio.equals(user.bio) : user.bio != null) return false;
     if (blog != null ? !blog.equals(user.blog) : user.blog != null) return false;
     if (company != null ? !company.equals(user.company) : user.company != null) return false;
-    if (createdAt != null ? !createdAt.equals(user.createdAt) : user.createdAt != null) return false;
+    if (createdAt != null ? !createdAt.equals(user.createdAt) : user.createdAt != null) {
+      return false;
+    }
     if (email != null ? !email.equals(user.email) : user.email != null) return false;
     if (htmlUrl != null ? !htmlUrl.equals(user.htmlUrl) : user.htmlUrl != null) return false;
     if (location != null ? !location.equals(user.location) : user.location != null) return false;

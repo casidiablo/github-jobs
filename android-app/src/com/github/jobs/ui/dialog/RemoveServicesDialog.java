@@ -45,27 +45,30 @@ public class RemoveServicesDialog extends BusDialog {
       items[i] = getString(R.string.service_list_item, service.getType(), service.getData());
     }
     final SparseBooleanArray checked = new SparseBooleanArray();
-    AlertDialog.Builder builder = new AlertDialog.Builder(getActivity()).setTitle(R.string.title_remove_services).setMultiChoiceItems(items, null, new DialogInterface.OnMultiChoiceClickListener() {
-      @Override
-      public void onClick(DialogInterface dialog, int which, boolean isChecked) {
-        checked.put(which, isChecked);
-      }
-    });
-    builder.setPositiveButton(R.string.remove_selected_services, new DialogInterface.OnClickListener() {
-      @Override
-      public void onClick(DialogInterface dialog, int which) {
-        // get a list of the services to delete
-        ArrayList<TemplateService> toRemove = new ArrayList<TemplateService>();
-        for (int i = 0; i < checked.size(); i++) {
-          if (checked.valueAt(i)) {
-            int index = checked.keyAt(i);
-            toRemove.add((TemplateService) services.get(index));
+    AlertDialog.Builder builder =
+        new AlertDialog.Builder(getActivity()).setTitle(R.string.title_remove_services)
+            .setMultiChoiceItems(items, null, new DialogInterface.OnMultiChoiceClickListener() {
+              @Override
+              public void onClick(DialogInterface dialog, int which, boolean isChecked) {
+                checked.put(which, isChecked);
+              }
+            });
+    builder.setPositiveButton(R.string.remove_selected_services,
+        new DialogInterface.OnClickListener() {
+          @Override
+          public void onClick(DialogInterface dialog, int which) {
+            // get a list of the services to delete
+            ArrayList<TemplateService> toRemove = new ArrayList<TemplateService>();
+            for (int i = 0; i < checked.size(); i++) {
+              if (checked.valueAt(i)) {
+                int index = checked.keyAt(i);
+                toRemove.add((TemplateService) services.get(index));
+              }
+            }
+            // fire service deletion
+            bus.post(new DeleteServices(toRemove));
           }
-        }
-        // fire service deletion
-        bus.post(new DeleteServices(toRemove));
-      }
-    });
+        });
     builder.setNegativeButton(R.string.cancel, null);
     return builder.create();
   }

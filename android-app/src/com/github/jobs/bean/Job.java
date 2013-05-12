@@ -20,9 +20,7 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-/**
- * @author cristian
- */
+/** @author cristian */
 public class Job implements Parcelable {
   private String id;
   private String title;
@@ -128,7 +126,6 @@ public class Job implements Parcelable {
     this.companyUrl = companyUrl;
   }
 
-
   @Override
   public boolean equals(Object o) {
     if (this == o) return true;
@@ -137,11 +134,19 @@ public class Job implements Parcelable {
     Job job = (Job) o;
 
     if (company != null ? !company.equals(job.company) : job.company != null) return false;
-    if (companyLogo != null ? !companyLogo.equals(job.companyLogo) : job.companyLogo != null) return false;
-    if (companyUrl != null ? !companyUrl.equals(job.companyUrl) : job.companyUrl != null) return false;
+    if (companyLogo != null ? !companyLogo.equals(job.companyLogo) : job.companyLogo != null) {
+      return false;
+    }
+    if (companyUrl != null ? !companyUrl.equals(job.companyUrl) : job.companyUrl != null) {
+      return false;
+    }
     if (createdAt != null ? !createdAt.equals(job.createdAt) : job.createdAt != null) return false;
-    if (description != null ? !description.equals(job.description) : job.description != null) return false;
-    if (howToApply != null ? !howToApply.equals(job.howToApply) : job.howToApply != null) return false;
+    if (description != null ? !description.equals(job.description) : job.description != null) {
+      return false;
+    }
+    if (howToApply != null ? !howToApply.equals(job.howToApply) : job.howToApply != null) {
+      return false;
+    }
     if (id != null ? !id.equals(job.id) : job.id != null) return false;
     if (location != null ? !location.equals(job.location) : job.location != null) return false;
     if (title != null ? !title.equals(job.title) : job.title != null) return false;

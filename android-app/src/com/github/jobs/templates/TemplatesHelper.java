@@ -57,7 +57,8 @@ public class TemplatesHelper {
     if (sServices == null) {
       sServices = new ArrayList<Service>();
       for (ServiceContract service : SERVICES) {
-        sServices.add(from(context, service.getId(), service.getServiceLabel(), service.getDrawable()));
+        sServices.add(
+            from(context, service.getId(), service.getServiceLabel(), service.getDrawable()));
       }
     }
     return sServices;
@@ -96,7 +97,7 @@ public class TemplatesHelper {
   /**
    * Returns content for a template service
    *
-   * @param context         used to create the content strings
+   * @param context used to create the content strings
    * @param templateService service to generate the content from
    * @return a string result with the service content
    */
@@ -106,7 +107,8 @@ public class TemplatesHelper {
     }
     ServiceContract service = findService(templateService.getType());
     if (service == null) {
-      return context.getString(R.string.cover_letter_footer, templateService.getType(), templateService.getData());
+      return context.getString(R.string.cover_letter_footer, templateService.getType(),
+          templateService.getData());
     }
     return service.getGenerator(context).generate(templateService);
   }
@@ -151,5 +153,4 @@ public class TemplatesHelper {
     }
     return null;
   }
-
 }

@@ -1,87 +1,87 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent"
+  android:padding="10dip"
+  android:orientation="vertical"
+  android:background="@drawable/search_background">
+
+  <TextView
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="10dip"
+    android:text="@string/service_explanation"
+    android:textAppearance="?android:attr/textAppearanceMedium" />
+
+  <ViewFlipper
+    android:id="@+id/flipper_choose_service"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:inAnimation="@android:anim/fade_in"
+    android:outAnimation="@android:anim/fade_out">
+
+    <!--this will show a list of services to include-->
+    <GridView
+      android:id="@+id/grid_services"
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      android:numColumns="2"
+      android:horizontalSpacing="10dip"
+      android:verticalSpacing="15dip"
+      android:listSelector="@drawable/grid_selector" />
+
+    <!--this will show a logo and edit text for services that only requires a username-->
+    <LinearLayout
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      android:orientation="vertical">
+
+      <ImageView
+        android:id="@+id/img_current_service"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:padding="10dip"
-        android:orientation="vertical"
-        android:background="@drawable/search_background">
+        android:layout_height="wrap_content"
+        android:contentDescription="@string/service_explanation"/>
 
-    <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="10dip"
-            android:text="@string/service_explanation"
-            android:textAppearance="?android:attr/textAppearanceMedium"/>
+      <EditText
+        android:id="@+id/edit_service_type"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="#ffffff"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:inputType="text|textCapWords"
+        android:hint="@string/hint_service_name"
+        android:visibility="gone" />
 
-    <ViewFlipper
-            android:id="@+id/flipper_choose_service"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:inAnimation="@android:anim/fade_in"
-            android:outAnimation="@android:anim/fade_out">
+      <EditText
+        android:id="@+id/edit_service_data"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="#ffffff"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:inputType="text|textWebEmailAddress" />
 
-        <!--this will show a list of services to include-->
-        <GridView
-                android:id="@+id/grid_services"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:numColumns="2"
-                android:horizontalSpacing="10dip"
-                android:verticalSpacing="15dip"
-                android:listSelector="@drawable/grid_selector"/>
+      <Button
+        android:id="@+id/btn_fetch_service_info"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/fetch_service_info" />
 
-        <!--this will show a logo and edit text for services that only requires a username-->
-        <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical">
+    </LinearLayout>
 
-            <ImageView
-                    android:id="@+id/img_current_service"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"/>
+    <!--this will be shown while service's info is being fetched-->
+    <ProgressBar
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_gravity="center"
+      style="@android:style/Widget.ProgressBar.Large"
+      android:layout_marginRight="5dp" />
 
-            <EditText
-                    android:id="@+id/edit_service_type"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:textColor="#ffffff"
-                    android:textAppearance="?android:attr/textAppearanceLarge"
-                    android:inputType="text|textCapWords"
-                    android:hint="@string/hint_service_name"
-                    android:visibility="gone"/>
+    <!--this can be used by a service to show additional confirmation-->
+    <FrameLayout
+      android:id="@+id/service_confirmation_container"
+      android:layout_width="match_parent"
+      android:layout_height="match_parent" />
 
-            <EditText
-                    android:id="@+id/edit_service_data"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:textColor="#ffffff"
-                    android:textAppearance="?android:attr/textAppearanceLarge"
-                    android:inputType="text|textWebEmailAddress"/>
-
-            <Button
-                    android:id="@+id/btn_fetch_service_info"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="@string/fetch_service_info"/>
-
-        </LinearLayout>
-
-        <!--this will be shown while service's info is being fetched-->
-        <ProgressBar
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                style="@android:style/Widget.ProgressBar.Large"
-                android:layout_marginRight="5dp"/>
-
-        <!--this can be used by a service to show additional confirmation-->
-        <FrameLayout
-                android:id="@+id/service_confirmation_container"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"/>
-
-    </ViewFlipper>
+  </ViewFlipper>
 
 </LinearLayout>

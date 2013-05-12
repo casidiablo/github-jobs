@@ -39,9 +39,7 @@ import java.util.regex.Matcher;
 import static com.github.jobs.utils.AnalyticsHelper.NAME_SUBSCRIBE_DIALOG;
 import static com.github.jobs.utils.AnalyticsHelper.getTracker;
 
-/**
- * @author cristian
- */
+/** @author cristian */
 public class SubscribeDialog extends TrackFragmentDialog implements View.OnClickListener {
 
   private EditText mEmail;
@@ -62,7 +60,8 @@ public class SubscribeDialog extends TrackFragmentDialog implements View.OnClick
     findViewById(R.id.btn_subscribe).setOnClickListener(this);
 
     FragmentManager fm = getSupportFragmentManager();
-    mEmailSubscriberReceiver = (EmailSubscriberReceiver) fm.findFragmentByTag(EmailSubscriberReceiver.TAG);
+    mEmailSubscriberReceiver =
+        (EmailSubscriberReceiver) fm.findFragmentByTag(EmailSubscriberReceiver.TAG);
     if (mEmailSubscriberReceiver == null) {
       mEmailSubscriberReceiver = new EmailSubscriberReceiver();
       fm.beginTransaction().add(mEmailSubscriberReceiver, EmailSubscriberReceiver.TAG).commit();

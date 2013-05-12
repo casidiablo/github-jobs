@@ -32,16 +32,14 @@ import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
-/**
- * @author cristian
- */
+/** @author cristian */
 public class TemplatesLoader extends SupportListLoader<Template> {
 
   @Inject SqlAdapter sqlAdapter;
 
   public TemplatesLoader(Context context) {
     super(context);
-    ((GithubJobsApplication)context.getApplicationContext()).inject(this);
+    ((GithubJobsApplication) context.getApplicationContext()).inject(this);
   }
 
   @Override protected List<Template> getData() {

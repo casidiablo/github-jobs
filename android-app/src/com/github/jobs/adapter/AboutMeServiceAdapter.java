@@ -27,7 +27,8 @@ import com.github.jobs.bean.AboutMeService;
  * @author cristian
  * @version 1.0
  */
-public class AboutMeServiceAdapter extends ListBaseAdapter<AboutMeService, AboutMeServiceAdapter.ViewHolder> {
+public class AboutMeServiceAdapter
+    extends ListBaseAdapter<AboutMeService, AboutMeServiceAdapter.ViewHolder> {
 
   private static final String FACEBOOK = "facebook";
 
@@ -36,7 +37,8 @@ public class AboutMeServiceAdapter extends ListBaseAdapter<AboutMeService, About
   }
 
   @Override
-  public void populateHolder(int position, View view, ViewGroup parent, AboutMeService item, ViewHolder holder) {
+  public void populateHolder(int position, View view, ViewGroup parent, AboutMeService item,
+      ViewHolder holder) {
     holder.label.setCheckMarkDrawable(R.drawable.btn_check_holo_light);
     if (FACEBOOK.equals(item.getPlatform())) {
       holder.label.setText(getContext().getString(R.string.lbl_facebook));
@@ -47,7 +49,6 @@ public class AboutMeServiceAdapter extends ListBaseAdapter<AboutMeService, About
 
   @Layout(android.R.layout.simple_list_item_multiple_choice)
   public static class ViewHolder {
-    @ResourceId(android.R.id.text1)
-    CheckedTextView label;
+    @ResourceId(android.R.id.text1) CheckedTextView label;
   }
 }

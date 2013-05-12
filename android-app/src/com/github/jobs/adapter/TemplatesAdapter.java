@@ -44,7 +44,8 @@ public class TemplatesAdapter extends ListBaseAdapter<Template, TemplatesAdapter
   }
 
   @Override
-  public void populateHolder(int position, View view, ViewGroup parent, Template template, ViewHolder holder) {
+  public void populateHolder(int position, View view, ViewGroup parent, Template template,
+      ViewHolder holder) {
     // set template name
     holder.title.setText(StringUtils.trim(template.getName()));
 

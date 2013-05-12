@@ -74,13 +74,14 @@ public class AboutDialog extends TrackDialog implements View.OnClickListener {
       case R.id.btn_feedback:
         Intent intent = new Intent(Intent.ACTION_SEND);
         intent.setType("message/rfc822");
-        intent.putExtra(Intent.EXTRA_EMAIL, new String[]{"cristian@elhacker.net"});
+        intent.putExtra(Intent.EXTRA_EMAIL, new String[] { "cristian@elhacker.net" });
         intent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.email_subject_about_app));
         getTracker(this).trackEvent(CATEGORY_ABOUT, ACTION_EMAIL, LABEL_CONTACT);
         try {
           startActivity(intent);
         } catch (Exception e) {
-          Toast.makeText(this, getString(R.string.cannot_launch_email_app), Toast.LENGTH_SHORT).show();
+          Toast.makeText(this, getString(R.string.cannot_launch_email_app), Toast.LENGTH_SHORT)
+              .show();
         }
         break;
       case R.id.library_maven:

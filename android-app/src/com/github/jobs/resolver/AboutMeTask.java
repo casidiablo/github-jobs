@@ -36,7 +36,9 @@ public class AboutMeTask extends GroundyTask {
     AboutMeFetcher aboutMeFetcher = new AboutMeFetcher();
     AboutMeUser aboutMeUser = aboutMeFetcher.getAboutMeUser(username);
 
-    if (aboutMeUser == null || aboutMeUser.getServices() == null || aboutMeUser.getServices().length == 0) {
+    if (aboutMeUser == null
+        || aboutMeUser.getServices() == null
+        || aboutMeUser.getServices().length == 0) {
       return failed();
     }
 

@@ -105,11 +105,15 @@ public class AboutMeUser implements Parcelable {
     AboutMeUser that = (AboutMeUser) o;
 
     if (bio != null ? !bio.equals(that.bio) : that.bio != null) return false;
-    if (firstName != null ? !firstName.equals(that.firstName) : that.firstName != null) return false;
+    if (firstName != null ? !firstName.equals(that.firstName) : that.firstName != null) {
+      return false;
+    }
     if (header != null ? !header.equals(that.header) : that.header != null) return false;
     if (lastName != null ? !lastName.equals(that.lastName) : that.lastName != null) return false;
     if (profile != null ? !profile.equals(that.profile) : that.profile != null) return false;
-    if (services != null ? !Arrays.equals(services, that.services) : that.services != null) return false;
+    if (services != null ? !Arrays.equals(services, that.services) : that.services != null) {
+      return false;
+    }
 
     return true;
   }
@@ -153,16 +157,17 @@ public class AboutMeUser implements Parcelable {
   }
 
   @SuppressWarnings("UnusedDeclaration")
-  public static final Parcelable.Creator<AboutMeUser> CREATOR = new Parcelable.Creator<AboutMeUser>() {
+  public static final Parcelable.Creator<AboutMeUser> CREATOR =
+      new Parcelable.Creator<AboutMeUser>() {
 
-    @Override
-    public AboutMeUser createFromParcel(Parcel source) {
-      return new AboutMeUser(source);
-    }
+        @Override
+        public AboutMeUser createFromParcel(Parcel source) {
+          return new AboutMeUser(source);
+        }
 
-    @Override
-    public AboutMeUser[] newArray(int size) {
-      return new AboutMeUser[size];
-    }
-  };
+        @Override
+        public AboutMeUser[] newArray(int size) {
+          return new AboutMeUser[size];
+        }
+      };
 }

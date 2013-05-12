@@ -19,9 +19,7 @@ package com.github.jobs.utils;
 import android.content.Intent;
 import com.github.jobs.bean.Job;
 
-/**
- * @author cristian
- */
+/** @author cristian */
 public class ShareHelper {
   private static final String JOB_URL = "https://jobs.github.com/positions/%s";
 

@@ -128,11 +128,20 @@ public class SOUser implements Parcelable {
     if (accountId != that.accountId) return false;
     if (id != that.id) return false;
     if (reputation != that.reputation) return false;
-    if (badgeCount != null ? !badgeCount.equals(that.badgeCount) : that.badgeCount != null) return false;
-    if (displayName != null ? !displayName.equals(that.displayName) : that.displayName != null) return false;
+    if (badgeCount != null ? !badgeCount.equals(that.badgeCount) : that.badgeCount != null) {
+      return false;
+    }
+    if (displayName != null ? !displayName.equals(that.displayName) : that.displayName != null) {
+      return false;
+    }
     if (link != null ? !link.equals(that.link) : that.link != null) return false;
-    if (profileImage != null ? !profileImage.equals(that.profileImage) : that.profileImage != null) return false;
-    if (websiteUrl != null ? !websiteUrl.equals(that.websiteUrl) : that.websiteUrl != null) return false;
+    if (profileImage != null ? !profileImage.equals(that.profileImage)
+        : that.profileImage != null) {
+      return false;
+    }
+    if (websiteUrl != null ? !websiteUrl.equals(that.websiteUrl) : that.websiteUrl != null) {
+      return false;
+    }
 
     return true;
   }

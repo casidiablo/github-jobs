@@ -94,7 +94,8 @@ public class SearchPack implements Parcelable {
   @Override
   public int hashCode() {
     int result = search != null ? StringUtils.trim(search.toLowerCase()).hashCode() : 0;
-    result = 31 * result + (location != null ? StringUtils.trim(location.toLowerCase()).hashCode() : 0);
+    result =
+        31 * result + (location != null ? StringUtils.trim(location.toLowerCase()).hashCode() : 0);
     result = 31 * result + (fullTime ? 1 : 0);
     return result;
   }

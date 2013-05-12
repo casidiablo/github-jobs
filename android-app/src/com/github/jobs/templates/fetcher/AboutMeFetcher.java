@@ -39,7 +39,8 @@ import java.util.List;
  * @version 1.0
  */
 public class AboutMeFetcher {
-  private static final String USER_LINK = "https://api.about.me/api/v2/json/user/view/%s?client_id=8c63fb1f3ee9fe2bf1d4e0f7888d992607ba7ad2&on_match=true&extended=true";
+  private static final String USER_LINK =
+      "https://api.about.me/api/v2/json/user/view/%s?client_id=8c63fb1f3ee9fe2bf1d4e0f7888d992607ba7ad2&on_match=true&extended=true";
 
   public AboutMeUser getAboutMeUser(String user) {
     String url = String.format(USER_LINK, user);
@@ -62,7 +63,8 @@ public class AboutMeFetcher {
     return aboutMeUser;
   }
 
-  public static void setupConfirmationView(final Context context, ViewGroup root, AboutMeUser aboutMeUser, final AboutMeServicesCallback callback) {
+  public static void setupConfirmationView(final Context context, ViewGroup root,
+      AboutMeUser aboutMeUser, final AboutMeServicesCallback callback) {
     // inflate view
     View view = LayoutInflater.from(context).inflate(R.layout.about_me_services_list, root);
     final AboutMeService[] services = aboutMeUser.getServices();

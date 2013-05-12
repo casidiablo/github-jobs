@@ -69,11 +69,10 @@ import static com.github.jobs.utils.AnalyticsHelper.LABEL_DIALOG;
 import static com.github.jobs.utils.AnalyticsHelper.LABEL_SHARE;
 import static com.github.jobs.utils.AnalyticsHelper.getTracker;
 
-/**
- * @author cristian
- */
-public class JobListFragment extends BusFragment implements LoaderManager.LoaderCallbacks<List<Job>>,
-  AdapterView.OnItemClickListener, AbsListView.OnScrollListener {
+/** @author cristian */
+public class JobListFragment extends BusFragment
+    implements LoaderManager.LoaderCallbacks<List<Job>>, AdapterView.OnItemClickListener,
+    AbsListView.OnScrollListener {
 
   private static final String KEY_SEARCH = "search_key";
   private static final String KEY_LOADING = "loading_key";
@@ -103,7 +102,8 @@ public class JobListFragment extends BusFragment implements LoaderManager.Loader
     }
   }
 
-  @Override public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+  @Override public View onCreateView(LayoutInflater inflater, ViewGroup container,
+      Bundle savedInstanceState) {
     return inflater.inflate(R.layout.jobs_list, null, false);
   }
 
@@ -126,7 +126,8 @@ public class JobListFragment extends BusFragment implements LoaderManager.Loader
     }
   }
 
-  @Override public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+  @Override
+  public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
     super.onCreateContextMenu(menu, v, menuInfo);
     FragmentActivity activity = getActivity();
     if (activity == null || !isAdded()) {
@@ -146,7 +147,8 @@ public class JobListFragment extends BusFragment implements LoaderManager.Loader
     if (activity == null || !isAdded()) {
       return true;
     }
-    AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
+    AdapterView.AdapterContextMenuInfo info =
+        (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
     Job job = mAdapter.getItem(info.position);
     switch (item.getItemId()) {
       case JOB_DETAILS:
@@ -222,13 +224,16 @@ public class JobListFragment extends BusFragment implements LoaderManager.Loader
     intent.putExtra(JobDetailsActivity.EXTRA_CURRENT_JOB_ID, job.getId());
     intent.putExtra(JobDetailsActivity.EXTRA_JOBS_IDS, ids);
     startActivity(intent);
-    getTracker(getActivity()).trackEvent(CATEGORY_JOBS, ACTION_OPEN, job.getTitle() + "," + job.getUrl());
+    getTracker(getActivity()).trackEvent(CATEGORY_JOBS, ACTION_OPEN,
+        job.getTitle() + "," + job.getUrl());
   }
 
   @Override public void onScrollStateChanged(AbsListView view, int scrollState) {
   }
 
-  @Override public void onScroll(AbsListView absListView, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+  @Override
+  public void onScroll(AbsListView absListView, int firstVisibleItem, int visibleItemCount,
+      int totalItemCount) {
     if (mMoreRootView == null) {
       return;
     }
@@ -236,7 +241,9 @@ public class JobListFragment extends BusFragment implements LoaderManager.Loader
       return;
     }
     totalItemCount -= mList.getHeaderViewsCount();
-    if (!mLoading && mLastTotalItemCount != totalItemCount && (totalItemCount - visibleItemCount) == firstVisibleItem) {
+    if (!mLoading
+        && mLastTotalItemCount != totalItemCount
+        && (totalItemCount - visibleItemCount) == firstVisibleItem) {
       mLoading = true;
       mLastTotalItemCount = totalItemCount;
       loadMore();

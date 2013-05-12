@@ -19,9 +19,7 @@ package com.github.jobs.utils;
 import android.text.Editable;
 import android.text.TextWatcher;
 
-/**
- * @author cristian
- */
+/** @author cristian */
 public class TextWatcherAdapter implements TextWatcher {
 
   public void afterTextChanged(Editable s) {

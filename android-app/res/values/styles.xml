@@ -21,7 +21,7 @@
   </style>
 
   <style name="Widget.Styled.ActionBar" parent="android:Widget.Holo.Light.ActionBar.Solid.Inverse">
-    <item name="android:background">@drawable/header_back</item>
+    <item name="android:background">#2980b9</item>
   </style>
 
   <style name="EditTextTheme.GithubJobs" parent="android:Widget.EditText">

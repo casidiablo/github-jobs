@@ -26,11 +26,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
 
-/**
- * @author cristian
- */
+/** @author cristian */
 public class JsonMapper {
   private static final ObjectMapper mapper = new ObjectMapper();
+
   static {
     mapper.configure(MapperFeature.AUTO_DETECT_FIELDS, true);
     mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);

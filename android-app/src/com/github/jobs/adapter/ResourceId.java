@@ -21,16 +21,11 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-@Retention(RetentionPolicy.RUNTIME)
-@Target(ElementType.FIELD)
+@Retention(RetentionPolicy.RUNTIME) @Target(ElementType.FIELD)
 public @interface ResourceId {
-  /**
-   * @return android resource id of the widget representing this field
-   */
+  /** @return android resource id of the widget representing this field */
   int value() default 0;
 
-  /**
-   * @return true if you want to ignore this field
-   */
+  /** @return true if you want to ignore this field */
   boolean ignore() default false;
 }
