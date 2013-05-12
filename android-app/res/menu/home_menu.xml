@@ -1,21 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
-    <item
-            android:id="@+id/menu_about"
-            android:icon="@drawable/ic_action_about_this"
-            android:title="@string/about_this_app"
-            android:orderInCategory="98"
-            android:showAsAction="ifRoom"/>
-    <item
-            android:id="@+id/menu_templates"
-            android:icon="@drawable/ic_action_template"
-            android:title="@string/cover_letters_list"
-            android:orderInCategory="99"
-            android:showAsAction="always"/>
-    <item
-            android:id="@+id/menu_search"
-            android:icon="@drawable/ic_action_search"
-            android:title="@string/search"
-            android:orderInCategory="100"
-            android:showAsAction="always"/>
+  <item
+    android:id="@+id/menu_about"
+    android:icon="@drawable/ic_action_about_this"
+    android:title="@string/about_this_app"
+    android:orderInCategory="98"
+    android:showAsAction="ifRoom" />
+  <item
+    android:id="@+id/menu_templates"
+    android:icon="@drawable/ic_action_template"
+    android:title="@string/cover_letters_list"
+    android:orderInCategory="99"
+    android:showAsAction="always" />
+  <item
+    android:id="@+id/menu_search"
+    android:icon="@drawable/ic_action_search"
+    android:title="@string/search"
+    android:orderInCategory="100"
+    android:showAsAction="always" />
 </menu>

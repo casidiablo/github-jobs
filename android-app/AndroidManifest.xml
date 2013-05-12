@@ -7,7 +7,7 @@
     <uses-permission android:name="android.permission.WAKE_LOCK"/>
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
     <uses-permission android:name="android.permission.GET_ACCOUNTS"/>
-    <uses-sdk android:minSdkVersion="8" android:targetSdkVersion="16"/>
+    <uses-sdk android:minSdkVersion="14" android:targetSdkVersion="17"/>
     <application android:label="@string/app_name" android:icon="@drawable/ic_launcher"
                  android:name=".GithubJobsApplication"
                  android:theme="@style/Theme.GithubJobs">
@@ -35,7 +35,7 @@
         <activity android:name=".ui.dialog.SOUserDialog" android:theme="@style/Theme.GithubJobs.Dialog"
                   android:label="@string/about_this_app"/>
         <activity android:name="com.crittercism.NotificationActivity"/>
-        <service android:name="com.codeslap.groundy.GroundyService">
+        <service android:name="com.telly.groundy.GroundyService">
             <meta-data android:name="groundy:mode" android:value="async"/>
         </service>
     </application>

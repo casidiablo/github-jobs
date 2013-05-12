@@ -16,24 +16,22 @@
 
 package com.github.jobs.ui.dialog;
 
-import com.actionbarsherlock.app.SherlockActivity;
+import android.app.Activity;
 import com.github.jobs.utils.AnalyticsHelper;
 
 /**
  * @author cristian
  * @version 1.0
  */
-public class TrackDialog extends SherlockActivity {
+public class TrackDialog extends Activity {
 
-    @Override
-    protected void onStart() {
-        super.onStart();
-        AnalyticsHelper.getTracker(this).onActivityStarted(this);
-    }
+  @Override protected void onStart() {
+    super.onStart();
+    AnalyticsHelper.getTracker(this).onActivityStarted(this);
+  }
 
-    @Override
-    protected void onStop() {
-        super.onStop();
-        AnalyticsHelper.getTracker(this).onActivityStopped(this);
-    }
+  @Override protected void onStop() {
+    super.onStop();
+    AnalyticsHelper.getTracker(this).onActivityStopped(this);
+  }
 }

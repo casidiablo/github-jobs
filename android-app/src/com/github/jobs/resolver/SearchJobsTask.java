@@ -17,81 +17,83 @@
 package com.github.jobs.resolver;
 
 import android.os.Bundle;
-import com.codeslap.groundy.GroundyTask;
-import com.codeslap.persistence.Persistence;
 import com.codeslap.persistence.SqlAdapter;
-import com.github.bean.Job;
-import com.github.bean.Search;
+import com.github.jobs.GithubJobsApplication;
 import com.github.jobs.api.GithubJobsApi;
+import com.github.jobs.bean.Job;
+import com.github.jobs.bean.Search;
 import com.github.jobs.bean.SearchPack;
 import com.github.jobs.bean.SearchesAndJobs;
-
+import com.telly.groundy.GroundyTask;
+import com.telly.groundy.TaskResult;
+import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.List;
 
 public class SearchJobsTask extends GroundyTask {
 
-    public static final String EXTRA_SEARCH_PACK = "com.github.jobs.extra_search_pack";
-    public static final String DATA_JOBS = "com.github.jobs.data.jobs";
-    public static final String DATA_SEARCH_PACK = "com.github.jobs.data.search_pack";
+  public static final String EXTRA_SEARCH_PACK = "com.github.jobs.extra_search_pack";
+  public static final String DATA_JOBS = "com.github.jobs.data.jobs";
+  public static final String DATA_SEARCH_PACK = "com.github.jobs.data.search_pack";
+  @Inject SqlAdapter sqlAdapter;
 
-    @Override
-    protected boolean doInBackground() {
-        // get parameters
-        Bundle params = getParameters();
-        SearchPack searchPack = (SearchPack) params.getParcelable(EXTRA_SEARCH_PACK);
+  @Override
+  protected TaskResult doInBackground() {
+    ((GithubJobsApplication) getContext().getApplicationContext()).inject(this);
+    // get parameters
+    Bundle params = getArgs();
+    SearchPack searchPack = params.getParcelable(EXTRA_SEARCH_PACK);
 
-        // configure search
-        Search.Builder builder = new Search.Builder();
-        builder.setSearch(searchPack.getSearch());
-        builder.setLocation(searchPack.getLocation());
-        builder.setFullTime(searchPack.isFullTime());
-        if (searchPack.getPage() > 0) {
-            builder.setPage(searchPack.getPage());
-        }
-
-        // execute search
-        Search search = builder.createSearch();
-        List<Job> jobsList = GithubJobsApi.search(search);
-        if (jobsList == null) {
-            return false;
-        }
-
-        ArrayList<Job> jobs = new ArrayList<Job>(jobsList);
-        SqlAdapter sqlAdapter = Persistence.getAdapter(getContext());
-        // delete old content
-        if (searchPack.getPage() == 0 && jobs.size() > 0) {
-            if (searchPack.isDefault()) {
-                sqlAdapter.delete(Job.class, null, null);
-            } else {
-                SearchesAndJobs sample = new SearchesAndJobs();
-                sample.setSearchHashCode(searchPack.hashCode());
-                sqlAdapter.delete(sample);
-            }
-        }
-        // if the search is not the default one, references to cache table too
-        if (!searchPack.isDefault()) {
-            List<SearchesAndJobs> searchCaches = new ArrayList<SearchesAndJobs>();
-            for (Job job : jobs) {
-                SearchesAndJobs searchesAndJobs = new SearchesAndJobs();
-                searchesAndJobs.setSearchHashCode(searchPack.hashCode());
-                searchesAndJobs.setJobId(job.getId());
-                searchCaches.add(searchesAndJobs);
-            }
-            sqlAdapter.storeCollection(searchCaches, null);
-        }
-        // persist all data to be able to use it later
-        sqlAdapter.storeCollection(jobs, null);
-
-        // prepare result
-        Bundle resultData = getResultData();
-        resultData.putParcelable(DATA_SEARCH_PACK, searchPack);
-        resultData.putParcelableArrayList(DATA_JOBS, jobs);
-        return true;
+    // configure search
+    Search.Builder builder = new Search.Builder();
+    builder.setSearch(searchPack.getSearch());
+    builder.setLocation(searchPack.getLocation());
+    builder.setFullTime(searchPack.isFullTime());
+    if (searchPack.getPage() > 0) {
+      builder.setPage(searchPack.getPage());
     }
 
-    @Override
-    protected boolean keepWifiOn() {
-        return true;
+    // execute search
+    Search search = builder.createSearch();
+    List<Job> jobsList = GithubJobsApi.search(search);
+    if (jobsList == null) {
+      return failed();
     }
+
+    ArrayList<Job> jobs = new ArrayList<Job>(jobsList);
+    // delete old content
+    if (searchPack.getPage() == 0 && jobs.size() > 0) {
+      if (searchPack.isDefault()) {
+        sqlAdapter.delete(Job.class, null, null);
+      } else {
+        SearchesAndJobs sample = new SearchesAndJobs();
+        sample.setSearchHashCode(searchPack.hashCode());
+        sqlAdapter.delete(sample);
+      }
+    }
+    // if the search is not the default one, references to cache table too
+    if (!searchPack.isDefault()) {
+      List<SearchesAndJobs> searchCaches = new ArrayList<SearchesAndJobs>();
+      for (Job job : jobs) {
+        SearchesAndJobs searchesAndJobs = new SearchesAndJobs();
+        searchesAndJobs.setSearchHashCode(searchPack.hashCode());
+        searchesAndJobs.setJobId(job.getId());
+        searchCaches.add(searchesAndJobs);
+      }
+      sqlAdapter.storeCollection(searchCaches, null);
+    }
+    // persist all data to be able to use it later
+    sqlAdapter.storeCollection(jobs, null);
+
+    // prepare result
+    Bundle resultData = new Bundle();
+    resultData.putParcelable(DATA_SEARCH_PACK, searchPack);
+    resultData.putParcelableArrayList(DATA_JOBS, jobs);
+    return succeeded().addAll(resultData);
+  }
+
+  @Override
+  protected boolean keepWifiOn() {
+    return true;
+  }
 }

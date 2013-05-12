@@ -25,7 +25,7 @@
 
     <groupId>com.codeslap</groupId>
     <artifactId>github-jobs</artifactId>
-    <version>1.4</version>
+    <version>1.5-SNAPSHOT</version>
     <packaging>pom</packaging>
     <name>GitHub Jobs Project</name>
     <description>GitHub Jobs Project</description>
@@ -72,7 +72,6 @@
     </build>
 
     <modules>
-        <module>java-api</module>
         <module>android-app</module>
     </modules>
 </project>

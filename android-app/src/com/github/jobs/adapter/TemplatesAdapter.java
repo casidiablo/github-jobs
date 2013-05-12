@@ -17,17 +17,14 @@
 package com.github.jobs.adapter;
 
 import android.content.Context;
-import android.text.Html;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import com.codeslap.groundy.adapter.Layout;
-import com.codeslap.groundy.adapter.ListBaseAdapter;
 import com.github.jobs.R;
 import com.github.jobs.bean.Template;
 import com.github.jobs.utils.RelativeDate;
 import com.github.jobs.utils.StringUtils;
-import com.petebevin.markdown.MarkdownProcessor;
+import in.uncod.android.bypass.Bypass;
 
 /**
  * @author cristian
@@ -35,43 +32,42 @@ import com.petebevin.markdown.MarkdownProcessor;
  */
 public class TemplatesAdapter extends ListBaseAdapter<Template, TemplatesAdapter.ViewHolder> {
 
-    private static final MarkdownProcessor MARKDOWN = new MarkdownProcessor();
+  private static final Bypass BYPASS = new Bypass();
 
-    public TemplatesAdapter(Context context) {
-        super(context, ViewHolder.class);
+  public TemplatesAdapter(Context context) {
+    super(context, ViewHolder.class);
+  }
+
+  @Override
+  public long getItemId(int position) {
+    return getItem(position).getId();
+  }
+
+  @Override
+  public void populateHolder(int position, View view, ViewGroup parent, Template template,
+      ViewHolder holder) {
+    // set template name
+    holder.title.setText(StringUtils.trim(template.getName()));
+
+    // set template content
+    String content = template.getContent();
+    if (content != null) {
+      if (content.length() > 150) {
+        content = content.substring(0, 150);
+      }
+      holder.content.setText(BYPASS.markdownToSpannable(content));
+    } else {
+      holder.content.setText("");
     }
 
-    @Override
-    public long getItemId(int position) {
-        return getItem(position).getId();
-    }
+    // set date
+    holder.date.setText(RelativeDate.getTimeAgo(getContext(), template.getLastUpdate()));
+  }
 
-    @Override
-    public void populateHolder(int position, View view, ViewGroup parent, Template template, ViewHolder holder) {
-        // set template name
-        holder.title.setText(StringUtils.trim(template.getName()));
-
-        // set template content
-        String content = template.getContent();
-        if (content != null) {
-            if (content.length() > 150) {
-                content = content.substring(0, 150);
-            }
-            String html = Html.fromHtml(MARKDOWN.markdown(content)).toString();
-            html = html.replace("\n\n", " ").replace("\n", " ");
-            holder.content.setText(StringUtils.trim(html));
-        } else {
-            holder.content.setText("");
-        }
-
-        // set date
-        holder.date.setText(RelativeDate.getTimeAgo(getContext(), template.getLastUpdate()));
-    }
-
-    @Layout(R.layout.template_row)
-    public static class ViewHolder {
-        TextView title;
-        TextView content;
-        TextView date;
-    }
+  @Layout(R.layout.template_row)
+  public static class ViewHolder {
+    TextView title;
+    TextView content;
+    TextView date;
+  }
 }

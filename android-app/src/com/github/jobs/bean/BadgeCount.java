@@ -24,91 +24,95 @@ import android.os.Parcelable;
  * @version 1.0
  */
 public class BadgeCount implements Parcelable {
-    private int gold;
-    private int silver;
-    private int bronze;
+  private int gold;
+  private int silver;
+  private int bronze;
 
-    public BadgeCount(Parcel in) {
-        gold = (Integer) in.readValue(null);
-        silver = (Integer) in.readValue(null);
-        bronze = (Integer) in.readValue(null);
-    }
+  public BadgeCount() {
+  }
 
-    public int getGold() {
-        return gold;
-    }
+  public BadgeCount(Parcel in) {
+    gold = (Integer) in.readValue(null);
+    silver = (Integer) in.readValue(null);
+    bronze = (Integer) in.readValue(null);
+  }
 
-    public void setGold(int gold) {
-        this.gold = gold;
-    }
+  public int getGold() {
+    return gold;
+  }
 
-    public int getSilver() {
-        return silver;
-    }
+  public void setGold(int gold) {
+    this.gold = gold;
+  }
 
-    public void setSilver(int silver) {
-        this.silver = silver;
-    }
+  public int getSilver() {
+    return silver;
+  }
 
-    public int getBronze() {
-        return bronze;
-    }
+  public void setSilver(int silver) {
+    this.silver = silver;
+  }
 
-    public void setBronze(int bronze) {
-        this.bronze = bronze;
-    }
+  public int getBronze() {
+    return bronze;
+  }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+  public void setBronze(int bronze) {
+    this.bronze = bronze;
+  }
 
-        BadgeCount that = (BadgeCount) o;
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (o == null || getClass() != o.getClass()) return false;
 
-        if (bronze != that.bronze) return false;
-        if (gold != that.gold) return false;
-        if (silver != that.silver) return false;
+    BadgeCount that = (BadgeCount) o;
 
-        return true;
-    }
+    if (bronze != that.bronze) return false;
+    if (gold != that.gold) return false;
+    if (silver != that.silver) return false;
 
-    @Override
-    public int hashCode() {
-        int result = gold;
-        result = 31 * result + silver;
-        result = 31 * result + bronze;
-        return result;
-    }
+    return true;
+  }
 
-    @Override
-    public String toString() {
-        return "BadgeCount{" +
-                "gold=" + gold +
-                ", silver=" + silver +
-                ", bronze=" + bronze +
-                '}';
-    }
+  @Override
+  public int hashCode() {
+    int result = gold;
+    result = 31 * result + silver;
+    result = 31 * result + bronze;
+    return result;
+  }
 
-    @Override
-    public int describeContents() {
-        return hashCode();
-    }
+  @Override
+  public String toString() {
+    return "BadgeCount{" +
+        "gold=" + gold +
+        ", silver=" + silver +
+        ", bronze=" + bronze +
+        '}';
+  }
 
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeValue(gold);
-        dest.writeValue(silver);
-        dest.writeValue(bronze);
-    }
+  @Override
+  public int describeContents() {
+    return hashCode();
+  }
 
-    @SuppressWarnings("UnusedDeclaration")
-    public static final Parcelable.Creator<BadgeCount> CREATOR = new Parcelable.Creator<BadgeCount>() {
+  @Override
+  public void writeToParcel(Parcel dest, int flags) {
+    dest.writeValue(gold);
+    dest.writeValue(silver);
+    dest.writeValue(bronze);
+  }
+
+  @SuppressWarnings("UnusedDeclaration")
+  public static final Parcelable.Creator<BadgeCount> CREATOR =
+      new Parcelable.Creator<BadgeCount>() {
         public BadgeCount createFromParcel(Parcel in) {
-            return new BadgeCount(in);
+          return new BadgeCount(in);
         }
 
         public BadgeCount[] newArray(int size) {
-            return new BadgeCount[size];
+          return new BadgeCount[size];
         }
-    };
+      };
 }

@@ -16,69 +16,66 @@
 
 package com.github.jobs.ui.fragment;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.FragmentManager;
-import android.util.Log;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
-import com.actionbarsherlock.app.SherlockFragmentActivity;
-import com.codeslap.groundy.ReceiverFragment;
+import com.github.jobs.GithubJobsApplication;
 import com.github.jobs.R;
 import com.github.jobs.bean.SOUser;
+import com.github.jobs.events.HideKeyboardEvent;
+import com.github.jobs.events.SOUsersUpdateEvent;
 import com.github.jobs.resolver.StackOverflowUserTask;
 import com.github.jobs.utils.AppUtils;
-
+import com.squareup.otto.Bus;
+import com.telly.groundy.annotations.OnFailure;
+import com.telly.groundy.annotations.OnStart;
+import com.telly.groundy.annotations.OnSuccess;
+import com.telly.groundy.annotations.Param;
 import java.util.ArrayList;
+import javax.inject.Inject;
 
-public class SOUserFetcherReceiver extends ReceiverFragment {
+public class SOUserFetcherReceiver extends Fragment {
 
-    @Override
-    protected void onError(Bundle resultData) {
-        super.onError(resultData);
-        FragmentActivity activity = getActivity();
-        if (activity == null || !isAdded()) {
-            return;
-        }
-        if (!AppUtils.isOnline(activity)) {
-            Toast.makeText(activity, R.string.error_fetching_search_result_network, Toast.LENGTH_LONG).show();
-        } else {
-            Toast.makeText(activity, R.string.error_fetching_search_result, Toast.LENGTH_LONG).show();
-        }
+  public static final String TAG = SOUserFetcherReceiver.class.getSimpleName();
+
+  @Inject Bus bus;
+
+  @Override public void onCreate(Bundle savedInstanceState) {
+    super.onCreate(savedInstanceState);
+    ((GithubJobsApplication) getActivity().getApplication()).inject(this);
+  }
+
+  @OnFailure(StackOverflowUserTask.class) public void onError() {
+    FragmentActivity activity = getActivity();
+    if (activity == null || !isAdded()) {
+      return;
     }
-
-    @Override
-    protected void onFinished(Bundle resultData) {
-        super.onFinished(resultData);
-        FragmentManager fragmentManager = getFragmentManager();
-        Fragment fragment = fragmentManager.findFragmentById(R.id.base_container);
-        if (fragment instanceof SOUserPickerFragment) {
-            SOUserPickerFragment soUserPickerFragment = (SOUserPickerFragment) fragment;
-            ArrayList<SOUser> users = resultData.getParcelableArrayList(StackOverflowUserTask.RESULT_USERS);
-            soUserPickerFragment.updateItems(users);
-        } else {
-            Log.wtf("FragmentReceiver", "The fragment isn't an instance of SOUserFetcherReceiver");
-        }
+    if (!AppUtils.isOnline(activity)) {
+      Toast.makeText(activity, R.string.error_fetching_search_result_network, Toast.LENGTH_LONG)
+          .show();
+    } else {
+      Toast.makeText(activity, R.string.error_fetching_search_result, Toast.LENGTH_LONG).show();
     }
+    changeProgress(false);
+  }
 
-    @Override
-    protected void onProgressChanged(boolean running) {
-        FragmentActivity activity = getActivity();
-        if (activity == null) {
-            return;
-        }
-        ((SherlockFragmentActivity) activity).setSupportProgressBarIndeterminateVisibility(running);
-        InputMethodManager imm = (InputMethodManager) activity.getSystemService(Context.INPUT_METHOD_SERVICE);
-        if (running) {
-            FragmentManager manager = getFragmentManager();
-            Fragment fragmentById = manager.findFragmentById(R.id.base_container);
-            if (fragmentById instanceof SOUserPickerFragment) {
-                SOUserPickerFragment pickerFragment = (SOUserPickerFragment) fragmentById;
-                imm.hideSoftInputFromWindow(pickerFragment.getWindowToken(), 0);
-            }
+  @OnSuccess(StackOverflowUserTask.class)
+  public void onFinished(@Param(StackOverflowUserTask.RESULT_USERS) ArrayList<SOUser> users) {
+    bus.post(new SOUsersUpdateEvent(users));
+    changeProgress(false);
+  }
 
-        }
+  @OnStart(StackOverflowUserTask.class) public void onFetchStart() {
+    bus.post(new HideKeyboardEvent());
+    changeProgress(true);
+  }
+
+  private void changeProgress(boolean running) {
+    FragmentActivity activity = getActivity();
+    if (activity == null) {
+      return;
     }
+    activity.setProgressBarIndeterminateVisibility(running);
+  }
 }

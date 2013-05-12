@@ -16,24 +16,22 @@
 
 package com.github.jobs.ui.dialog;
 
-import com.actionbarsherlock.app.SherlockFragmentActivity;
+import android.support.v4.app.FragmentActivity;
 import com.github.jobs.utils.AnalyticsHelper;
 
 /**
  * @author cristian
  * @version 1.0
  */
-public class TrackFragmentDialog extends SherlockFragmentActivity {
+public class TrackFragmentDialog extends FragmentActivity {
 
-    @Override
-    protected void onStart() {
-        super.onStart();
-        AnalyticsHelper.getTracker(this).onActivityStarted(this);
-    }
+  @Override protected void onStart() {
+    super.onStart();
+    AnalyticsHelper.getTracker(this).onActivityStarted(this);
+  }
 
-    @Override
-    protected void onStop() {
-        super.onStop();
-        AnalyticsHelper.getTracker(this).onActivityStopped(this);
-    }
+  @Override protected void onStop() {
+    super.onStop();
+    AnalyticsHelper.getTracker(this).onActivityStopped(this);
+  }
 }
