@@ -31,7 +31,7 @@ public class SOUserPickerActivity extends TrackActivity {
 
   @Override protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-    getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+    getActionBar().setDisplayHomeAsUpEnabled(true);
     setupBaseFragment(R.id.base_container, SOUserPickerFragment.class);
   }
 }

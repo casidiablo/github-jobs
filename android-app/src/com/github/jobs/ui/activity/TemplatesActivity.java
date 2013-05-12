@@ -32,7 +32,7 @@ public class TemplatesActivity extends TrackActivity {
 
   @Override protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-    getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+    getActionBar().setDisplayHomeAsUpEnabled(true);
     setupBaseFragment(R.id.base_container, TemplatesListFragment.class);
   }
 

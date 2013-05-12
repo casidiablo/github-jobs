@@ -21,10 +21,11 @@ import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Parcelable;
+import android.support.v4.view.PagerTabStrip;
 import android.support.v4.view.ViewPager;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
-import com.actionbarsherlock.view.Menu;
-import com.actionbarsherlock.view.MenuItem;
 import com.github.jobs.GithubJobsApplication;
 import com.github.jobs.R;
 import com.github.jobs.adapter.SearchJobFragmentAdapter;
@@ -46,7 +47,6 @@ import com.telly.groundy.annotations.OnFailure;
 import com.telly.groundy.annotations.OnStart;
 import com.telly.groundy.annotations.OnSuccess;
 import com.telly.groundy.annotations.Param;
-import com.viewpagerindicator.TabPageIndicator;
 import java.util.ArrayList;
 import java.util.List;
 import javax.inject.Inject;
@@ -62,7 +62,7 @@ import static com.github.jobs.utils.AnalyticsHelper.getTracker;
 public class HomeActivity extends TrackActivity {
   private static final int SEARCH_REQUEST = 534;
 
-  private TabPageIndicator mIndicator;
+  private PagerTabStrip mIndicator;
   private SearchJobFragmentAdapter mSearchJobFragmentAdapter;
   private ViewPager mViewPager;
   private State mState;
@@ -82,7 +82,7 @@ public class HomeActivity extends TrackActivity {
     if (mState == null) {
       mState = new State();
     } else if (mState.loading) {
-      setSupportProgressBarIndeterminateVisibility(mState.loading);
+      setProgressBarIndeterminateVisibility(mState.loading);
     }
 
     mSearchJobFragmentAdapter = new SearchJobFragmentAdapter(this, getSupportFragmentManager());
@@ -92,15 +92,13 @@ public class HomeActivity extends TrackActivity {
     mViewPager.setPageMargin(drawable.getIntrinsicWidth());
     mViewPager.setPageMarginDrawable(drawable);
 
-    mIndicator = (TabPageIndicator) findViewById(R.id.indicator);
-    mIndicator.setViewPager(mViewPager);
+    mIndicator = (PagerTabStrip) findViewById(R.id.indicator);
 
     if (mState.searchPacks != null) {
       showTabs();
       for (SearchPack searchPack : mState.searchPacks) {
         mSearchJobFragmentAdapter.addSearch(searchPack);
       }
-      mIndicator.notifyDataSetChanged();
       selectTab(mState.currentTab);
     }
   }
@@ -113,13 +111,6 @@ public class HomeActivity extends TrackActivity {
   @Override protected void onDestroy() {
     super.onDestroy();
     callbacksManager.onDestroy();
-  }
-
-  @Override public void setSupportProgressBarIndeterminateVisibility(boolean visible) {
-    super.setSupportProgressBarIndeterminateVisibility(visible);
-    if (mState != null) {
-      mState.loading = visible;
-    }
   }
 
   @Override public Object onRetainCustomNonConfigurationInstance() {
@@ -143,7 +134,6 @@ public class HomeActivity extends TrackActivity {
         mState.searchPacks = new ArrayList<SearchPack>();
       }
       mState.searchPacks.add(searchPack);
-      mIndicator.notifyDataSetChanged();
     }
     int position = mSearchJobFragmentAdapter.positionFor(searchPack);
     selectTab(position);
@@ -168,12 +158,12 @@ public class HomeActivity extends TrackActivity {
   }
 
   @Override public boolean onCreateOptionsMenu(Menu menu) {
-    getSupportMenuInflater().inflate(R.menu.home_menu, menu);
+    getMenuInflater().inflate(R.menu.home_menu, menu);
     return true;
   }
 
   @Subscribe public void showProgressWheel(ProgressWheel progressWheel) {
-    setSupportProgressBarIndeterminateVisibility(progressWheel.show);
+    setProgressBarIndeterminateVisibility(progressWheel.show);
   }
 
   private void showTabs() {
@@ -191,14 +181,12 @@ public class HomeActivity extends TrackActivity {
   }
 
   private void selectTab(int i) {
-    mIndicator.setCurrentItem(i);
     mViewPager.setCurrentItem(i);
   }
 
   @Subscribe public void removeSearch(RemoveSearch removeSearch) {
     int position = mSearchJobFragmentAdapter.positionFor(removeSearch.searchPack);
     mSearchJobFragmentAdapter.removeItem(removeSearch.searchPack);
-    mIndicator.notifyDataSetChanged();
     // choose the next open tab or the latest one
     if (position < mSearchJobFragmentAdapter.getCount()) {
       selectTab(position);

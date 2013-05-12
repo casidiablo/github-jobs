@@ -16,12 +16,15 @@
 
 package com.github.jobs.ui.activity;
 
+import android.app.ActionBar;
 import android.os.Bundle;
-import android.support.v4.app.FragmentTransaction;
-import com.actionbarsherlock.app.ActionBar;
-import com.actionbarsherlock.view.MenuItem;
+import android.view.MenuItem;
 import com.github.jobs.R;
-import com.github.jobs.events.*;
+import com.github.jobs.events.ConfigureActionBar;
+import com.github.jobs.events.DisableEditMode;
+import com.github.jobs.events.FinishCurrentActivity;
+import com.github.jobs.events.SelectEditorTab;
+import com.github.jobs.events.ShowTemplateEditor;
 import com.github.jobs.ui.fragment.EditTemplateFragment;
 import com.github.jobs.utils.AppUtils;
 import com.github.jobs.utils.TabListenerAdapter;
@@ -47,7 +50,7 @@ public class EditTemplateActivity extends TrackActivity {
 
   @Override protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-    getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+    getActionBar().setDisplayHomeAsUpEnabled(true);
     if (savedInstanceState != null) {
       mCurrentTab = savedInstanceState.getInt(KEY_CURRENT_TAB);
     }
@@ -61,7 +64,7 @@ public class EditTemplateActivity extends TrackActivity {
 
   @Override protected void onSaveInstanceState(Bundle outState) {
     super.onSaveInstanceState(outState);
-    ActionBar.Tab selectedTab = getSupportActionBar().getSelectedTab();
+    ActionBar.Tab selectedTab = getActionBar().getSelectedTab();
     if (selectedTab != null) {
       mCurrentTab = selectedTab.getPosition();
       outState.putInt(KEY_CURRENT_TAB, mCurrentTab);
@@ -79,7 +82,7 @@ public class EditTemplateActivity extends TrackActivity {
   }
 
   @Subscribe public void selectEditorTab(SelectEditorTab selectEditorTab) {
-    ActionBar supportActionBar = getSupportActionBar();
+    ActionBar supportActionBar = getActionBar();
     ActionBar.Tab selectedTab = supportActionBar.getSelectedTab();
     if (selectedTab.getPosition() != 0) {
       supportActionBar.getTabAt(0).select();
@@ -97,13 +100,13 @@ public class EditTemplateActivity extends TrackActivity {
     }
     mAlreadyConfigured = true;
     // let's create edit tabs!
-    ActionBar actionBar = getSupportActionBar();
+    ActionBar actionBar = getActionBar();
     actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
 
     ActionBar.Tab editorTab = actionBar.newTab();
     editorTab.setText(R.string.lbl_editor);
     editorTab.setTabListener(new TabListenerAdapter() {
-      @Override public void onTabSelected(ActionBar.Tab tab, FragmentTransaction ft) {
+      @Override public void onTabSelected(ActionBar.Tab tab, android.app.FragmentTransaction ft) {
         bus.post(new ShowTemplateEditor(true));
       }
     });
@@ -111,7 +114,7 @@ public class EditTemplateActivity extends TrackActivity {
     ActionBar.Tab previewTab = actionBar.newTab();
     previewTab.setText(R.string.preview);
     previewTab.setTabListener(new TabListenerAdapter() {
-      @Override public void onTabSelected(ActionBar.Tab tab, FragmentTransaction ft) {
+      @Override public void onTabSelected(ActionBar.Tab tab, android.app.FragmentTransaction ft) {
         bus.post(new ShowTemplateEditor(false));
       }
     });
@@ -127,7 +130,7 @@ public class EditTemplateActivity extends TrackActivity {
 
   @Subscribe public void disableEditMode(DisableEditMode disableEditMode) {
     // let's create edit tabs!
-    ActionBar actionBar = getSupportActionBar();
+    ActionBar actionBar = getActionBar();
     actionBar.removeAllTabs();
     actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
   }

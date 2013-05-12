@@ -8,7 +8,6 @@
     <version>1.5-SNAPSHOT</version>
   </parent>
 
-  <groupId>com.codeslap</groupId>
   <artifactId>github-jobs-android-app</artifactId>
   <version>1.5-SNAPSHOT</version>
   <packaging>apk</packaging>
@@ -17,20 +16,13 @@
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <android.version>4.0.1.2</android.version>
-    <sherlock.version>4.1.0</sherlock.version>
   </properties>
 
   <dependencies>
     <dependency>
-      <groupId>com.actionbarsherlock</groupId>
-      <artifactId>library</artifactId>
-      <version>${sherlock.version}</version>
-      <type>apklib</type>
-    </dependency>
-    <dependency>
       <groupId>com.google.android</groupId>
       <artifactId>support-v4</artifactId>
-      <version>r7</version>
+      <version>r12</version>
     </dependency>
     <dependency>
       <groupId>com.telly</groupId>
@@ -49,12 +41,6 @@
       <artifactId>persistence</artifactId>
       <version>0.9.23</version>
       <scope>compile</scope>
-    </dependency>
-    <dependency>
-      <groupId>com.viewpagerindicator</groupId>
-      <artifactId>library</artifactId>
-      <version>2.4.1</version>
-      <type>apklib</type>
     </dependency>
     <dependency>
       <groupId>com.fasterxml.jackson.core</groupId>
@@ -97,13 +83,6 @@
       <groupId>com.google.android</groupId>
       <artifactId>android</artifactId>
       <version>${android.version}</version>
-      <scope>provided</scope>
-    </dependency>
-    <dependency>
-      <groupId>com.actionbarsherlock</groupId>
-      <artifactId>library</artifactId>
-      <version>${sherlock.version}</version>
-      <type>jar</type>
       <scope>provided</scope>
     </dependency>
     <dependency>

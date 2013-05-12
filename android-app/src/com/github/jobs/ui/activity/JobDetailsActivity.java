@@ -20,18 +20,24 @@ import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.Toast;
-import com.actionbarsherlock.view.Menu;
-import com.actionbarsherlock.view.MenuItem;
 import com.codeslap.persistence.SqlAdapter;
 import com.github.jobs.R;
 import com.github.jobs.adapter.JobsDetailsAdapter;
 import com.github.jobs.bean.Job;
 import com.github.jobs.ui.dialog.HowToApplyDialog;
-import javax.inject.Inject;
 import java.util.List;
+import javax.inject.Inject;
 
-import static com.github.jobs.utils.AnalyticsHelper.*;
+import static com.github.jobs.utils.AnalyticsHelper.ACTION_APPLY;
+import static com.github.jobs.utils.AnalyticsHelper.ACTION_SWIPE;
+import static com.github.jobs.utils.AnalyticsHelper.CATEGORY_JOBS;
+import static com.github.jobs.utils.AnalyticsHelper.LABEL_LEFT;
+import static com.github.jobs.utils.AnalyticsHelper.LABEL_RIGHT;
+import static com.github.jobs.utils.AnalyticsHelper.NAME_DETAILS;
+import static com.github.jobs.utils.AnalyticsHelper.getTracker;
 
 /**
  * @author cristian
@@ -52,7 +58,7 @@ public class JobDetailsActivity extends TrackActivity implements ViewPager.OnPag
   @Override protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.job_details_activity);
-    getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+    getActionBar().setDisplayHomeAsUpEnabled(true);
 
     if (getIntent() == null || getIntent().getExtras() == null) {
       finish();

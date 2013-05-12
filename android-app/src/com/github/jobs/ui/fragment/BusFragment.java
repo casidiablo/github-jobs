@@ -1,13 +1,12 @@
 package com.github.jobs.ui.fragment;
 
 import android.os.Bundle;
-import com.actionbarsherlock.app.SherlockFragment;
+import android.support.v4.app.Fragment;
 import com.github.jobs.GithubJobsApplication;
 import com.squareup.otto.Bus;
-
 import javax.inject.Inject;
 
-public class BusFragment extends SherlockFragment {
+public class BusFragment extends Fragment {
   @Inject Bus bus;
 
   @Override public void onCreate(Bundle savedInstanceState) {

@@ -24,6 +24,9 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
@@ -32,9 +35,6 @@ import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
-import com.actionbarsherlock.view.Menu;
-import com.actionbarsherlock.view.MenuInflater;
-import com.actionbarsherlock.view.MenuItem;
 import com.github.jobs.R;
 import com.github.jobs.adapter.SOUsersAdapter;
 import com.github.jobs.bean.SOUser;
@@ -45,7 +45,6 @@ import com.github.jobs.ui.activity.SOUserPickerActivity;
 import com.github.jobs.ui.dialog.SOUserDialog;
 import com.squareup.otto.Subscribe;
 import com.telly.groundy.Groundy;
-
 import java.util.ArrayList;
 
 import static android.app.Activity.RESULT_OK;

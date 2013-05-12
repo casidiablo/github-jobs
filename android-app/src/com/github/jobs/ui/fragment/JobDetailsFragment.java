@@ -30,15 +30,15 @@ import android.text.method.LinkMovementMethod;
 import android.text.style.UnderlineSpan;
 import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.ShareActionProvider;
 import android.widget.TextView;
 import android.widget.Toast;
-import com.actionbarsherlock.view.Menu;
-import com.actionbarsherlock.view.MenuInflater;
-import com.actionbarsherlock.view.MenuItem;
-import com.actionbarsherlock.widget.ShareActionProvider;
 import com.codeslap.persistence.SqlAdapter;
 import com.github.jobs.R;
 import com.github.jobs.bean.Job;
@@ -49,7 +49,9 @@ import com.telly.wasp.BitmapHelper;
 import com.telly.wasp.CallbackBitmapObserver;
 import javax.inject.Inject;
 
-import static com.github.jobs.utils.AnalyticsHelper.*;
+import static com.github.jobs.utils.AnalyticsHelper.ACTION_SHARE;
+import static com.github.jobs.utils.AnalyticsHelper.CATEGORY_JOBS;
+import static com.github.jobs.utils.AnalyticsHelper.getTracker;
 
 /**
  * @author cristian
@@ -123,7 +125,7 @@ public class JobDetailsFragment extends BusFragment implements View.OnClickListe
 
   @Override public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
     super.onCreateOptionsMenu(menu, inflater);
-    Context themedContext = getSherlockActivity().getSupportActionBar().getThemedContext();
+    Context themedContext = getActivity().getActionBar().getThemedContext();
     ShareActionProvider shareActionProvider = new ShareActionProvider(themedContext);
     shareActionProvider.setOnShareTargetSelectedListener(new ShareActionProvider.OnShareTargetSelectedListener() {
       @Override

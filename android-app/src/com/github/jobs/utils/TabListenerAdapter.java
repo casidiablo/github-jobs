@@ -16,8 +16,8 @@
 
 package com.github.jobs.utils;
 
-import android.support.v4.app.FragmentTransaction;
-import com.actionbarsherlock.app.ActionBar;
+import android.app.ActionBar;
+import android.app.FragmentTransaction;
 
 /**
  * @author cristian

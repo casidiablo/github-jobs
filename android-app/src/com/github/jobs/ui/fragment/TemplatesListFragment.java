@@ -19,21 +19,20 @@ package com.github.jobs.ui.fragment;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.ListFragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ListView;
-import com.actionbarsherlock.app.SherlockListFragment;
-import com.actionbarsherlock.view.Menu;
-import com.actionbarsherlock.view.MenuInflater;
-import com.actionbarsherlock.view.MenuItem;
 import com.github.jobs.R;
 import com.github.jobs.adapter.TemplatesAdapter;
 import com.github.jobs.bean.Template;
 import com.github.jobs.loader.TemplatesLoader;
 import com.github.jobs.ui.activity.EditTemplateActivity;
 import com.github.jobs.ui.activity.TemplatesActivity;
-
 import java.util.List;
 
 import static android.app.Activity.RESULT_OK;
@@ -45,7 +44,7 @@ import static com.github.jobs.utils.AnalyticsHelper.getTracker;
  * @author cristian
  * @version 1.0
  */
-public class TemplatesListFragment extends SherlockListFragment implements LoaderManager.LoaderCallbacks<List<Template>> {
+public class TemplatesListFragment extends ListFragment implements LoaderManager.LoaderCallbacks<List<Template>> {
   private static final int TEMPLATES_LOADER_ID = 8432;
   private TemplatesAdapter mAdapter;
 

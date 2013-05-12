@@ -20,7 +20,6 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.widget.Toast;
-import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.github.jobs.GithubJobsApplication;
 import com.github.jobs.R;
 import com.github.jobs.bean.SOUser;
@@ -77,6 +76,6 @@ public class SOUserFetcherReceiver extends Fragment {
     if (activity == null) {
       return;
     }
-    ((SherlockFragmentActivity) activity).setSupportProgressBarIndeterminateVisibility(running);
+    activity.setProgressBarIndeterminateVisibility(running);
   }
 }

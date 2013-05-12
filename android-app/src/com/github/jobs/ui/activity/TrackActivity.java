@@ -16,7 +16,7 @@
 
 package com.github.jobs.ui.activity;
 
-import com.actionbarsherlock.view.MenuItem;
+import android.view.MenuItem;
 import com.github.jobs.utils.AnalyticsHelper;
 import com.github.jobs.utils.AppUtils;
 

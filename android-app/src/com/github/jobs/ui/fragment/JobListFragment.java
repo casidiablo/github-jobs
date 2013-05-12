@@ -26,15 +26,14 @@ import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ListView;
-import com.actionbarsherlock.app.SherlockFragmentActivity;
-import com.actionbarsherlock.view.Menu;
-import com.actionbarsherlock.view.MenuInflater;
-import com.actionbarsherlock.view.MenuItem;
 import com.github.jobs.R;
 import com.github.jobs.adapter.JobsAdapter;
 import com.github.jobs.bean.Job;
@@ -347,7 +346,7 @@ public class JobListFragment extends BusFragment implements LoaderManager.Loader
         .callback(activity)
         .arg(SearchJobsTask.EXTRA_SEARCH_PACK, mCurrentSearch)
         .execute(activity);
-    ((SherlockFragmentActivity) getActivity()).setSupportProgressBarIndeterminateVisibility(true);
+    activity.setProgressBarIndeterminateVisibility(true);
   }
 
   private boolean shouldProcess(SearchEvent searchEvent) {

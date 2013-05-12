@@ -17,19 +17,18 @@ package com.github.jobs.ui.activity;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.FrameLayout;
-import com.actionbarsherlock.app.SherlockFragmentActivity;
-import com.actionbarsherlock.view.Window;
 import com.github.jobs.GithubJobsApplication;
 import com.squareup.otto.Bus;
-
 import javax.inject.Inject;
 
-public abstract class BaseActivity extends SherlockFragmentActivity {
+public abstract class BaseActivity extends FragmentActivity {
   private boolean mSetContentViewAlreadyCalled;
   @Inject Bus bus;
 
@@ -65,7 +64,7 @@ public abstract class BaseActivity extends SherlockFragmentActivity {
   }
 
   private void onSetContentView() {
-    setSupportProgressBarIndeterminateVisibility(false);
+    setProgressBarIndeterminateVisibility(false);
     mSetContentViewAlreadyCalled = true;
   }
 
