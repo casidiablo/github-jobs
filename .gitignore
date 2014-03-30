@@ -13,3 +13,6 @@ gen-external-apklibs
 .project
 atlassian-ide-plugin.xml
 .idea
+TAGS
+build
+.gradle
