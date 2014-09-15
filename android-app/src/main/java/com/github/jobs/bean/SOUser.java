@@ -18,26 +18,27 @@ package com.github.jobs.bean;
 
 import android.os.Parcel;
 import android.os.Parcelable;
-import com.fasterxml.jackson.annotation.JsonProperty;
+
+import com.google.gson.annotations.SerializedName;
 
 /**
  * @author cristian
  * @version 1.0
  */
 public class SOUser implements Parcelable {
-  @JsonProperty("user_id")
+  @SerializedName("user_id")
   private long id;
-  @JsonProperty("display_name")
+  @SerializedName("display_name")
   private String displayName;
-  @JsonProperty("profile_image")
+  @SerializedName("profile_image")
   private String profileImage;
   private int reputation;
   private String link;
-  @JsonProperty("website_url")
+  @SerializedName("website_url")
   private String websiteUrl;
-  @JsonProperty("account_id")
+  @SerializedName("account_id")
   private int accountId;
-  @JsonProperty("badge_counts")
+  @SerializedName("badge_counts")
   private BadgeCount badgeCount;
 
   public SOUser() {

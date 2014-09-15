@@ -16,81 +16,31 @@
 
 package com.github.jobs.api;
 
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.github.jobs.bean.Job;
-import com.github.jobs.bean.Search;
-import com.github.jobs.utils.JsonMapper;
-import com.github.kevinsawicki.http.HttpRequest;
-import org.apache.commons.httpclient.HttpMethod;
-import org.apache.commons.httpclient.NameValuePair;
-import org.apache.commons.httpclient.URIException;
-import org.apache.commons.httpclient.methods.GetMethod;
+import com.github.jobs.templates.apis.ApiUtils;
 
-import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
-/** @author cristian */
-public class GithubJobsApi {
+import retrofit.http.GET;
+import retrofit.http.Multipart;
+import retrofit.http.POST;
+import retrofit.http.Part;
+import retrofit.http.Query;
 
-  public static final String SUBSCRIPTION_EMAIL_PARAM = "email";
-  public static final String SUBSCRIPTION_DESCRIPTION_PARAM = "description";
-  public static final String SUBSCRIPTION_LOCATION_PARAM = "location";
-  public static final String SUBSCRIPTION_FULL_TIME_PARAM = "full_time";
-  public static final String SUBSCRIPTION_OK_PARAM = "ok";
+public interface GithubJobsApi {
 
-  public static List<Job> search(Search search) {
-    ArrayList<NameValuePair> pairs = new ArrayList<NameValuePair>();
-    if (search.getSearch() != null) {
-      pairs.add(new NameValuePair(ApiConstants.SEARCH, search.getSearch()));
-    }
-    if (search.getLocation() != null) {
-      pairs.add(new NameValuePair(ApiConstants.LOCATION, search.getLocation()));
-    } else if (search.getLatitude() != 0 && search.getLongitude() != 0) {
-      pairs.add(new NameValuePair(ApiConstants.LATITUDE, String.valueOf(search.getLatitude())));
-      pairs.add(new NameValuePair(ApiConstants.LONGITUDE, String.valueOf(search.getLongitude())));
-    }
-    if (search.getPage() > 0) {
-      pairs.add(new NameValuePair(ApiConstants.PAGE, String.valueOf(search.getPage())));
-    }
-    if (search.isFullTime()) {
-      pairs.add(new NameValuePair(ApiConstants.FULL_TIME, String.valueOf(search.isFullTime())));
-    }
-    try {
-      String url = createUrl(ApiConstants.POSITIONS_URL, pairs);
-      InputStream responseStream = HttpRequest.get(url).acceptGzipEncoding().acceptJson().stream();
-      if (responseStream == null) {
-        throw new RuntimeException("Error calling API; it returned null.");
-      }
-      return JsonMapper.getList(responseStream, new TypeReference<List<Job>>() {
-      });
-    } catch (URIException e) {
-      e.printStackTrace();
-    }
-    return null;
-  }
+  GithubJobsApi INSTANCE = ApiUtils.get("https://jobs.github.com/", GithubJobsApi.class);
 
-  public static boolean subscribe(String email, String description, String location,
-      boolean fullTime) {
-    HashMap<String, String> parameters = new HashMap<String, String>();
-    parameters.put(SUBSCRIPTION_EMAIL_PARAM, email);
-    parameters.put(SUBSCRIPTION_DESCRIPTION_PARAM, description);
-    parameters.put(SUBSCRIPTION_LOCATION_PARAM, location);
-    parameters.put(SUBSCRIPTION_FULL_TIME_PARAM, String.valueOf(fullTime));
-    String response = HttpRequest.post(ApiConstants.EMAIL_SUBSCRIPTION_URL)
-        .part(SUBSCRIPTION_EMAIL_PARAM, email)
-        .part(SUBSCRIPTION_DESCRIPTION_PARAM, description)
-        .part(SUBSCRIPTION_LOCATION_PARAM, location)
-        .part(SUBSCRIPTION_FULL_TIME_PARAM, String.valueOf(fullTime))
-        .body();
-    return SUBSCRIPTION_OK_PARAM.equals(response);
-  }
+  @GET("/positions.json")
+  List<Job> search(@Query("search") String search,
+                   @Query("location") String location,
+                   @Query("page") int page,
+                   @Query("full_time") boolean isFulltime);
 
-  private static String createUrl(String url, List<NameValuePair> pairs) throws URIException {
-    HttpMethod method = new GetMethod(url);
-    NameValuePair[] nameValuePairs = pairs.toArray(new NameValuePair[pairs.size()]);
-    method.setQueryString(nameValuePairs);
-    return method.getURI().getEscapedURI();
-  }
+  @POST("/subscribe")
+  @Multipart
+  String subscribe(@Part("email") String email,
+                   @Part("description") String description,
+                   @Part("location") String location,
+                   @Part("full_time") boolean fullTime);
 }

@@ -14,19 +14,17 @@
  * limitations under the License.
  */
 
-package com.github.jobs.adapter;
+package com.github.jobs.templates.apis;
 
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+import com.github.jobs.bean.AboutMeUser;
 
-/** @author Cristian <cristian@elhacker.net> */
-@Retention(RetentionPolicy.RUNTIME) @Target(ElementType.TYPE)
-public @interface Layout {
-  /** @return android resource id of the layout representing this view holder */
-  int value() default 0;
+import retrofit.http.GET;
+import retrofit.http.Path;
 
-  /** @return android resource id array of the layout representing this view holder */
-  int[] ids() default 0;
+public interface AboutMeApi {
+
+  AboutMeApi INSTANCE = ApiUtils.get("https://api.about.me/api/v2/json/", AboutMeApi.class);
+
+  @GET("/user/view/{user}?client_id=8c63fb1f3ee9fe2bf1d4e0f7888d992607ba7ad2&on_match=true&extended=true")
+  AboutMeUser getAboutMeUser(@Path("user") String user);
 }

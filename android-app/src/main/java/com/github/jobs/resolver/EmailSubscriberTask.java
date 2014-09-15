@@ -17,6 +17,7 @@
 package com.github.jobs.resolver;
 
 import android.os.Bundle;
+
 import com.github.jobs.api.GithubJobsApi;
 import com.github.jobs.bean.SearchPack;
 import com.telly.groundy.GroundyTask;
@@ -31,11 +32,12 @@ public class EmailSubscriberTask extends GroundyTask {
   protected TaskResult doInBackground() {
     Bundle parameters = getArgs();
     SearchPack searchPack = parameters.getParcelable(EXTRA_SEARCH);
-    String email = parameters.getString(EXTRA_EMAIL);
-    String description = searchPack.getSearch();
-    String location = searchPack.getLocation();
-    boolean fullTime = searchPack.isFullTime();
-    return boolToResult(GithubJobsApi.subscribe(email, description, location, fullTime));
+    String subscribe = GithubJobsApi.INSTANCE.subscribe(
+        parameters.getString(EXTRA_EMAIL),
+        searchPack.getSearch(),
+        searchPack.getLocation(),
+        searchPack.isFullTime());
+    return boolToResult("ok".equals(subscribe));
   }
 
   @Override

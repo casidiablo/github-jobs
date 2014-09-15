@@ -14,16 +14,14 @@
  * limitations under the License.
  */
 
-package com.github.jobs.api;
+package com.github.jobs.templates.apis;
 
-/** @author cristian */
-public class ApiConstants {
-  static final String POSITIONS_URL = "https://jobs.github.com/positions.json";
-  static final String EMAIL_SUBSCRIPTION_URL = "https://jobs.github.com/subscribe";
-  static final String SEARCH = "search";
-  static final String LOCATION = "location";
-  static final String LATITUDE = "lat";
-  static final String LONGITUDE = "long";
-  static final String FULL_TIME = "full_time";
-  static final String PAGE = "page";
+import retrofit.http.GET;
+import retrofit.http.Query;
+
+public interface StackOverflowApi {
+  StackOverflowApi INSTANCE = ApiUtils.get("https://api.stackexchange.com/2.1", StackOverflowApi.class);
+
+  @GET("/users?order=desc&sort=reputation&site=stackoverflow&key=pi7fgVg11VspVuG0kdB2PA((")
+  com.github.jobs.bean.SOSearchResponse findUser(@Query("inname") String username);
 }

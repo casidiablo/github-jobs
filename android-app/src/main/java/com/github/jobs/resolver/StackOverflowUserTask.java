@@ -16,10 +16,12 @@
 
 package com.github.jobs.resolver;
 
+import com.github.jobs.bean.SOSearchResponse;
 import com.github.jobs.bean.SOUser;
-import com.github.jobs.templates.fetcher.StackOverflowUsersFetcher;
+import com.github.jobs.templates.apis.StackOverflowApi;
 import com.telly.groundy.GroundyTask;
 import com.telly.groundy.TaskResult;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -35,8 +37,8 @@ public class StackOverflowUserTask extends GroundyTask {
   protected TaskResult doInBackground() {
     String search = getStringArg(EXTRA_SEARCH);
 
-    StackOverflowUsersFetcher stackOverflowUsersFetcher = new StackOverflowUsersFetcher();
-    List<SOUser> users = stackOverflowUsersFetcher.findUser(search);
+    SOSearchResponse soSearchResponse = StackOverflowApi.INSTANCE.findUser(search);
+    List<SOUser> users = soSearchResponse.getItems();
 
     if (users == null) {
       return failed(); // something went wrong :-/

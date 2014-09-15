@@ -17,25 +17,28 @@
 package com.github.jobs.resolver;
 
 import android.os.Bundle;
+
 import com.codeslap.persistence.SqlAdapter;
 import com.github.jobs.GithubJobsApplication;
 import com.github.jobs.api.GithubJobsApi;
 import com.github.jobs.bean.Job;
-import com.github.jobs.bean.Search;
 import com.github.jobs.bean.SearchPack;
 import com.github.jobs.bean.SearchesAndJobs;
 import com.telly.groundy.GroundyTask;
 import com.telly.groundy.TaskResult;
-import javax.inject.Inject;
+
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.inject.Inject;
 
 public class SearchJobsTask extends GroundyTask {
 
   public static final String EXTRA_SEARCH_PACK = "com.github.jobs.extra_search_pack";
   public static final String DATA_JOBS = "com.github.jobs.data.jobs";
   public static final String DATA_SEARCH_PACK = "com.github.jobs.data.search_pack";
-  @Inject SqlAdapter sqlAdapter;
+  @Inject
+  SqlAdapter sqlAdapter;
 
   @Override
   protected TaskResult doInBackground() {
@@ -44,18 +47,11 @@ public class SearchJobsTask extends GroundyTask {
     Bundle params = getArgs();
     SearchPack searchPack = params.getParcelable(EXTRA_SEARCH_PACK);
 
-    // configure search
-    Search.Builder builder = new Search.Builder();
-    builder.setSearch(searchPack.getSearch());
-    builder.setLocation(searchPack.getLocation());
-    builder.setFullTime(searchPack.isFullTime());
-    if (searchPack.getPage() > 0) {
-      builder.setPage(searchPack.getPage());
-    }
-
     // execute search
-    Search search = builder.createSearch();
-    List<Job> jobsList = GithubJobsApi.search(search);
+    List<Job> jobsList = GithubJobsApi.INSTANCE.search(searchPack.getSearch(),
+        searchPack.getLocation(),
+        searchPack.getPage(),
+        searchPack.isFullTime());
     if (jobsList == null) {
       return failed();
     }

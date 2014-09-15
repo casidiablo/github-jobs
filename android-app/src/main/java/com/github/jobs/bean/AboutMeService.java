@@ -18,18 +18,19 @@ package com.github.jobs.bean;
 
 import android.os.Parcel;
 import android.os.Parcelable;
-import com.fasterxml.jackson.annotation.JsonProperty;
+
+import com.google.gson.annotations.SerializedName;
 
 /**
  * @author cristian
  * @version 1.0
  */
 public class AboutMeService implements Parcelable {
-  @JsonProperty("display_name")
+  @SerializedName("display_name")
   private String displayName;
-  @JsonProperty("platform")
+  @SerializedName("platform")
   private String platform;
-  @JsonProperty("service_url")
+  @SerializedName("service_url")
   private String serviceUrl;
 
   public AboutMeService() {

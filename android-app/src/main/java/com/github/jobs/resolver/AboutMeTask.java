@@ -16,10 +16,14 @@
 
 package com.github.jobs.resolver;
 
+import com.github.jobs.bean.AboutMeService;
 import com.github.jobs.bean.AboutMeUser;
-import com.github.jobs.templates.fetcher.AboutMeFetcher;
+import com.github.jobs.templates.apis.AboutMeApi;
 import com.telly.groundy.GroundyTask;
 import com.telly.groundy.TaskResult;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author cristian
@@ -33,8 +37,18 @@ public class AboutMeTask extends GroundyTask {
   protected TaskResult doInBackground() {
     String username = getStringArg(PARAM_USERNAME);
 
-    AboutMeFetcher aboutMeFetcher = new AboutMeFetcher();
-    AboutMeUser aboutMeUser = aboutMeFetcher.getAboutMeUser(username);
+    AboutMeUser aboutMeUser = AboutMeApi.INSTANCE.getAboutMeUser(username);
+    if (aboutMeUser != null && aboutMeUser.getServices() != null) {
+      // check if there is a service that should be removed
+      List<AboutMeService> toKeep = new ArrayList<AboutMeService>();
+      for (AboutMeService service : aboutMeUser.getServices()) {
+        if (service.getServiceUrl() != null) {
+          toKeep.add(service);
+        }
+      }
+      // recreate array with only complete services
+      aboutMeUser.setServices(toKeep.toArray(new AboutMeService[toKeep.size()]));
+    }
 
     if (aboutMeUser == null
         || aboutMeUser.getServices() == null

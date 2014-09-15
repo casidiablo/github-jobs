@@ -16,18 +16,18 @@
 
 package com.github.jobs.bean;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 
 /** @author cristian */
 public class SOSearchResponse {
   private List<SOUser> items;
-  @JsonProperty("quota_remaining")
+  @SerializedName("quota_remaining")
   private int quotaRemaining;
-  @JsonProperty("quota_max")
+  @SerializedName("quota_max")
   private int quotaMax;
-  @JsonProperty("has_more")
+  @SerializedName("has_more")
   private boolean hasMore;
 
   public List<SOUser> getItems() {

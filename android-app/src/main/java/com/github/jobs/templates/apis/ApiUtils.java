@@ -14,19 +14,15 @@
  * limitations under the License.
  */
 
-package com.github.jobs.adapter;
+package com.github.jobs.templates.apis;
 
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+import retrofit.RestAdapter;
 
-/** @author Cristian <cristian@elhacker.net> */
-@Retention(RetentionPolicy.RUNTIME) @Target(ElementType.TYPE)
-public @interface Layout {
-  /** @return android resource id of the layout representing this view holder */
-  int value() default 0;
-
-  /** @return android resource id array of the layout representing this view holder */
-  int[] ids() default 0;
+public class ApiUtils {
+  public static <T> T get(String endpoint, Class<T> type) {
+    return new RestAdapter.Builder()
+        .setEndpoint(endpoint)
+        .build()
+        .create(type);
+  }
 }
