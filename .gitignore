@@ -16,3 +16,4 @@ atlassian-ide-plugin.xml
 TAGS
 build
 .gradle
+local.properties

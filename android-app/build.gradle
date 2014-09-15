@@ -1,19 +1,20 @@
+apply plugin: 'android-sdk-manager'
 apply plugin: 'android'
 apply plugin: 'android-apt'
 
 dependencies {
   compile 'com.android.support:appcompat-v7:19.+'
   compile 'com.telly:groundy:1.5'
-  apt 'com.telly:groundy-compiler:1.5'
   compile 'com.telly:wasp:1.8'
   compile 'com.codeslap:persistence:0.9.24'
   compile 'com.fasterxml.jackson.core:jackson-databind:2.1.3'
   compile 'commons-httpclient:commons-httpclient:3.1'
   compile 'joda-time:joda-time:2.1'
   compile 'com.squareup.dagger:dagger:1.2.1'
-  apt 'com.squareup.dagger:dagger-compiler:1.2.1'
   compile 'com.squareup:otto:1.3.4'
   compile 'com.github.kevinsawicki:http-request:5.6'
+  apt 'com.telly:groundy-compiler:1.5'
+  apt 'com.squareup.dagger:dagger-compiler:1.2.1'
 /*  compile 'com.squareup.picasso:picasso:2.1.1'
   compile 'com.jakewharton.timber:timber:2.2.2'
   compile 'com.jakewharton:butterknife:+'*/
@@ -21,10 +22,10 @@ dependencies {
 
 android {
   compileSdkVersion 19
-  buildToolsVersion "19.0.3"
+  buildToolsVersion '20'
 
   defaultConfig {
-    packageName "com.github.jobs"
+    applicationId 'com.github.jobs'
     versionCode 18
     versionName "1.5"
     minSdkVersion 14
@@ -35,7 +36,7 @@ android {
     release {
       storeFile file("${System.env.HOME}/Dropbox/keys/github.jobs.keystore")
       storePassword githubJobsStorePass
-      keyAlias "android-app"
+      keyAlias 'android-app'
       keyPassword githubJobsKeyPass
     }
   }
