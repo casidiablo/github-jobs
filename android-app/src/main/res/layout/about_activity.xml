@@ -57,18 +57,13 @@
       android:textAppearance="?android:attr/textAppearanceMedium" />
 
     <TextView
-      android:id="@+id/library_maven"
-      android:text="@string/library_maven"
-      style="@style/LibraryCheckbox" />
-
-    <TextView
       android:id="@+id/library_abs"
       android:text="@string/library_abs"
       style="@style/LibraryCheckbox" />
 
     <TextView
-      android:id="@+id/library_wasp"
-      android:text="@string/library_wasp"
+      android:id="@+id/library_picasso"
+      android:text="@string/library_picasso"
       style="@style/LibraryCheckbox" />
 
     <TextView
@@ -81,52 +76,12 @@
       android:text="@string/library_persistence"
       style="@style/LibraryCheckbox" />
 
-    <TextView
-      android:id="@+id/lbl_about_me"
-      android:layout_width="fill_parent"
-      android:layout_height="wrap_content"
-      android:layout_marginTop="5dip"
-      android:layout_marginBottom="5dip"
-      android:text="@string/about_me"
-      android:textAppearance="?android:attr/textAppearanceMedium" />
-
-    <RelativeLayout
-      android:id="@+id/about_author_container"
-      android:layout_width="fill_parent"
-      android:layout_height="wrap_content"
-      android:layout_marginBottom="5dip"
-      android:visibility="gone">
-
-      <ImageView
-        android:id="@+id/img_avatar"
-        android:layout_width="72dip"
-        android:layout_height="72dip"
-        android:layout_alignParentRight="true"
-        android:layout_centerVertical="true"
-        android:layout_marginLeft="5dip"
-        android:src="@drawable/avatar"
-        android:contentDescription="@string/about_me" />
-
-      <TextView
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_toLeftOf="@id/img_avatar"
-        android:text="@string/about_me_content"
-        android:textAppearance="?android:attr/textAppearanceSmall" />
-
-    </RelativeLayout>
-
     <LinearLayout
       android:id="@+id/contact_buttons_container"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:layout_gravity="right"
       android:visibility="gone">
-
-      <Button
-        android:id="@+id/btn_tweet"
-        android:drawableRight="@drawable/btn_twitter"
-        style="@style/PromoButton" />
 
       <Button
         android:id="@+id/btn_github"

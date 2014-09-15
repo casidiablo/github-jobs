@@ -40,13 +40,6 @@
   <string name="cancel">Cancel</string>
   <string name="description_background">Background</string>
   <string name="about_this_app">About this app</string>
-  <string name="about_me">about author…</string>
-  <string name="about_me_content">My name is Cristian and I am an Android developer who works as
-    freelance (mainly
-    through oDesk.com). I am a fast, reliable coder who is seeking opportunities to build Android
-    applications from
-    the ground up for you or your business.
-  </string>
   <string name="about_this_app_title">about this app…</string>
   <string name="about_this">GitHub app for Android allows you to search for jobs posted on the
     jobs.github.com
@@ -59,17 +52,15 @@
   <string name="could_not_launch_url">Cannot launch website…</string>
   <string name="cannot_launch_email_app">Cannot launch email app</string>
   <string name="app_libraries">this app is powered by…</string>
-  <string name="library_maven">maven: cool tool for building and managing any Java-based project
-  </string>
   <string name="library_abs">ActionBarSherlock and ViewPagerIndicator: best ActionBar and ViewPager
     libraries (by J.
     Wharton)
   </string>
-  <string name="library_wasp">telly:wasp: library to handle/cache bitmap resources</string>
+  <string name="library_picasso">picasso: library to handle/cache bitmap resources</string>
   <string name="library_persistence">codeslap:persistence: a persistence library for Android I wrote
     a while ago
   </string>
-  <string name="library_groundy">codeslap:groundy: library for Android containing some boilerplate
+  <string name="library_groundy">telly:groundy: library for Android containing some boilerplate
     code for
     implementing background REST API calls implementations
   </string>

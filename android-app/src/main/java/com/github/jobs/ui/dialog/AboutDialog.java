@@ -40,20 +40,16 @@ public class AboutDialog extends TrackDialog implements View.OnClickListener {
 
     Typeface font = Typeface.createFromAsset(getAssets(), "droid_font.ttf");
 
-    ((TextView) findViewById(R.id.lbl_about_me)).setTypeface(font);
     ((TextView) findViewById(R.id.lbl_about_this_app)).setTypeface(font);
     ((TextView) findViewById(R.id.lbl_app_libraries)).setTypeface(font);
 
-    findViewById(R.id.btn_tweet).setOnClickListener(this);
     findViewById(R.id.btn_github).setOnClickListener(this);
     findViewById(R.id.btn_stackoverflow).setOnClickListener(this);
     findViewById(R.id.btn_feedback).setOnClickListener(this);
     findViewById(R.id.library_abs).setOnClickListener(this);
-    findViewById(R.id.library_maven).setOnClickListener(this);
-    findViewById(R.id.library_wasp).setOnClickListener(this);
+    findViewById(R.id.library_picasso).setOnClickListener(this);
     findViewById(R.id.library_groundy).setOnClickListener(this);
     findViewById(R.id.library_persistence).setOnClickListener(this);
-    findViewById(R.id.lbl_about_me).setOnClickListener(this);
 
     TextView content = (TextView) findViewById(R.id.about_this_app_content);
     Linkify.addLinks(content, Linkify.WEB_URLS);
@@ -62,9 +58,6 @@ public class AboutDialog extends TrackDialog implements View.OnClickListener {
   @Override
   public void onClick(View view) {
     switch (view.getId()) {
-      case R.id.btn_tweet:
-        WebsiteHelper.launchWebsite(this, "http://twitter.com/casidiablo");
-        break;
       case R.id.btn_github:
         WebsiteHelper.launchWebsite(this, "http://github.com/casidiablo");
         break;
@@ -84,25 +77,17 @@ public class AboutDialog extends TrackDialog implements View.OnClickListener {
               .show();
         }
         break;
-      case R.id.library_maven:
-        WebsiteHelper.launchWebsite(this, "http://maven.apache.org/");
-        break;
       case R.id.library_abs:
         WebsiteHelper.launchWebsite(this, "http://actionbarsherlock.com/");
         break;
-      case R.id.library_wasp:
-        WebsiteHelper.launchWebsite(this, "https://github.com/twitvid/wasp");
+      case R.id.library_picasso:
+        WebsiteHelper.launchWebsite(this, "https://github.com/square/picasso");
         break;
       case R.id.library_groundy:
         WebsiteHelper.launchWebsite(this, "https://github.com/casidiablo/groundy");
         break;
       case R.id.library_persistence:
         WebsiteHelper.launchWebsite(this, "https://github.com/casidiablo/persistence");
-        break;
-      case R.id.lbl_about_me:
-        findViewById(R.id.about_author_container).setVisibility(View.VISIBLE);
-        findViewById(R.id.contact_buttons_container).setVisibility(View.VISIBLE);
-        findViewById(R.id.lbl_about_me).setOnClickListener(null);
         break;
     }
   }
