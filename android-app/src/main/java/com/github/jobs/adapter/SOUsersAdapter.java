@@ -17,17 +17,14 @@
 package com.github.jobs.adapter;
 
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.os.Handler;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+
 import com.github.jobs.R;
 import com.github.jobs.bean.SOUser;
-import com.telly.wasp.BitmapHelper;
-import com.telly.wasp.BitmapObserver;
-import com.telly.wasp.BitmapUtils;
+import com.squareup.picasso.Picasso;
 
 /**
  * @author cristian
@@ -35,26 +32,19 @@ import com.telly.wasp.BitmapUtils;
  */
 public class SOUsersAdapter extends ListBaseAdapter<SOUser, SOUsersAdapter.SOUserViewHolder> {
 
-  private final Handler mUiHandler;
+  private final Picasso mPicasso;
 
   public SOUsersAdapter(Context context) {
     super(context, SOUserViewHolder.class);
-    mUiHandler = new Handler();
+    mPicasso = Picasso.with(context);
   }
 
   @Override
   public void populateHolder(int position, View view, ViewGroup parent, SOUser item,
       SOUserViewHolder holder) {
-    BitmapHelper bitmapHelper = BitmapHelper.getInstance();
     String avatarUrl = item.getProfileImage();
-    Bitmap bitmap = bitmapHelper.getBitmap(avatarUrl);
-    if (BitmapUtils.isBitmapValid(bitmap)) {
-      holder.avatar.setImageBitmap(bitmap);
-    } else {
-      holder.avatar.setImageResource(R.drawable.ic_default_avatar);
-      BitmapObserver observer = new BitmapObserver(holder.avatar, avatarUrl, mUiHandler);
-      bitmapHelper.registerBitmapObserver(getContext(), observer);
-    }
+    mPicasso.load(avatarUrl).placeholder(R.drawable.ic_default_avatar).into(holder.avatar);
+
     holder.username.setText(item.getDisplayName());
     holder.reputation.setText("Reputation: " + item.getReputation());
   }

@@ -17,21 +17,18 @@
 package com.github.jobs.ui.dialog;
 
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.os.Bundle;
-import android.os.Handler;
 import android.text.util.Linkify;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import com.github.jobs.R;
 import com.github.jobs.bean.SOUser;
 import com.github.jobs.ui.activity.SOUserPickerActivity;
 import com.github.jobs.utils.WebsiteHelper;
-import com.telly.wasp.BitmapHelper;
-import com.telly.wasp.BitmapObserver;
-import com.telly.wasp.BitmapUtils;
+import com.squareup.picasso.Picasso;
 
 /**
  * @author cristian
@@ -94,15 +91,9 @@ public class SOUserDialog extends TrackDialog implements View.OnClickListener {
     Linkify.addLinks(website, Linkify.WEB_URLS);
 
     ImageView userAvatar = (ImageView) findViewById(R.id.img_user_avatar);
-    BitmapHelper bitmapHelper = BitmapHelper.getInstance();
-    Bitmap avatar = bitmapHelper.getBitmap(mSoUser.getProfileImage());
-    if (BitmapUtils.isBitmapValid(avatar)) {
-      userAvatar.setImageBitmap(avatar);
-    } else {
-      BitmapObserver observer =
-          new BitmapObserver(userAvatar, mSoUser.getProfileImage(), new Handler());
-      bitmapHelper.registerBitmapObserver(this, observer);
-    }
+    Picasso.with(this)
+        .load(mSoUser.getProfileImage())
+        .into(userAvatar);
     userAvatar.setOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(View v) {

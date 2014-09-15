@@ -20,9 +20,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.text.Html;
 import android.text.SpannableString;
@@ -39,21 +39,25 @@ import android.widget.ImageView;
 import android.widget.ShareActionProvider;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import com.codeslap.persistence.SqlAdapter;
 import com.github.jobs.R;
 import com.github.jobs.bean.Job;
 import com.github.jobs.ui.activity.JobDetailsActivity;
 import com.github.jobs.utils.ShareHelper;
 import com.github.jobs.utils.StringUtils;
-import com.telly.wasp.BitmapHelper;
-import com.telly.wasp.CallbackBitmapObserver;
+import com.squareup.picasso.Picasso;
+import com.squareup.picasso.Target;
+
 import javax.inject.Inject;
 
 import static com.github.jobs.utils.AnalyticsHelper.ACTION_SHARE;
 import static com.github.jobs.utils.AnalyticsHelper.CATEGORY_JOBS;
 import static com.github.jobs.utils.AnalyticsHelper.getTracker;
 
-/** @author cristian */
+/**
+ * @author cristian
+ */
 public class JobDetailsFragment extends BusFragment implements View.OnClickListener {
 
   private static final int SHARE = 484;
@@ -61,15 +65,20 @@ public class JobDetailsFragment extends BusFragment implements View.OnClickListe
 
   private Job mJob;
   private ImageView mBackground;
-  @Inject SqlAdapter adapter;
+  private Picasso mPicasso;
+  @Inject
+  SqlAdapter adapter;
 
-  @Override public View onCreateView(LayoutInflater inflater, ViewGroup container,
-      Bundle savedInstanceState) {
-    return inflater.inflate(R.layout.job_details, null, false);
+  @Override
+  public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                           Bundle savedInstanceState) {
+    return inflater.inflate(R.layout.job_details, container, false);
   }
 
-  @Override public void onActivityCreated(Bundle savedInstanceState) {
+  @Override
+  public void onActivityCreated(Bundle savedInstanceState) {
     super.onActivityCreated(savedInstanceState);
+    mPicasso = Picasso.with(getActivity());
 
     Bundle arguments = getArguments();
     String jobId = arguments.getString(KEY_JOB_ID);
@@ -122,7 +131,8 @@ public class JobDetailsFragment extends BusFragment implements View.OnClickListe
     setLogoBackground();
   }
 
-  @Override public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+  @Override
+  public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
     super.onCreateOptionsMenu(menu, inflater);
     Context themedContext = getActivity().getActionBar().getThemedContext();
     ShareActionProvider shareActionProvider = new ShareActionProvider(themedContext);
@@ -130,7 +140,7 @@ public class JobDetailsFragment extends BusFragment implements View.OnClickListe
         new ShareActionProvider.OnShareTargetSelectedListener() {
           @Override
           public boolean onShareTargetSelected(ShareActionProvider shareActionProvider,
-              Intent intent) {
+                                               Intent intent) {
             getTracker(getActivity()).trackEvent(CATEGORY_JOBS, ACTION_SHARE,
                 intent.getComponent().getPackageName());
             return false;
@@ -147,7 +157,8 @@ public class JobDetailsFragment extends BusFragment implements View.OnClickListe
     actionProvider.setShareIntent(ShareHelper.getShareIntent(mJob));
   }
 
-  @Override public void onClick(View v) {
+  @Override
+  public void onClick(View v) {
     switch (v.getId()) {
       case R.id.company_url:
         Intent companyUrl = new Intent(Intent.ACTION_VIEW);
@@ -162,25 +173,25 @@ public class JobDetailsFragment extends BusFragment implements View.OnClickListe
     if (mJob.getCompanyLogo() == null) {
       return;
     }
-    CallbackBitmapObserver rawBitmapObserver =
-        new CallbackBitmapObserver(new CallbackBitmapObserver.BitmapCallback() {
-          @Override
-          public boolean stillNeedsUrl(String uri) {
-            return true;
-          }
 
+    mPicasso.load(mJob.getCompanyLogo())
+        .into(new Target() {
           @Override
-          public void receiveBitmap(String uri, Bitmap bitmap) {
-            if (bitmap == null) {
-              return;
-            }
-            BitmapDrawable bitmapDrawable = new BitmapDrawable(bitmap);
+          public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom loadedFrom) {
+            BitmapDrawable bitmapDrawable = new BitmapDrawable(getResources(), bitmap);
             bitmapDrawable.setAlpha(50);
             bitmapDrawable.setGravity(Gravity.CENTER);
             mBackground.setImageDrawable(bitmapDrawable);
           }
-        }, mJob.getCompanyLogo(), new Handler());
-    BitmapHelper.getInstance().registerBitmapObserver(getActivity(), rawBitmapObserver);
+
+          @Override
+          public void onBitmapFailed(Drawable drawable) {
+          }
+
+          @Override
+          public void onPrepareLoad(Drawable drawable) {
+          }
+        });
   }
 
   public static Fragment newInstance(String id) {
